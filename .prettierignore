@@ -1,0 +1,6 @@
+# Ignore generated output
+artifacts/
+codegen/
+cache/
+dist/
+deployments/

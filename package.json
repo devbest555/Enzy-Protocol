@@ -1,0 +1,94 @@
+{
+  "name": "@enzymefinance/protocol-monorepo-root",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "preconstruct": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "postinstall": "preconstruct dev && manypkg check",
+    "clean": "yarn manypkg exec yarn rimraf **/dist **/artifacts **/codegen",
+    "compile": "hardhat compile",
+    "coverage": "hardhat coverage && COVERAGE=true yarn test",
+    "dev": "preconstruct dev",
+    "build": "preconstruct build",
+    "release": "yarn compile && yarn build && changeset publish",
+    "typecheck": "manypkg exec tsc --noEmit",
+    "lint": "yarn lint:eslint && yarn lint:prettier && yarn lint:solhint",
+    "lint:eslint": "eslint \"{*,**/*}.{js,jsx,ts,tsx}\"",
+    "lint:prettier": "prettier --list-different \"{*,**/*}.{sol,json}\"",
+    "lint:solhint": "solhint --max-warnings 0 \"contracts/{*,**/*}.sol\"",
+    "format": "yarn format:prettier && yarn format:eslint && yarn format:solhint",
+    "format:prettier": "yarn lint:prettier --write",
+    "format:eslint": "yarn lint:eslint --fix",
+    "format:solhint": "yarn lint:solhint --fix",
+    "test": "NODE_OPTIONS=--max_old_space_size=4096 TS_JEST_DISABLE_VER_CHECKER=true jest",
+    "deploy:kovan": "hardhat deploy --network kovan",
+    "export:kovan": "hardhat export --network kovan --export deployments/kovan.json",
+    "verify:kovan": "hardhat etherscan-verify --network kovan",
+    "deploy:mainnet": "hardhat deploy --network mainnet",
+    "export:mainnet": "hardhat export --network mainnet --export deployments/mainnet.json",
+    "verify:mainnet": "hardhat etherscan-verify --network mainnet"
+  },
+  "dependencies": {
+    "@changesets/cli": "^2.16.0",
+    "@enzymefinance/babel-config": "^1.0.13",
+    "@enzymefinance/ethers": "^0.0.7",
+    "@enzymefinance/hardhat": "^0.0.13",
+    "@manypkg/cli": "^0.18.0",
+    "@openzeppelin/contracts": "^3.4.1",
+    "@preconstruct/cli": "^2.1.0",
+    "@types/jest": "^26.0.23",
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.0",
+    "babel-jest": "^27.0.2",
+    "decimal.js": "^10.2.1",
+    "dotenv": "^10.0.0",
+    "eslint": "^7.28.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "hardhat": "^2.3.0",
+    "husky": "^4.3.0",
+    "jest": "^27.0.4",
+    "lint-staged": "^11.0.0",
+    "prettier": "^2.2.1",
+    "prettier-plugin-solidity": "^1.0.0-alpha.59",
+    "rimraf": "^3.0.2",
+    "solhint": "^3.3.4",
+    "typescript": "^4.3.2"
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 2020,
+      "sourceType": "module"
+    },
+    "extends": [
+      "plugin:@typescript-eslint/recommended",
+      "plugin:prettier/recommended"
+    ],
+    "rules": {
+      "@typescript-eslint/explicit-module-boundary-types": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/ban-types": "off",
+      "@typescript-eslint/no-non-null-assertion": "off"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts}": "eslint --fix",
+    "*.json": "prettier --write",
+    "*.sol": [
+      "prettier --write",
+      "solhint --fix"
+    ]
+  }
+}

@@ -1,0 +1,177 @@
+name: CI
+on:
+  push:
+    branches:
+      - current
+      - next
+  pull_request:
+    branches:
+      - current
+      - next
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        project: ['persistent', 'core', 'infrastructure', 'fee', 'policy', 'integration', 'peripheral', 'e2e']
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Yarn cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Node module cache
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: Hardhat artifact cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            artifacts
+            cache/solidity-files-cache.json
+          key: ${{ runner.os }}-artifacts-${{ hashFiles('contracts/**/*.sol') }}
+          restore-keys: |
+            ${{ runner.os }}-artifacts-
+
+      - name: Hardhat fork cache
+        uses: actions/cache@v2
+        with:
+          path: cache/hardhat-network-fork
+          key: fork-${{ matrix.project }}-${{ github.sha }}
+          restore-keys: |
+            fork-${{ matrix.project }}-
+            fork-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Compile contracts
+        run: yarn compile
+
+      - name: Run tests
+        run: yarn test --selectProjects ${{ matrix.project }}
+        env:
+          ETHEREUM_NODE_MAINNET: ${{ secrets.ETHEREUM_NODE_MAINNET }}
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Yarn cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Node module cache
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Compile contracts
+        run: yarn compile
+
+      - name: Check types
+        run: yarn typecheck
+
+      - name: Check linting
+        run: yarn lint
+
+  # coverage:
+  #   name: Coverage
+  #   runs-on: ubuntu-latest
+  #   needs: test
+
+  #   steps:
+  #     - name: Check out repository
+  #       uses: actions/checkout@v2
+
+  #     - name: Set up node
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: 14
+
+  #     - name: Get yarn cache directory path
+  #       id: yarn-cache-dir-path
+  #       run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+  #     - name: Yarn cache
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-yarn-
+
+  #     - name: Node module cache
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: '**/node_modules'
+  #         key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-modules-
+
+  #     - name: Hardhat fork cache
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: cache/hardhat-network-fork
+  #         key: fork-${{ matrix.project }}-${{ github.sha }}
+  #         restore-keys: |
+  #           fork-${{ matrix.project }}-
+  #           fork-
+
+  #     - name: Install dependencies
+  #       run: yarn install --frozen-lockfile
+
+  #     - name: Instrument and test with code coverage enabled
+  #       run: yarn coverage
+  #       env:
+  #         MAINNET_ARCHIVE_NODE: ${{ secrets.MAINNET_ARCHIVE_NODE }}
+
+  #     - name: Coveralls
+  #       uses: coverallsapp/github-action@master
+  #       with:
+  #         github-token: ${{ secrets.GITHUB_TOKEN }}
