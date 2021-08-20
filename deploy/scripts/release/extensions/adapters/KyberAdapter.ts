@@ -1,4 +1,4 @@
-import { KyberAdapterArgs } from '@enzymefinance/protocol';
+import { KyberAdapterArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

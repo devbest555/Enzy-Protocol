@@ -4,7 +4,7 @@ import {
   addTrackedAssetsSelector,
   StandardToken,
   SpendAssetsHandleType,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { addTrackedAssets, assertEvent, createNewFund, deployProtocolFixture } from '@enzymefinance/testutils';
 import { BigNumber, utils } from 'ethers';
 
@@ -68,13 +68,8 @@ describe('parseAssetsForMethod', () => {
     const incomingAsset = randomAddress();
     const args = addTrackedAssetsArgs([incomingAsset]);
 
-    const {
-      spendAssetsHandleType_,
-      incomingAssets_,
-      spendAssets_,
-      spendAssetAmounts_,
-      minIncomingAssetAmounts_,
-    } = await trackedAssetsAdapter.parseAssetsForMethod(addTrackedAssetsSelector, args);
+    const { spendAssetsHandleType_, incomingAssets_, spendAssets_, spendAssetAmounts_, minIncomingAssetAmounts_ } =
+      await trackedAssetsAdapter.parseAssetsForMethod(addTrackedAssetsSelector, args);
 
     expect({
       spendAssetsHandleType_,

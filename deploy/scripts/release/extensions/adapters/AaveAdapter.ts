@@ -1,4 +1,4 @@
-import { AaveAdapterArgs } from '@enzymefinance/protocol';
+import { AaveAdapterArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

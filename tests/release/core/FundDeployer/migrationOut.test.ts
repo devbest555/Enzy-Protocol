@@ -1,5 +1,5 @@
 import { randomAddress } from '@enzymefinance/ethers';
-import { IMigrationHookHandler, MigrationOutHook, MockVaultLib, StandardToken } from '@enzymefinance/protocol';
+import { IMigrationHookHandler, MigrationOutHook, MockVaultLib, StandardToken } from '@taodao/protocol';
 import {
   createNewFund,
   generateFeeManagerConfigWithMockFees,

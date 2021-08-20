@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -17,7 +10,6 @@ import "../../../../interfaces/IUniswapV2Router2.sol";
 import "../utils/AdapterBase.sol";
 
 /// @title UniswapV2Adapter Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Adapter for interacting with Uniswap v2
 contract UniswapV2Adapter is AdapterBase {
     using SafeMath for uint256;

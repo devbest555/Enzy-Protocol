@@ -1,4 +1,4 @@
-import { AdapterWhitelistArgs } from '@enzymefinance/protocol';
+import { AdapterWhitelistArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 const fn: DeployFunction = async function (hre) {

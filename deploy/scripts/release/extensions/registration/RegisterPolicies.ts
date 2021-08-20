@@ -1,4 +1,4 @@
-import { PolicyManager } from '@enzymefinance/protocol';
+import { PolicyManager } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 const fn: DeployFunction = async function (hre) {

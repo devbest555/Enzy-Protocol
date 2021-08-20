@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -18,7 +11,6 @@ import "../price-feeds/primitives/IPrimitivePriceFeed.sol";
 import "./IValueInterpreter.sol";
 
 /// @title ValueInterpreter Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Interprets price feeds to provide covert value between asset pairs
 /// @dev This contract contains several "live" value calculations, which for this release are simply
 /// aliases to their "canonical" value counterparts since the only primitive price feed (Chainlink)
@@ -147,8 +139,7 @@ contract ValueInterpreter is IValueInterpreter {
         // Handle case that asset is a derivative
         address derivativePriceFeed = IAggregatedDerivativePriceFeed(
             AGGREGATED_DERIVATIVE_PRICE_FEED
-        )
-            .getPriceFeedForDerivative(_baseAsset);
+        ).getPriceFeedForDerivative(_baseAsset);
         if (derivativePriceFeed != address(0)) {
             return __calcDerivativeValue(derivativePriceFeed, _baseAsset, _amount, _quoteAsset);
         }
@@ -167,8 +158,7 @@ contract ValueInterpreter is IValueInterpreter {
     ) private returns (uint256 value_, bool isValid_) {
         (address[] memory underlyings, uint256[] memory underlyingAmounts) = IDerivativePriceFeed(
             _derivativePriceFeed
-        )
-            .calcUnderlyingValues(_derivative, _amount);
+        ).calcUnderlyingValues(_derivative, _amount);
 
         require(underlyings.length > 0, "__calcDerivativeValue: No underlyings");
         require(

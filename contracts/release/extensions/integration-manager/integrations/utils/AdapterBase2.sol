@@ -1,20 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
 import "./AdapterBase.sol";
 
 /// @title AdapterBase2 Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice A base contract for integration adapters that extends AdapterBase
 /// @dev This is a temporary contract that will be merged into AdapterBase with the next release
 abstract contract AdapterBase2 is AdapterBase {

@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -17,7 +10,6 @@ import "../IDerivativePriceFeed.sol";
 import "./utils/SingleUnderlyingDerivativeRegistryMixin.sol";
 
 /// @title IdlePriceFeed Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Price source oracle for IdleTokens
 contract IdlePriceFeed is IDerivativePriceFeed, SingleUnderlyingDerivativeRegistryMixin {
     using SafeMath for uint256;

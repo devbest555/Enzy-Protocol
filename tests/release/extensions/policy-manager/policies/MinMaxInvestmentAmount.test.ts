@@ -6,7 +6,7 @@ import {
   policyManagerConfigArgs,
   validateRulePreBuySharesArgs,
   WETH,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import {
   assertEvent,
   createNewFund,

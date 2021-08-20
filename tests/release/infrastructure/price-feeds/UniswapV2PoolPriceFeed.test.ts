@@ -1,5 +1,5 @@
 import { extractEvent, randomAddress } from '@enzymefinance/ethers';
-import { IUniswapV2Pair, StandardToken } from '@enzymefinance/protocol';
+import { IUniswapV2Pair, StandardToken } from '@taodao/protocol';
 import { deployProtocolFixture, UniswapV2Factory } from '@enzymefinance/testutils';
 import { utils } from 'ethers';
 

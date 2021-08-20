@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -15,7 +8,6 @@ import "../utils/AddressListPolicyMixin.sol";
 import "./utils/BuySharesSetupPolicyBase.sol";
 
 /// @title BuySharesCallerWhitelist Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice A policy that only allows a configurable whitelist of buyShares callers for a fund
 contract BuySharesCallerWhitelist is BuySharesSetupPolicyBase, AddressListPolicyMixin {
     constructor(address _policyManager) public PolicyBase(_policyManager) {}

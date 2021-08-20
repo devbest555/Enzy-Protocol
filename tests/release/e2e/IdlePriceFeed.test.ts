@@ -1,5 +1,5 @@
 import { randomAddress } from '@enzymefinance/ethers';
-import { IIdleTokenV4, StandardToken } from '@enzymefinance/protocol';
+import { IIdleTokenV4, StandardToken } from '@taodao/protocol';
 import {
   buyShares,
   createNewFund,

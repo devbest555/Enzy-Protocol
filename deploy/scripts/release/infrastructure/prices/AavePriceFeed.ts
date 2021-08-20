@@ -1,4 +1,4 @@
-import { AavePriceFeed, AavePriceFeedArgs } from '@enzymefinance/protocol';
+import { AavePriceFeed, AavePriceFeedArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

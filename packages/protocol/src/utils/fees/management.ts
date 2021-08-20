@@ -22,7 +22,7 @@ export function convertRateToScaledPerSecondRate(rate: BigNumberish) {
     .pow(1 / secondsPerYear)
     .toSignificantDigits(managementFeeDigits)
     .mul(managementFeeScaleDecimal);
-
+    
   return BigNumber.from(factor.toFixed(0));
 }
 

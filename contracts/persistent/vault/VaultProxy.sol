@@ -1,20 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
 import "./utils/ProxiableVaultLib.sol";
 
 /// @title VaultProxy Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice A proxy contract for all VaultProxy instances, slightly modified from EIP-1822
 /// @dev Adapted from the recommended implementation of a Proxy in EIP-1822, updated for solc 0.6.12,
 /// and using the EIP-1967 storage slot for the proxiable implementation.
@@ -58,12 +50,12 @@ contract VaultProxy {
             let retSz := returndatasize()
             returndatacopy(0, 0, retSz)
             switch success
-                case 0 {
-                    revert(0, retSz)
-                }
-                default {
-                    return(0, retSz)
-                }
+            case 0 {
+                revert(0, retSz)
+            }
+            default {
+                return(0, retSz)
+            }
         }
     }
 }

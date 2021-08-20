@@ -1,4 +1,4 @@
-import { IdlePriceFeed, IdlePriceFeedArgs, IIdleTokenV4 } from '@enzymefinance/protocol';
+import { IdlePriceFeed, IdlePriceFeedArgs, IIdleTokenV4 } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

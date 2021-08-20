@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -16,7 +9,6 @@ import "../../../../interfaces/IWETH.sol";
 import "../utils/AdapterBase.sol";
 
 /// @title AlphaHomoraV1Adapter Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Adapter for Alpha Homora v1 <https://alphafinance.io/>
 contract AlphaHomoraV1Adapter is AdapterBase {
     address private immutable IBETH_TOKEN;

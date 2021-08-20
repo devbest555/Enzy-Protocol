@@ -1,5 +1,5 @@
 import { randomAddress } from '@enzymefinance/ethers';
-import { IAlphaHomoraV1Bank, StandardToken } from '@enzymefinance/protocol';
+import { IAlphaHomoraV1Bank, StandardToken } from '@taodao/protocol';
 import {
   alphaHomoraV1Lend,
   buyShares,

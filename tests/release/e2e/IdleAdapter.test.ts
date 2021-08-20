@@ -15,7 +15,7 @@ import {
   redeemSelector,
   SpendAssetsHandleType,
   StandardToken,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import {
   createNewFund,
   deployProtocolFixture,

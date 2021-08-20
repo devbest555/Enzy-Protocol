@@ -1,4 +1,4 @@
-import { CompoundAdapterArgs } from '@enzymefinance/protocol';
+import { CompoundAdapterArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
@@ -17,7 +10,6 @@ import "../../../utils/FundDeployerOwnerMixin.sol";
 import "./utils/PreCallOnIntegrationValidatePolicyBase.sol";
 
 /// @title GuaranteedRedemption Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice A policy that guarantees that shares will either be continuously redeemable or
 /// redeemable within a predictable daily window by preventing trading during a configurable daily period
 contract GuaranteedRedemption is PreCallOnIntegrationValidatePolicyBase, FundDeployerOwnerMixin {
@@ -108,9 +100,9 @@ contract GuaranteedRedemption is PreCallOnIntegrationValidatePolicyBase, FundDep
             return true;
         }
 
-
-            RedemptionWindow memory redemptionWindow
-         = comptrollerProxyToRedemptionWindow[_comptrollerProxy];
+        RedemptionWindow memory redemptionWindow = comptrollerProxyToRedemptionWindow[
+            _comptrollerProxy
+        ];
 
         // If no RedemptionWindow is set, the fund can never use redemption-blocking adapters
         if (redemptionWindow.startTimestamp == 0) {

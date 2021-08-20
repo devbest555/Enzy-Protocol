@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -15,7 +8,6 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "../../release/extensions/integration-manager/integrations/utils/AdapterBase.sol";
 
 /// @title IMockGenericIntegratee Interface
-/// @author Enzyme Council <security@enzyme.finance>
 interface IMockGenericIntegratee {
     function swap(
         address[] calldata,
@@ -34,7 +26,6 @@ interface IMockGenericIntegratee {
 }
 
 /// @title MockGenericAdapter Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Provides a generic adapter that:
 /// 1. Provides swapping functions that use various `SpendAssetsTransferType` values
 /// 2. Directly parses the _actual_ values to swap from provided call data (e.g., `actualIncomingAssetAmounts`)

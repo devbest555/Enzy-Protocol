@@ -1,4 +1,4 @@
-import { StandardToken } from '@enzymefinance/protocol';
+import { StandardToken } from '@taodao/protocol';
 import {
   createNewFund,
   ProtocolDeployment,

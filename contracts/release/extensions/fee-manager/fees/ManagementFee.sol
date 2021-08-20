@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
@@ -18,7 +11,6 @@ import "../../../utils/MakerDaoMath.sol";
 import "./utils/FeeBase.sol";
 
 /// @title ManagementFee Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice A management fee with a configurable annual rate
 contract ManagementFee is FeeBase, MakerDaoMath {
     using SafeMath for uint256;
@@ -156,9 +148,12 @@ contract ManagementFee is FeeBase, MakerDaoMath {
             if (netSharesSupply > 0) {
                 sharesDue_ = netSharesSupply
                     .mul(
-                    __rpow(feeInfo.scaledPerSecondRate, secondsSinceSettlement, RATE_SCALE_BASE)
-                        .sub(RATE_SCALE_BASE)
-                )
+                        __rpow(
+                            feeInfo.scaledPerSecondRate,
+                            secondsSinceSettlement,
+                            RATE_SCALE_BASE
+                        ).sub(RATE_SCALE_BASE)
+                    )
                     .div(RATE_SCALE_BASE);
             }
         }

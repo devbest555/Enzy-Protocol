@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -15,7 +8,6 @@ import "../../../extensions/utils/FundDeployerOwnerMixin.sol";
 import "./IAggregatedDerivativePriceFeed.sol";
 
 /// @title AggregatedDerivativePriceFeed Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Aggregates multiple derivative price feeds (e.g., Compound, Chai) and dispatches
 /// rate requests to the appropriate feed
 contract AggregatedDerivativePriceFeed is IAggregatedDerivativePriceFeed, FundDeployerOwnerMixin {

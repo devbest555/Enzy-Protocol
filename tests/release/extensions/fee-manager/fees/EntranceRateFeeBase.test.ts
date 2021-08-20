@@ -9,7 +9,7 @@ import {
   entranceRateFeeConfigArgs,
   FeeHook,
   settlePostBuySharesArgs,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { assertEvent, deployProtocolFixture } from '@enzymefinance/testutils';
 import { utils } from 'ethers';
 

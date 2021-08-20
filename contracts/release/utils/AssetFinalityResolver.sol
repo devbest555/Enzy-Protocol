@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -17,7 +10,6 @@ import "../interfaces/ISynthetixAddressResolver.sol";
 import "../interfaces/ISynthetixExchanger.sol";
 
 /// @title AssetFinalityResolver Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice A contract that helps achieve asset finality
 abstract contract AssetFinalityResolver {
     address internal immutable SYNTHETIX_ADDRESS_RESOLVER;
@@ -40,10 +32,10 @@ abstract contract AssetFinalityResolver {
         if (currencyKey != 0) {
             address synthetixExchanger = ISynthetixAddressResolver(SYNTHETIX_ADDRESS_RESOLVER)
                 .requireAndGetAddress(
-                "Exchanger",
-                "finalizeAndGetAssetBalance: Missing Exchanger"
-            );
-            try ISynthetixExchanger(synthetixExchanger).settle(_target, currencyKey)  {} catch {
+                    "Exchanger",
+                    "finalizeAndGetAssetBalance: Missing Exchanger"
+                );
+            try ISynthetixExchanger(synthetixExchanger).settle(_target, currencyKey) {} catch {
                 require(!_requireFinality, "finalizeAndGetAssetBalance: Cannot settle Synth");
             }
         }

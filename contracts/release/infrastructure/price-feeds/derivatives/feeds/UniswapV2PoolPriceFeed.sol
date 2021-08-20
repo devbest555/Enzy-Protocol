@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
@@ -22,7 +15,6 @@ import "../../utils/UniswapV2PoolTokenValueCalculator.sol";
 import "../IDerivativePriceFeed.sol";
 
 /// @title UniswapV2PoolPriceFeed Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Price feed for Uniswap lending pool tokens
 contract UniswapV2PoolPriceFeed is
     IDerivativePriceFeed,
@@ -92,11 +84,11 @@ contract UniswapV2PoolPriceFeed is
             uint256 token0DenormalizedRate,
             uint256 token1DenormalizedRate
         ) = __calcTrustedPoolTokenValue(
-            FACTORY,
-            _derivative,
-            token0TrustedRateAmount,
-            token1TrustedRateAmount
-        );
+                FACTORY,
+                _derivative,
+                token0TrustedRateAmount,
+                token1TrustedRateAmount
+            );
 
         // Define normalized rates for each underlying
         underlyingAmounts_ = new uint256[](2);

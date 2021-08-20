@@ -1,5 +1,5 @@
 import { randomAddress } from '@enzymefinance/ethers';
-import { ReleaseStatusTypes, StandardToken } from '@enzymefinance/protocol';
+import { ReleaseStatusTypes, StandardToken } from '@taodao/protocol';
 import {
   createMigratedFundConfig,
   createNewFund,
@@ -178,13 +178,8 @@ describe('createMigratedFundConfig', () => {
   });
 
   it('correctly handles valid call', async () => {
-    const {
-      denominationAsset,
-      fundDeployer,
-      signer,
-      feeManagerConfigData,
-      policyManagerConfigData,
-    } = await provider.snapshot(snapshot);
+    const { denominationAsset, fundDeployer, signer, feeManagerConfigData, policyManagerConfigData } =
+      await provider.snapshot(snapshot);
 
     // TODO: Call first to check return value and assert below (after resolved above)
 

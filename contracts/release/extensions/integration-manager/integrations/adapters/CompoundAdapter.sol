@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -18,7 +11,6 @@ import "../../../../interfaces/IWETH.sol";
 import "../utils/AdapterBase.sol";
 
 /// @title CompoundAdapter Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Adapter for Compound <https://compound.finance/>
 contract CompoundAdapter is AdapterBase {
     address private immutable COMPOUND_PRICE_FEED;

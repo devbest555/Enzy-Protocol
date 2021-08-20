@@ -33,7 +33,6 @@ const whales = {
   seth: '0xc34a7c65aa08cb36744bda8eeec7b8e9891e147c',
   seur: '0xca17ef1925d49931918e3fde7aa4516a3a4958c4',
   susd: '0x49BE88F0fcC3A8393a59d3688480d7D253C37D2A',
-  lidoSteth: '0x31f644e2dd5d74f5c8d6d9de89dd517474d51800',
   eurs: '0x98ed26de6451db36246672df78ae7c50f2c76f6d',
   idle: '0x34aaa3d5a73d6f9594326d0422ce69748f09b14f',
 } as const;

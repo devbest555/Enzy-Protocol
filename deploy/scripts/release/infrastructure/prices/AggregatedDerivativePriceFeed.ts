@@ -1,4 +1,4 @@
-import { AggregatedDerivativePriceFeedArgs } from '@enzymefinance/protocol';
+import { AggregatedDerivativePriceFeedArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';
@@ -14,10 +14,8 @@ const fn: DeployFunction = async function (hre) {
   const fundDeployer = await get('FundDeployer');
   const aavePriceFeed = await getOrNull('AavePriceFeed');
   const alphaHomoraV1PriceFeed = await getOrNull('AlphaHomoraV1PriceFeed');
-  const curvePriceFeed = await getOrNull('CurvePriceFeed');
   const compoundPriceFeed = await getOrNull('CompoundPriceFeed');
   const idlePriceFeed = await getOrNull('IdlePriceFeed');
-  const lidoStethPriceFeed = await getOrNull('LidoStethPriceFeed');
   const stakehoundEthPriceFeed = await getOrNull('StakehoundEthPriceFeed');
   const synthetixPriceFeed = await getOrNull('SynthetixPriceFeed');
   const wdgldPriceFeed = await getOrNull('WdgldPriceFeed');
@@ -36,10 +34,6 @@ const fn: DeployFunction = async function (hre) {
     derivativePairs.push([config.compound.ceth, compoundPriceFeed.address]);
   }
 
-  if (lidoStethPriceFeed != null) {
-    derivativePairs.push([config.lido.steth, lidoStethPriceFeed.address]);
-  }
-
   if (stakehoundEthPriceFeed != null) {
     derivativePairs.push([config.stakehound.steth, stakehoundEthPriceFeed.address]);
   }
@@ -54,17 +48,6 @@ const fn: DeployFunction = async function (hre) {
     derivativePairs.push(
       ...Object.values(config.compound.ctokens).map(
         (ctoken) => [ctoken, compoundPriceFeed.address] as [string, string],
-      ),
-    );
-  }
-
-  if (curvePriceFeed != null) {
-    derivativePairs.push(
-      ...Object.values(config.curve.pools).map((pool) => [pool.lpToken, curvePriceFeed.address] as [string, string]),
-    );
-    derivativePairs.push(
-      ...Object.values(config.curve.pools).map(
-        (pool) => [pool.liquidityGaugeToken, curvePriceFeed.address] as [string, string],
       ),
     );
   }
@@ -106,10 +89,8 @@ fn.dependencies = [
   'FundDeployer',
   'AavePriceFeed',
   'AlphaHomoraV1PriceFeed',
-  'CurvePriceFeed',
   'CompoundPriceFeed',
   'IdlePriceFeed',
-  'LidoStethPriceFeed',
   'StakehoundEthPriceFeed',
   'SynthetixPriceFeed',
   'WdgldPriceFeed',

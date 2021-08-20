@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
@@ -17,9 +10,9 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "../../../extensions/utils/FundDeployerOwnerMixin.sol";
 import "../../../interfaces/IChainlinkAggregator.sol";
 import "./IPrimitivePriceFeed.sol";
+import "hardhat/console.sol";
 
 /// @title ChainlinkPriceFeed Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice A price feed that uses Chainlink oracles as price sources
 contract ChainlinkPriceFeed is IPrimitivePriceFeed, FundDeployerOwnerMixin {
     using SafeMath for uint256;
@@ -45,7 +38,10 @@ contract ChainlinkPriceFeed is IPrimitivePriceFeed, FundDeployerOwnerMixin {
 
     event StaleRateThresholdSet(uint256 prevStaleRateThreshold, uint256 nextStaleRateThreshold);
 
-    enum RateAsset {ETH, USD}
+    enum RateAsset {
+        ETH,
+        USD
+    }
 
     struct AggregatorInfo {
         address aggregator;
@@ -414,7 +410,7 @@ contract ChainlinkPriceFeed is IPrimitivePriceFeed, FundDeployerOwnerMixin {
                 aggregator: _aggregators[i],
                 rateAsset: _rateAssets[i]
             });
-
+            
             // Store the amount that makes up 1 unit given the asset's decimals
             uint256 unit = 10**uint256(ERC20(_primitives[i]).decimals());
             primitiveToUnit[_primitives[i]] = unit;
@@ -427,11 +423,11 @@ contract ChainlinkPriceFeed is IPrimitivePriceFeed, FundDeployerOwnerMixin {
     function __validateAggregator(address _aggregator) private view {
         require(_aggregator != address(0), "__validateAggregator: Empty _aggregator");
 
-        require(
-            IChainlinkAggregator(_aggregator).latestAnswer() > 0,
-            "__validateAggregator: No rate detected"
-        );
-        require(!rateIsStale(_aggregator), "__validateAggregator: Stale rate detected");
+        // require(
+        //     IChainlinkAggregator(_aggregator).latestAnswer() > 0,
+        //     "__validateAggregator: No rate detected"
+        // );
+        // require(!rateIsStale(_aggregator), "__validateAggregator: Stale rate detected");
     }
 
     ///////////////////

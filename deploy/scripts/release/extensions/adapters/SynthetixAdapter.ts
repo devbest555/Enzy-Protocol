@@ -1,4 +1,4 @@
-import { SynthetixAdapterArgs } from '@enzymefinance/protocol';
+import { SynthetixAdapterArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

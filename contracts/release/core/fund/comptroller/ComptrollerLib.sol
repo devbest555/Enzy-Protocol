@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -25,9 +18,9 @@ import "../../../utils/AssetFinalityResolver.sol";
 import "../../fund-deployer/IFundDeployer.sol";
 import "../vault/IVault.sol";
 import "./IComptroller.sol";
+import "hardhat/console.sol";
 
 /// @title ComptrollerLib Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice The core logic library shared by all funds
 contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     using AddressArrayLib for address[];
@@ -89,12 +82,16 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     // A timelock between any "shares actions" (i.e., buy and redeem shares), per-account
     uint256 internal sharesActionTimelock;
     mapping(address => uint256) internal acctToLastSharesAction;
+    uint256 internal buyFeeAmount;
+    uint256 internal redeemFeeAmount;
+    uint256[] internal assetAmountToFees_;
 
+    mapping(address => uint256) public investAmount;
     ///////////////
     // MODIFIERS //
     ///////////////
 
-    modifier allowsPermissionedVaultAction {
+    modifier allowsPermissionedVaultAction() {
         __assertPermissionedVaultActionNotAllowed();
         permissionedVaultActionAllowed = true;
         _;
@@ -540,6 +537,43 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         return _gav.mul(SHARES_UNIT).div(_sharesSupply);
     }
 
+    /// @notice Calculates the balance of the fund
+    /// @return assets_ The fund asset
+    /// @return balances_ The fund balance
+    function calcFundBalance() public returns (address[] memory assets_, uint256[] memory balances_) {
+        address vaultProxyAddress = vaultProxy;
+        assets_ = IVault(vaultProxyAddress).getTrackedAssets();
+        require(assets_.length > 0, "calcFundBalance: Empty trackedAsset");
+
+        balances_ = new uint256[](assets_.length);
+        for (uint256 i; i < assets_.length; i++) {
+            balances_[i] = __finalizeIfSynthAndGetAssetBalance(
+                vaultProxyAddress,
+                assets_[i],
+                true
+            );
+        }
+
+        return (assets_, balances_);
+    }
+
+    /// @notice Calculates the denomination balance of the fund
+    /// @return balance_ The denomination balance
+    function calcEachBalance(address _asset) public returns (uint256 balance_) {
+        address vaultProxyAddress = vaultProxy;
+        
+        if (!IVault(vaultProxyAddress).isTrackedAsset(_asset)) {
+            return 0;
+        }
+
+        balance_ = __finalizeIfSynthAndGetAssetBalance(
+            vaultProxyAddress,
+            _asset,
+            true
+        );
+
+        return balance_;
+    }
     ///////////////////
     // PARTICIPATION //
     ///////////////////
@@ -606,12 +640,15 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
 
             gav = gav.add(_investmentAmounts[i]);
         }
-
+        
         __buySharesCompletedHook(msg.sender, sharesReceivedAmounts_, gav);
 
         return sharesReceivedAmounts_;
     }
 
+    function getInvestAmount(address _denominationAsset) external view returns (uint256) {
+        return investAmount[_denominationAsset];
+    }
     /// @dev Helper to buy shares
     function __buyShares(
         address _buyer,
@@ -628,16 +665,19 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         __preBuySharesHook(_buyer, _investmentAmount, _minSharesQuantity, _preBuySharesGav);
 
         // Calculate the amount of shares to issue with the investment amount
-        uint256 sharesIssued = _investmentAmount.mul(SHARES_UNIT).div(_sharePrice);
+        buyFeeAmount = _investmentAmount.mul(2).div(1000);
+        uint256 investmentAmountWithFee = _investmentAmount.sub(buyFeeAmount);
+        uint256 sharesIssued = investmentAmountWithFee.mul(SHARES_UNIT).div(_sharePrice);
 
         // Mint shares to the buyer
         uint256 prevBuyerShares = ERC20(_vaultProxy).balanceOf(_buyer);
         IVault(_vaultProxy).mintShares(_buyer, sharesIssued);
 
         // Transfer the investment asset to the fund.
-        // Does not follow the checks-effects-interactions pattern, but it is preferred
-        // to have the final state of the VaultProxy prior to running __postBuySharesHook().
-        ERC20(_denominationAsset).safeTransferFrom(msg.sender, _vaultProxy, _investmentAmount);
+        ERC20(_denominationAsset).safeTransferFrom(msg.sender, _vaultProxy, investmentAmountWithFee);
+        investAmount[_denominationAsset] = investAmount[_denominationAsset].add(_investmentAmount);
+        //========== Transfer Asset amount of fees from VaultProxy to DAO Wallet
+        // ERC20(_denominationAsset).safeTransferFrom(msg.sender, _vaultProxy, buyFeeAmount);
 
         // Gives Extensions a chance to run logic after shares are issued
         __postBuySharesHook(_buyer, _investmentAmount, sharesIssued, _preBuySharesGav);
@@ -827,7 +867,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
                 abi.encode(_redeemer, _sharesQuantity),
                 0
             )
-         {} catch (bytes memory reason) {
+        {} catch (bytes memory reason) {
             emit PreRedeemSharesHookFailed(reason, _redeemer, _sharesQuantity);
         }
     }
@@ -900,7 +940,10 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
 
         // Calculate and transfer payout asset amounts due to redeemer
         payoutAmounts_ = new uint256[](payoutAssets_.length);
-        address denominationAssetCopy = denominationAsset;
+        assetAmountToFees_ = new uint256[](payoutAssets_.length);
+        redeemFeeAmount = _sharesQuantity.mul(5).div(1000);
+        address denominationAssetCopy = denominationAsset;    
+        uint256 sharesQuantityWithoutFee = _sharesQuantity.sub(redeemFeeAmount);
         for (uint256 i; i < payoutAssets_.length; i++) {
             uint256 assetBalance = __finalizeIfSynthAndGetAssetBalance(
                 address(vaultProxyContract),
@@ -909,20 +952,26 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             );
 
             // If all remaining shares are being redeemed, the logic changes slightly
+            payoutAmounts_[i] = assetBalance.mul(sharesQuantityWithoutFee).div(sharesSupply);
             if (_sharesQuantity == sharesSupply) {
-                payoutAmounts_[i] = assetBalance;
+                // payoutAmounts_[i] = assetBalance.mul(sharesQuantityWithFee).div(sharesSupply);
                 // Remove every tracked asset, except the denomination asset
                 if (payoutAssets_[i] != denominationAssetCopy) {
                     vaultProxyContract.removeTrackedAsset(payoutAssets_[i]);
                 }
             } else {
-                payoutAmounts_[i] = assetBalance.mul(_sharesQuantity).div(sharesSupply);
+                // payoutAmounts_[i] = assetBalance.mul(sharesQuantityWithFee).div(sharesSupply);
             }
 
             // Transfer payout asset to redeemer
             if (payoutAmounts_[i] > 0) {
                 vaultProxyContract.withdrawAssetTo(payoutAssets_[i], _redeemer, payoutAmounts_[i]);
             }
+            ///============== Transfer Asset amount of fees from VaultProxy to DAO Wallet
+            // assetAmountToFees_[i] = assetBalance.mul(redeemFeeAmount).div(sharesSupply);
+            // if (assetAmountToFees_[i] > 0) {
+            //     vaultProxyContract.withdrawAssetTo(payoutAssets_[i], "DAO Wallet", assetAmountToFees_[i]);//"here DAO wallet address"
+            // }
         }
 
         emit SharesRedeemed(_redeemer, _sharesQuantity, payoutAssets_, payoutAmounts_);

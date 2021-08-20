@@ -5,7 +5,7 @@ import {
   ReleaseStatusTypes,
   StandardToken,
   WETH,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import {
   assertEvent,
   buyShares,

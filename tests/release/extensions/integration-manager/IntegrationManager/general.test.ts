@@ -7,7 +7,7 @@ import {
   StandardToken,
   VaultLib,
   WETH,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { addNewAssetsToFund, assertEvent, createNewFund, deployProtocolFixture } from '@enzymefinance/testutils';
 import { constants, utils } from 'ethers';
 

@@ -1,4 +1,4 @@
-import { FeeManagerArgs } from '@enzymefinance/protocol';
+import { FeeManagerArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 const fn: DeployFunction = async function (hre) {
@@ -10,7 +10,7 @@ const fn: DeployFunction = async function (hre) {
   const deployer = (await getSigners())[0];
   const feeManager = await get('FeeManager');
 
-  await deploy('PerformanceFee', {
+  await deploy('PerformanceFeeHWM', {
     args: [feeManager.address] as FeeManagerArgs,
     from: deployer.address,
     linkedData: {
@@ -21,7 +21,7 @@ const fn: DeployFunction = async function (hre) {
   });
 };
 
-fn.tags = ['Release', 'Fees', 'PerformanceFee'];
+fn.tags = ['Release', 'Fees', 'PerformanceFeeHWM'];
 fn.dependencies = ['FeeManager'];
 
 export default fn;

@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
@@ -18,9 +11,9 @@ import "../fund/comptroller/IComptroller.sol";
 import "../fund/comptroller/ComptrollerProxy.sol";
 import "../fund/vault/IVault.sol";
 import "./IFundDeployer.sol";
+import "hardhat/console.sol";
 
 /// @title FundDeployer Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice The top-level contract of the release.
 /// It primarily coordinates fund deployment and fund migration, but
 /// it is also deferred to for contract access control and for allowed calls
@@ -155,7 +148,7 @@ contract FundDeployer is IFundDeployer, IMigrationHookHandler {
     /// @return owner_ The contract owner address
     /// @dev Dynamically gets the owner based on the Protocol status. The owner is initially the
     /// contract's deployer, for convenience in setting up configuration.
-    /// Ownership is claimed when the owner of the Dispatcher contract (the Enzyme Council)
+    /// Ownership is claimed when the owner of the Dispatcher contract
     /// sets the releaseStatus to `Live`.
     function getOwner() public view override returns (address owner_) {
         if (releaseStatus == ReleaseStatus.PreLaunch) {
@@ -234,6 +227,7 @@ contract FundDeployer is IFundDeployer, IMigrationHookHandler {
         bytes memory _policyManagerConfigData
     ) private returns (address comptrollerProxy_, address vaultProxy_) {
         require(_fundOwner != address(0), "__createNewFund: _owner cannot be empty");
+        // require(_sharesActionTimelock > 1 minutes, "__createNewFund: SharesActionTimelock must be greater 1 min");
 
         comptrollerProxy_ = __deployComptrollerProxy(
             _denominationAsset,
@@ -251,7 +245,7 @@ contract FundDeployer is IFundDeployer, IMigrationHookHandler {
         );
 
         IComptroller(comptrollerProxy_).activate(vaultProxy_, false);
-
+        console.log("====FundDeployer msg.sender", msg.sender);
         emit NewFundCreated(
             msg.sender,
             comptrollerProxy_,

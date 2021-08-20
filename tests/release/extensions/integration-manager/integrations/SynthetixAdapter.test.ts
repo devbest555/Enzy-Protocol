@@ -6,7 +6,7 @@ import {
   StandardToken,
   synthetixTakeOrderArgs,
   takeOrderSelector,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import {
   createNewFund,
   deployProtocolFixture,

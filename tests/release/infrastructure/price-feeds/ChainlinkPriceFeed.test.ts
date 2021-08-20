@@ -1,5 +1,5 @@
 import { extractEvent, randomAddress, resolveAddress } from '@enzymefinance/ethers';
-import { ChainlinkRateAsset, MockChainlinkPriceSource, MockToken } from '@enzymefinance/protocol';
+import { ChainlinkRateAsset, MockChainlinkPriceSource, MockToken } from '@taodao/protocol';
 import { assertEvent, deployProtocolFixture } from '@enzymefinance/testutils';
 import { constants, utils } from 'ethers';
 

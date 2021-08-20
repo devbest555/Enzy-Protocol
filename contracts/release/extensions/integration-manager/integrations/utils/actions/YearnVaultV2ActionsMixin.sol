@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -15,7 +8,6 @@ import "../../../../../interfaces/IYearnVaultV2.sol";
 import "../../../../../utils/AssetHelpers.sol";
 
 /// @title YearnVaultV2ActionsMixin Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Mixin contract for interacting with Yearn v2 vaults
 abstract contract YearnVaultV2ActionsMixin is AssetHelpers {
     /// @dev Helper to lend underlying for yVault shares

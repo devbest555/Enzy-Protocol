@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -15,7 +8,6 @@ import "../../../../core/fund/vault/VaultLib.sol";
 import "../utils/AdapterBase.sol";
 
 /// @title TrackedAssetsAdapter Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Adapter to add tracked assets to a fund (useful e.g. to handle token airdrops)
 contract TrackedAssetsAdapter is AdapterBase {
     constructor(address _integrationManager) public AdapterBase(_integrationManager) {}

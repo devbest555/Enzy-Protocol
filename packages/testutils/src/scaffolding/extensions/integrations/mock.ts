@@ -10,7 +10,7 @@ import {
   callOnIntegrationArgs,
   encodeArgs,
   IntegrationManagerActionId,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { BigNumberish, BytesLike, utils } from 'ethers';
 
 export const mockGenericRemoveOnlySelector = sighash(

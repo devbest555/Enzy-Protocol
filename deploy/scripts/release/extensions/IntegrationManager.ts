@@ -1,4 +1,4 @@
-import type { IntegrationManagerArgs } from '@enzymefinance/protocol';
+import type { IntegrationManagerArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 const fn: DeployFunction = async function (hre) {

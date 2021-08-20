@@ -1,5 +1,5 @@
 import { utils } from 'ethers';
-import { ChainlinkRateAsset, sighash } from '@enzymefinance/protocol';
+import { ChainlinkRateAsset, sighash } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { DeploymentConfig, saveConfig } from '../../utils/config';
@@ -47,20 +47,20 @@ const primitives = {
   rlc: '0x607f4c5bb672230e8672085532f7e901544a7375',
   rune: '0x3155ba85d5f96b2d030a4966af206230e46849cb',
   snx: '0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f',
-  susd: '0x57ab1ec28d129707052df4df418d58a2d46d5f51',
+  susd: '0x57ab1ec28d129707052df4df418d58a2d46d5f51',//=sUSD
   sushi: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
   sxp: '0x8ce9137d39326ad0cd6491fb5cc0cba0e089b6a9',
   uma: '0x04fa0d235c4abf4bcf4787af4cf447de572ef828',
   uni: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
-  usdc: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-  usdt: '0xdac17f958d2ee523a2206206994597c13d831ec7',
-  wbtc: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
+  usdc: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',//USDC
+  usdt: '0xdac17f958d2ee523a2206206994597c13d831ec7',//USDT
+  wbtc: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',//BTC
   wnxm: '0x0d438f3b5175bebc262bf23753c1e53d03432bde',
   yfi: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
   zrx: '0xe41d2489571d322189246dafa5ebde1f4699f498',
 } as const;
 
-const weth = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
+const weth = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';//ETH
 
 const aggregators = {
   '1inch': ['0x72afaecf99c9d9c8215ff44c77b94b99c28741e8', ChainlinkRateAsset.ETH],
@@ -291,7 +291,6 @@ const unsupportedAssets = {
 const ethUsdAggregator = '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419';
 const xauUsdAggregator = '0x214eD9Da11D2fbe465a6fc601a91E62EbEc1a0D6';
 
-const curveMinter = '0xd061D61a4d941c39E5453435B6345Dc261C2fcE0';
 const synthetixDelegateApprovals = '0x15fd6e554874B9e70F832Ed37f231Ac5E142362f';
 
 // prettier-ignore
@@ -312,42 +311,9 @@ const mainnetConfig: DeploymentConfig = {
     ceth: '0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5',
     ctokens,
   },
-  curve: {
-    addressProvider: '0x0000000022D53366457F9d5E68Ec105046FC4383',
-    minter: curveMinter,
-    pools: {
-      aave: {
-        invariantProxyAsset: primitives.usdc,
-        liquidityGaugeToken: '0xd662908ADA2Ea1916B3318327A97eB18aD588b5d',
-        lpToken: '0xFd2a8fA60Abd58Efe3EeE34dd494cD491dC14900',
-        pool: '0xDeBF20617708857ebe4F679508E7b7863a8A8EeE'
-      },
-      eurs: {
-        invariantProxyAsset: synths.seur,
-        liquidityGaugeToken: '0x90Bb609649E0451E5aD952683D64BD2d1f245840',
-        lpToken: '0x194eBd173F6cDacE046C53eACcE9B953F28411d1',
-        pool: '0x0Ce6a5fF5217e38315f87032CF90686C96627CAA'
-      },
-      seth: {
-        invariantProxyAsset: weth,
-        liquidityGaugeToken: '0x3C0FFFF15EA30C35d7A85B85c0782D6c94e1d238',
-        lpToken: '0xA3D87FffcE63B53E0d54fAa1cc983B7eB0b74A9c',
-        pool: '0xc5424B857f758E906013F3555Dad202e4bdB4567'
-      },
-      steth: {
-        invariantProxyAsset: weth,
-        liquidityGaugeToken: '0x182B723a58739a9c974cFDB385ceaDb237453c28',
-        lpToken: '0x06325440D014e39736583c165C2963BA99fAf14E',
-        pool: '0xDC24316b9AE028F1497c275EB9192a3Ea0f67022'
-      },
-    },
-  },
   idle,
   kyber: {
     networkProxy: '0x9AAb3f75489902f3a48495025729a0AF77d4b11e',
-  },
-  lido: {
-    steth: '0xae7ab96520de3a18e5e111b5eaab095312d7fe84'
   },
   paraSwapV4: {
     augustusSwapper: '0x1bD435F3C054b6e901B7b108a0ab7617C808677b',
@@ -404,9 +370,6 @@ const mainnetConfig: DeploymentConfig = {
       synthetixDelegateApprovals,
       sighash(utils.FunctionFragment.fromString('approveExchangeOnBehalf(address delegate)')),
     ],
-    [curveMinter, sighash(utils.FunctionFragment.fromString('mint(address)'))],
-    [curveMinter, sighash(utils.FunctionFragment.fromString('mint_many(address[8])'))],
-    [curveMinter, sighash(utils.FunctionFragment.fromString('toggle_approve_mint(address)'))]
   ],
 }
 

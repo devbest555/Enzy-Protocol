@@ -1,4 +1,4 @@
-import { IYearnVaultV2, YearnVaultV2PriceFeed, YearnVaultV2PriceFeedArgs } from '@enzymefinance/protocol';
+import { IYearnVaultV2, YearnVaultV2PriceFeed, YearnVaultV2PriceFeedArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

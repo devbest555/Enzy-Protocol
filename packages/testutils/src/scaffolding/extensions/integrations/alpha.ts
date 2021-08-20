@@ -10,7 +10,7 @@ import {
   IntegrationManagerActionId,
   lendSelector,
   redeemSelector,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { BigNumber, BigNumberish, providers, utils } from 'ethers';
 
 export interface AlphaHomoraV1BankConfig extends Contract<AlphaHomoraV1BankConfig> {

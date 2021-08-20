@@ -1,5 +1,5 @@
 import { randomAddress } from '@enzymefinance/ethers';
-import { ChainlinkRateAsset, sighash } from '@enzymefinance/protocol';
+import { ChainlinkRateAsset, sighash } from '@taodao/protocol';
 import { utils } from 'ethers';
 import { DeployFunction } from 'hardhat-deploy/types';
 import { DeploymentConfig, saveConfig } from '../../utils/config';
@@ -21,16 +21,16 @@ const primitives = {
   ren: '0xd9436124f61685e63cd87370d1a9b32e79b75601',
   rep: '0x56a7c6766b5e7a9e6bc704f7becc001f2755a713',
   snx: '0x4c22d46c07ab880f94e8213e0256727af471a9f4',
-  susd: '0x190cece40aef39a2a15d8858cafa691f01a909c5',
+  susd: '0x190cece40aef39a2a15d8858cafa691f01a909c5',//sUSD
   uni: '0x86684577af5598b229a27c5774b658d303e2e044',
-  usdc: '0xfac5cbefa43a877c675e8007a685e0d72ee1f109',
-  usdt: '0x50e7615a526f715556c478749303c75571f1e6b5',
-  wbtc: '0x08adedfb5f473a7dffd05da2c0f33651553668a9',
+  usdc: '0x16266fcb1eba66db68ee07b78c2a6f02bc5b8763',//USDC=''
+  usdt: '0x50e7615a526f715556c478749303c75571f1e6b5',//USDT
+  wbtc: '0x08adedfb5f473a7dffd05da2c0f33651553668a9',//BTC
   yfi: '0x3a854556f28f77dcc803538032ca64fdf42a0783',
   zrx: '0x8955cd6b7826a86e820f0774278d89b76db25c46',
 } as const;
 
-const weth = '0xd0a1e359811322d97991e03f863a0c30c2cf029c';
+const weth = '0xd0a1e359811322d97991e03f863a0c30c2cf029c';//ETH
 
 const aggregators = {
   bat: ['0x0e4fcec26c9f85c3d714370c98f43c4e02fc35ae', ChainlinkRateAsset.ETH],
@@ -77,7 +77,6 @@ const idle = {} as const;
 const ethUsdAggregator = '0x9326bfa02add2366b30bacb125260af641031331';
 const xauUsdAggregator = '0x0000000000000000000000000000000000000000';
 
-const curveMinter = '0x0000000000000000000000000000000000000000';
 const synthetixDelegateApprovals = '0x93a5c5c7547832c8ebfccabc2157d43a9c5e68d4';
 
 // prettier-ignore
@@ -98,36 +97,9 @@ const mainnetConfig: DeploymentConfig = {
     ceth: '0x651c7d880878c1febf485b3279d5883f41e24896',
     ctokens,
   },
-  curve: {
-    addressProvider: '0x0000000000000000000000000000000000000000',
-    minter: curveMinter,
-    pools: {
-      aave: {
-        invariantProxyAsset: primitives.usdc,
-        liquidityGaugeToken: '0x0000000000000000000000000000000000000000',
-        lpToken: '0x0000000000000000000000000000000000000000',
-        pool: '0x0000000000000000000000000000000000000000'
-      },
-      seth: {
-        invariantProxyAsset: weth,
-        liquidityGaugeToken: '0x0000000000000000000000000000000000000000',
-        lpToken: '0x0000000000000000000000000000000000000000',
-        pool: '0x0000000000000000000000000000000000000000'
-      },
-      steth: {
-        invariantProxyAsset: weth,
-        liquidityGaugeToken: '0x0000000000000000000000000000000000000000',
-        lpToken: '0x0000000000000000000000000000000000000000',
-        pool: '0x0000000000000000000000000000000000000000'
-      },
-    },
-  },
   idle,
   kyber: {
     networkProxy: '0x9AAb3f75489902f3a48495025729a0AF77d4b11e',
-  },
-  lido: {
-    steth: '0x0000000000000000000000000000000000000000'
   },
   paraSwapV4: {
     augustusSwapper: '0x0000000000000000000000000000000000000000',
@@ -159,13 +131,15 @@ const mainnetConfig: DeploymentConfig = {
   uniswapV3: {
     router: randomAddress()
   },
-  unsupportedAssets: {},
+  unsupportedAssets: {
+    eurs: '0xef122471a8d726dddb029a64acda9d3b904db1c9'
+  },
   wdgld: {
     ethusd: ethUsdAggregator,
     wdgld: '0x23993cA98c63F1f8de457C271f8ceFD9076A42f4',
     xauusd: xauUsdAggregator,
   },
-  weth: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+  weth,
   yearn: {
     vaultV2: {
       registry: '0x50c1a2eA0a861A967D9d0FFE2AE4012c2E053804',
@@ -181,9 +155,6 @@ const mainnetConfig: DeploymentConfig = {
       synthetixDelegateApprovals,
       sighash(utils.FunctionFragment.fromString('approveExchangeOnBehalf(address delegate)')),
     ],
-    [curveMinter, sighash(utils.FunctionFragment.fromString('mint(address)'))],
-    [curveMinter, sighash(utils.FunctionFragment.fromString('mint_many(address[8])'))],
-    [curveMinter, sighash(utils.FunctionFragment.fromString('toggle_approve_mint(address)'))],
   ],
 }
 

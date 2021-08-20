@@ -1,25 +1,17 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
 import "../../IPolicy.sol";
 
 /// @title PolicyBase Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Abstract base contract for all policies
 abstract contract PolicyBase is IPolicy {
     address internal immutable POLICY_MANAGER;
 
-    modifier onlyPolicyManager {
+    modifier onlyPolicyManager() {
         require(msg.sender == POLICY_MANAGER, "Only the PolicyManager can make this call");
         _;
     }

@@ -1,4 +1,4 @@
-import { ISynthetixAddressResolver, ISynthetixExchangeRates, StandardToken } from '@enzymefinance/protocol';
+import { ISynthetixAddressResolver, ISynthetixExchangeRates, StandardToken } from '@taodao/protocol';
 import { ProtocolDeployment, deployProtocolFixture, synthetixResolveAddress } from '@enzymefinance/testutils';
 import { BigNumber, utils } from 'ethers';
 

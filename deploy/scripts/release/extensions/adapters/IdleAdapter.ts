@@ -1,4 +1,4 @@
-import { IdleAdapterArgs } from '@enzymefinance/protocol';
+import { IdleAdapterArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

@@ -1,5 +1,5 @@
 import { extractEvent, randomAddress } from '@enzymefinance/ethers';
-import { IMigrationHookHandler, StandardToken, VaultLib, WETH } from '@enzymefinance/protocol';
+import { IMigrationHookHandler, StandardToken, VaultLib, WETH } from '@taodao/protocol';
 import { addNewAssetsToFund, assertEvent, createNewFund, deployProtocolFixture } from '@enzymefinance/testutils';
 import { BigNumber, constants, utils } from 'ethers';
 
@@ -109,15 +109,8 @@ describe('addTrackedAsset', () => {
   });
 
   it('does not allow exceeding the tracked assets limit', async () => {
-    const {
-      fundOwner,
-      weth,
-      dispatcher,
-      fundDeployer,
-      integrationManager,
-      trackedAssetsAdapter,
-      config,
-    } = await provider.snapshot(snapshot);
+    const { fundOwner, weth, dispatcher, fundDeployer, integrationManager, trackedAssetsAdapter, config } =
+      await provider.snapshot(snapshot);
 
     // Reset the deployed FundDeployer as the currentFundDeployer
     await dispatcher.setCurrentFundDeployer(fundDeployer);

@@ -1,4 +1,4 @@
-import { CompoundPriceFeedArgs } from '@enzymefinance/protocol';
+import { CompoundPriceFeedArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

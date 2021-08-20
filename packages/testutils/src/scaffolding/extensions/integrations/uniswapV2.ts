@@ -14,7 +14,7 @@ import {
   uniswapV2RedeemArgs,
   uniswapV2TakeOrderArgs,
   VaultLib,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { BigNumberish } from 'ethers';
 
 export interface UniswapV2Factory extends Contract<UniswapV2Factory> {

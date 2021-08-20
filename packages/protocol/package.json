@@ -1,15 +1,15 @@
 {
-  "name": "@enzymefinance/protocol",
-  "version": "2.0.7",
+  "name": "@taodao/protocol",
+  "version": "1.0.0",
   "description": "Technology Regulated and Operated Investment Funds",
-  "author": "Enzyme Council DAO <council@enzyme.finance>",
+  "author": "TaoDAO-2.0",
   "license": "GPL-3.0",
-  "homepage": "https://enzyme.finance",
-  "main": "dist/enzymefinance-protocol.cjs.js",
-  "module": "dist/enzymefinance-protocol.esm.js",
+  "homepage": "https://www.taodao.finance/",
+  "main": "dist/taodao-protocol.cjs.js",
+  "module": "dist/taodao-protocol.esm.js",
   "browser": {
-    "./dist/enzymefinance-protocol.cjs.js": "./dist/enzymefinance-protocol.browser.cjs.js",
-    "./dist/enzymefinance-protocol.esm.js": "./dist/enzymefinance-protocol.browser.esm.js"
+    "./dist/taodao-protocol.cjs.js": "./dist/taodao-protocol.browser.cjs.js",
+    "./dist/taodao-protocol.esm.js": "./dist/taodao-protocol.browser.esm.js"
   },
   "files": [
     "dist",
@@ -20,16 +20,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/enzymefinance/protocol.git"
+    "url": "git+https://github.com/Taoist-DAO/TAODAO-2.0.git"
   },
   "bugs": {
-    "url": "https://github.com/enzymefinance/protocol/issues"
+    "url": "https://github.com/Taoist-DAO/TAODAO-2.0/issues"
   },
   "keywords": [
     "DeFi",
     "Ethereum",
-    "Enzyme",
-    "Enzyme Finance",
+    "taodao",
+    "TaoDAO Finance",
     "Smart Contracts",
     "Solidity"
   ],

@@ -1,5 +1,5 @@
 import { extractEvent, randomAddress } from '@enzymefinance/ethers';
-import { IDerivativePriceFeed, MockToken } from '@enzymefinance/protocol';
+import { IDerivativePriceFeed, MockToken } from '@taodao/protocol';
 import { deployProtocolFixture } from '@enzymefinance/testutils';
 import { constants } from 'ethers';
 
@@ -250,12 +250,8 @@ describe('updateDerivatives', () => {
 
 describe('removeDerivatives', () => {
   it('removes a set of derivatives', async () => {
-    const {
-      aggregatedDerivativePriceFeed,
-      mockDerivative1,
-      mockDerivative2,
-      mockDerivativePriceFeed1,
-    } = await provider.snapshot(snapshot);
+    const { aggregatedDerivativePriceFeed, mockDerivative1, mockDerivative2, mockDerivativePriceFeed1 } =
+      await provider.snapshot(snapshot);
 
     // Add both derivatives to the aggregate feed using mockDerivativePriceFeed1
     await mockDerivativePriceFeed1.isSupportedAsset.given(mockDerivative1).returns(true);

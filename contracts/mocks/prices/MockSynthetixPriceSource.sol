@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
@@ -27,7 +20,10 @@ contract MockSynthetixPriceSource is Ownable, ISynthetixExchangeRates {
     mapping(bytes32 => uint256) private fixedRate;
     mapping(bytes32 => AggregatorInfo) private currencyKeyToAggregator;
 
-    enum RateAsset {ETH, USD}
+    enum RateAsset {
+        ETH,
+        USD
+    }
 
     struct AggregatorInfo {
         address aggregator;
@@ -88,10 +84,8 @@ contract MockSynthetixPriceSource is Ownable, ISynthetixExchangeRates {
             if (aggregatorInfo.rateAsset == RateAsset.ETH) {
                 uint256 ethToUsd = uint256(
                     MockChainlinkPriceSource(
-                        getAggregatorFromCurrencyKey(bytes32("ETH"))
-                            .aggregator
-                    )
-                        .latestAnswer()
+                        getAggregatorFromCurrencyKey(bytes32("ETH")).aggregator
+                    ).latestAnswer()
                 );
                 rate_ = rate_.mul(ethToUsd).div(10**8);
             }

@@ -1,4 +1,4 @@
-import { ComptrollerLibArgs, FundDeployer as FundDeployerContract } from '@enzymefinance/protocol';
+import { ComptrollerLibArgs, FundDeployer as FundDeployerContract } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../utils/config';

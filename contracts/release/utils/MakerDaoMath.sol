@@ -18,7 +18,6 @@
 pragma solidity 0.6.12;
 
 /// @title MakerDaoMath Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Helper functions for math operations adapted from MakerDao contracts
 abstract contract MakerDaoMath {
     /// @dev Performs scaled, fixed-point exponentiation.

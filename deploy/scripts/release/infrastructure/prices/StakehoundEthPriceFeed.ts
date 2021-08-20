@@ -1,4 +1,4 @@
-import { StakehoundEthPriceFeedArgs } from '@enzymefinance/protocol';
+import { StakehoundEthPriceFeedArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

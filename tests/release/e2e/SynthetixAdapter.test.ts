@@ -1,4 +1,4 @@
-import { ISynthetixAddressResolver, ISynthetixExchanger, StandardToken } from '@enzymefinance/protocol';
+import { ISynthetixAddressResolver, ISynthetixExchanger, StandardToken } from '@taodao/protocol';
 import {
   createNewFund,
   ProtocolDeployment,

@@ -1,4 +1,4 @@
-import { AlphaHomoraV1AdapterArgs } from '@enzymefinance/protocol';
+import { AlphaHomoraV1AdapterArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

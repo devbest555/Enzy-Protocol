@@ -5,7 +5,7 @@ import {
   IChainlinkAggregator,
   MockToken,
   StandardToken,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { ProtocolDeployment, deployProtocolFixture } from '@enzymefinance/testutils';
 import { BigNumber, constants, Signer, utils } from 'ethers';
 

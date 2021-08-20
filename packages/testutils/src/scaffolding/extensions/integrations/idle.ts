@@ -19,7 +19,7 @@ import {
   lendSelector,
   redeemSelector,
   StandardToken,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { BigNumber, BigNumberish } from 'ethers';
 
 export async function idleApproveAssets({

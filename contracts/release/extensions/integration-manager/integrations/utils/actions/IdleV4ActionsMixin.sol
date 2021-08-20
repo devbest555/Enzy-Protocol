@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -15,7 +8,6 @@ import "../../../../../interfaces/IIdleTokenV4.sol";
 import "../../../../../utils/AssetHelpers.sol";
 
 /// @title IdleV4ActionsMixin Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Mixin contract for interacting with Idle tokens (V4)
 abstract contract IdleV4ActionsMixin is AssetHelpers {
     address private constant IDLE_V4_REFERRAL_ACCOUNT = 0x1ad1fc9964c551f456238Dd88D6a38344B5319D7;

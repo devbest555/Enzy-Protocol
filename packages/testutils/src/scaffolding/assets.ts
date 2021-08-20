@@ -5,7 +5,7 @@ import {
   StandardToken,
   TrackedAssetsAdapter,
   VaultLib,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { BigNumberish } from 'ethers';
 import { addTrackedAssets } from './extensions/integrations/trackedAssets';
 

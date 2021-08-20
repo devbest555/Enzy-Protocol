@@ -1,4 +1,4 @@
-import { WdgldPriceFeedArgs } from '@enzymefinance/protocol';
+import { WdgldPriceFeedArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

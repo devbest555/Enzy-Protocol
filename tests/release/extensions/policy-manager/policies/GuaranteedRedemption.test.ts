@@ -6,7 +6,7 @@ import {
   guaranteedRedemptionArgs,
   PolicyHook,
   validateRulePreCoIArgs,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { assertEvent, deployProtocolFixture } from '@enzymefinance/testutils';
 import { BigNumber, BigNumberish, constants, utils } from 'ethers';
 

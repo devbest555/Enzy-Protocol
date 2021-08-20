@@ -15,7 +15,7 @@ import {
   unstakeSelector,
   unstakeAndRedeemSelector,
   ChainlinkRateAsset,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import {
   createNewFund,
   curveEursClaimRewards,

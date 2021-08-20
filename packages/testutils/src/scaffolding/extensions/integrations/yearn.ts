@@ -10,7 +10,7 @@ import {
   YearnVaultV2Adapter,
   yearnVaultV2LendArgs,
   yearnVaultV2RedeemArgs,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { BigNumber, BigNumberish } from 'ethers';
 
 export async function yearnVaultV2Lend({

@@ -10,7 +10,7 @@ import {
   StandardToken,
   takeOrderSelector,
   VaultLib,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import {
   assertEvent,
   createNewFund,

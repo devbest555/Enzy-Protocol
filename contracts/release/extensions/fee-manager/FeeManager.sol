@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
@@ -23,9 +16,10 @@ import "../utils/FundDeployerOwnerMixin.sol";
 import "../utils/PermissionedVaultActionMixin.sol";
 import "./IFee.sol";
 import "./IFeeManager.sol";
+import "../../core/fund/comptroller/ComptrollerLib.sol";
+import "hardhat/console.sol";
 
 /// @title FeeManager Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Manages fees for funds
 contract FeeManager is
     IFeeManager,
@@ -246,6 +240,7 @@ contract FeeManager is
     /// transferring shares) have finished. To optimize for the expensive operation of calculating
     /// GAV, once one fee requires GAV, we recycle that `gav` value for subsequent fees.
     /// Assumes that _gav is either 0 or has already been validated.
+    /// __invokeHook(msg.sender, _hook, _settlementData, _gav, true);
     function __invokeHook(
         address _comptrollerProxy,
         FeeHook _hook,
@@ -282,6 +277,10 @@ contract FeeManager is
         }
     }
 
+    /// @dev Helper to compare two strings
+    function compareStringsbyBytes(string memory s1, string memory s2) internal pure returns(bool) {
+        return keccak256(abi.encodePacked(s1)) == keccak256(abi.encodePacked(s2));
+    }
     /// @dev Helper to payout the shares outstanding for the specified fees.
     /// Does not call settle() on fees.
     /// Only callable via ComptrollerProxy.callOnExtension().
@@ -292,19 +291,34 @@ contract FeeManager is
         address vaultProxy = getVaultProxyForFund(msg.sender);
 
         uint256 sharesOutstandingDue;
+        uint256 sharesOutstandingToFee;
         for (uint256 i; i < fees.length; i++) {
             if (!IFee(fees[i]).payout(_comptrollerProxy, vaultProxy)) {
                 continue;
             }
 
-
-                uint256 sharesOutstandingForFee
-             = comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][fees[i]];
+            uint256 sharesOutstandingForFee = comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][fees[i]];
+            
             if (sharesOutstandingForFee == 0) {
                 continue;
             }
 
+            uint256 feeShares;
+            // Adjust 8% shares of performanceFee if fee is performanceFee
+            if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE") || 
+                compareStringsbyBytes(IFee(fees[i]).identifier(), "BenchmarkIndexPerformanceFee")) {
+                feeShares = sharesOutstandingForFee.mul(8).div(100);
+                sharesOutstandingForFee = sharesOutstandingForFee.sub(feeShares);
+            } 
+
+            // Adjust 0.5% shares of managementFee if fee is managementFee
+            if (compareStringsbyBytes(IFee(fees[i]).identifier(), "MANAGEMENT")) {
+                feeShares = sharesOutstandingForFee.mul(5).div(1000);
+                sharesOutstandingForFee = sharesOutstandingForFee.sub(feeShares);                
+            }
+            
             sharesOutstandingDue = sharesOutstandingDue.add(sharesOutstandingForFee);
+            sharesOutstandingToFee = sharesOutstandingToFee.add(feeShares);
 
             // Delete shares outstanding and distribute from VaultProxy to the fees recipient
             comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][fees[i]] = 0;
@@ -320,6 +334,15 @@ contract FeeManager is
                 sharesOutstandingDue
             );
         }
+        //============= Transfer Shares of fees from VaultProxy to DAO Wallet 
+        // if (sharesOutstandingToFee > 0) {
+        //     __transferShares(
+        //         _comptrollerProxy,
+        //         vaultProxy,
+        //         "here DAO wallet address",
+        //         sharesOutstandingDue
+        //     );
+        // }
     }
 
     /// @dev Helper to settle a fee
@@ -331,6 +354,7 @@ contract FeeManager is
         bytes memory _settlementData,
         uint256 _gav
     ) private {
+
         (SettlementType settlementType, address payer, uint256 sharesDue) = IFee(_fee).settle(
             _comptrollerProxy,
             _vaultProxy,
@@ -341,8 +365,18 @@ contract FeeManager is
         if (settlementType == SettlementType.None) {
             return;
         }
-
+        
         address payee;
+        if (compareStringsbyBytes(IFee(_fee).identifier(), "PERFORMANCE_HURDLE")) {
+            if (settlementType == SettlementType.Direct) {
+                payee = IVault(_vaultProxy).getOwner();
+                address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset();  
+                //Asset amount(ex : 0.18 ETH) send to fund manager
+                ERC20(denominationAsset).transferFrom(payer, payee, sharesDue);
+            } 
+            return;
+        }
+
         if (settlementType == SettlementType.Direct) {
             payee = IVault(_vaultProxy).getOwner();
             __transferShares(_comptrollerProxy, payer, payee, sharesDue);
@@ -352,14 +386,16 @@ contract FeeManager is
         } else if (settlementType == SettlementType.Burn) {
             __burnShares(_comptrollerProxy, payer, sharesDue);
         } else if (settlementType == SettlementType.MintSharesOutstanding) {
-            comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][_fee] = comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][_fee]
-                .add(sharesDue);
+            comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][
+                _fee
+            ] = comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][_fee].add(sharesDue);
 
             payee = _vaultProxy;
             __mintShares(_comptrollerProxy, payee, sharesDue);
         } else if (settlementType == SettlementType.BurnSharesOutstanding) {
-            comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][_fee] = comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][_fee]
-                .sub(sharesDue);
+            comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][
+                _fee
+            ] = comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][_fee].sub(sharesDue);
 
             payer = _vaultProxy;
             __burnShares(_comptrollerProxy, payer, sharesDue);

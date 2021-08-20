@@ -7,7 +7,7 @@ import {
   policyManagerConfigArgs,
   StandardToken,
   VaultLib,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import {
   buyShares,
   createNewFund,

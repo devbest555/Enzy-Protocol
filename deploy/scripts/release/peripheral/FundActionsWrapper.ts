@@ -1,4 +1,4 @@
-import type { FundActionsWrapperArgs } from '@enzymefinance/protocol';
+import type { FundActionsWrapperArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../utils/config';

@@ -6,7 +6,7 @@ import {
   redeemSelector,
   SpendAssetsHandleType,
   StandardToken,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { createNewFund, ProtocolDeployment, getAssetBalances, deployProtocolFixture } from '@enzymefinance/testutils';
 import { aaveLend, aaveRedeem } from '@enzymefinance/testutils/src/scaffolding/extensions/integrations/aave';
 import { BigNumber, utils } from 'ethers';

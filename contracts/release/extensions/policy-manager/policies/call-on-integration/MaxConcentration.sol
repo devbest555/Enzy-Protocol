@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -19,7 +12,6 @@ import "../../../../infrastructure/value-interpreter/ValueInterpreter.sol";
 import "./utils/PostCallOnIntegrationValidatePolicyBase.sol";
 
 /// @title MaxConcentration Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice A policy that defines a configurable threshold for the concentration of any one asset
 /// in a fund's holdings
 contract MaxConcentration is PostCallOnIntegrationValidatePolicyBase {

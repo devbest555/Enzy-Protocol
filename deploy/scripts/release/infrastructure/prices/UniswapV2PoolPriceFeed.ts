@@ -1,4 +1,4 @@
-import { AggregatedDerivativePriceFeed, UniswapV2PoolPriceFeedArgs } from '@enzymefinance/protocol';
+import { AggregatedDerivativePriceFeed, UniswapV2PoolPriceFeedArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

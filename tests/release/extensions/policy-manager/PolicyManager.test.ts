@@ -11,7 +11,7 @@ import {
   validateRulePreBuySharesArgs,
   validateRulePreCoIArgs,
   WETH,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import {
   buyShares,
   createNewFund,

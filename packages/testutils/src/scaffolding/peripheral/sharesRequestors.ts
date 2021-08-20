@@ -4,7 +4,7 @@ import {
   AuthUserExecutedSharesRequestorFactory,
   AuthUserExecutedSharesRequestorLib,
   StandardToken,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { BigNumberish, utils } from 'ethers';
 import { assertEvent } from '../../assertions';
 

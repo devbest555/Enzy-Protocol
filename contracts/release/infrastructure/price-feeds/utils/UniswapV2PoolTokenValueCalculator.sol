@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -16,7 +9,6 @@ import "../../../interfaces/IUniswapV2Factory.sol";
 import "../../../interfaces/IUniswapV2Pair.sol";
 
 /// @title UniswapV2PoolTokenValueCalculator Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Abstract contract for computing the value of Uniswap liquidity pool tokens
 /// @dev Unless otherwise noted, these functions are adapted to our needs and style guide from
 /// an un-merged Uniswap branch:

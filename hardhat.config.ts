@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import '@enzymefinance/hardhat/plugin';
 
-import { utils } from 'ethers';
+// import { utils } from 'ethers';
 import { HardhatUserConfig } from 'hardhat/types';
 
 function node(networkName: string) {
@@ -20,7 +20,7 @@ function accounts(networkName: string) {
     .filter(Boolean);
 }
 
-const mnemonic = 'test test test test test test test test test test test junk';
+const mnemonic = process.env.MNEMONIC; // = 'test test test test test test test test test test test junk';
 
 const config: HardhatUserConfig = {
   codeCoverage: {
@@ -64,11 +64,6 @@ const config: HardhatUserConfig = {
       'ISynthetixExchanger',
       'ISynthetixProxyERC20',
       'ISynthetixSynth',
-      'ICurveAddressProvider',
-      'ICurveLiquidityGaugeV2',
-      'ICurveLiquidityPool',
-      'ICurveRegistry',
-      'ICurveStableSwapSteth',
       'IYearnVaultV2',
     ],
     options: {
@@ -84,28 +79,33 @@ const config: HardhatUserConfig = {
   },
   namedAccounts: {
     deployer: 0,
-  },
+  },  
+  defaultNetwork: "hardhat",
   networks: {
     hardhat: {
       hardfork: 'istanbul',
       accounts: {
-        accountsBalance: utils.parseUnits('1', 36).toString(),
-        count: 5,
+        // accountsBalance: utils.parseUnits('1', 36).toString(),
+        // count: 5,
         mnemonic,
       },
+      chainId: 42,
       forking: {
-        blockNumber: 12540501,
-        url: node('mainnet'), // May 31, 2021
+        // blockNumber: 12540501,
+        url: node('kovan'),
       },
       gas: 9500000,
       gasPrice: 0, // TODO: Consider removing this again.
-      ...(process.env.COVERAGE && {
-        allowUnlimitedContractSize: true,
-      }),
+      // ...(process.env.COVERAGE && {
+      //   allowUnlimitedContractSize: true,
+      // }),
     },
     kovan: {
       hardfork: 'istanbul',
-      accounts: accounts('kovan'),
+      accounts: {
+        mnemonic,
+      },
+      // accounts: accounts('kovan'),
       url: node('kovan'),
     },
     mainnet: {

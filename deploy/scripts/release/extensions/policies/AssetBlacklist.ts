@@ -1,4 +1,4 @@
-import { AssetBlacklistArgs } from '@enzymefinance/protocol';
+import { AssetBlacklistArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 const fn: DeployFunction = async function (hre) {

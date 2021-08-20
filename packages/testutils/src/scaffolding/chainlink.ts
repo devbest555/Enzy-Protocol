@@ -1,5 +1,5 @@
 import { BigNumberish } from 'ethers';
-import { MockChainlinkPriceSource } from '@enzymefinance/protocol';
+import { MockChainlinkPriceSource } from '@taodao/protocol';
 
 export async function updateChainlinkAggregator(aggregator: MockChainlinkPriceSource, price?: BigNumberish) {
   const answer = price ?? (await aggregator.latestAnswer());

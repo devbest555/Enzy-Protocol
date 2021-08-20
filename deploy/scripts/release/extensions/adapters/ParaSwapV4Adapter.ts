@@ -1,4 +1,4 @@
-import { ParaSwapV4AdapterArgs } from '@enzymefinance/protocol';
+import { ParaSwapV4AdapterArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

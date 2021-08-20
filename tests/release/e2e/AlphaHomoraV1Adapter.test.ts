@@ -5,7 +5,7 @@ import {
   redeemSelector,
   SpendAssetsHandleType,
   StandardToken,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import {
   AlphaHomoraV1Bank,
   alphaHomoraV1Lend,

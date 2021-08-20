@@ -1,4 +1,4 @@
-import { GuaranteedRedemptionArgs } from '@enzymefinance/protocol';
+import { GuaranteedRedemptionArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

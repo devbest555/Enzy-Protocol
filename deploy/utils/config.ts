@@ -1,4 +1,4 @@
-import { ChainlinkRateAsset } from '@enzymefinance/protocol';
+import { ChainlinkRateAsset } from '@taodao/protocol';
 import { constants } from 'ethers';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
@@ -41,11 +41,6 @@ export interface DeploymentConfig {
     originator: string;
     trackingCode: string;
   };
-  curve: {
-    addressProvider: string;
-    minter: string;
-    pools: Record<string, { pool: string; lpToken: string; liquidityGaugeToken: string; invariantProxyAsset: string }>;
-  };
   aave: {
     lendingPoolAddressProvider: string;
     protocolDataProvider: string;
@@ -61,9 +56,6 @@ export interface DeploymentConfig {
   idle: Record<string, string>;
   kyber: {
     networkProxy: string;
-  };
-  lido: {
-    steth: string;
   };
   paraSwapV4: {
     augustusSwapper: string;

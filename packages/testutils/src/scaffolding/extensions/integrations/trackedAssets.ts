@@ -8,7 +8,7 @@ import {
   IntegrationManager,
   IntegrationManagerActionId,
   TrackedAssetsAdapter,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 
 export async function addTrackedAssets({
   comptrollerProxy,

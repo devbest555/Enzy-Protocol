@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@enzymefinance/hardhat';
-import { ComptrollerLib, IntegrationManager, KyberAdapter, StandardToken, VaultLib } from '@enzymefinance/protocol';
+import { ComptrollerLib, IntegrationManager, KyberAdapter, StandardToken, VaultLib } from '@taodao/protocol';
 import {
   createNewFund,
   ProtocolDeployment,

@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -17,7 +10,6 @@ import "../IIntegrationAdapter.sol";
 import "./IntegrationSelectors.sol";
 
 /// @title AdapterBase Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice A base contract for integration adapters
 abstract contract AdapterBase is IIntegrationAdapter, IntegrationSelectors {
     using SafeERC20 for ERC20;
@@ -58,7 +50,7 @@ abstract contract AdapterBase is IIntegrationAdapter, IntegrationSelectors {
         __transferContractAssetBalancesToFund(_vaultProxy, spendAssets);
     }
 
-    modifier onlyIntegrationManager {
+    modifier onlyIntegrationManager() {
         require(
             msg.sender == INTEGRATION_MANAGER,
             "Only the IntegrationManager can call this function"

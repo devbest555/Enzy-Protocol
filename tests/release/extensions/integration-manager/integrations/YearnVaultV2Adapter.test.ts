@@ -7,7 +7,7 @@ import {
   StandardToken,
   yearnVaultV2LendArgs,
   yearnVaultV2RedeemArgs,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import {
   createNewFund,
   deployProtocolFixture,

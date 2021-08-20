@@ -55,7 +55,7 @@ import {
   takeOrderSelector,
   unstakeAndRedeemSelector,
   unstakeSelector,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { BigNumber, BigNumberish, constants, utils } from 'ethers';
 
 export interface CurveLiquidityGaugeV2 extends Contract<CurveLiquidityGaugeV2> {

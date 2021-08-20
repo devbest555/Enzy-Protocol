@@ -1,4 +1,4 @@
-import { ValueInterpreterArgs } from '@enzymefinance/protocol';
+import { ValueInterpreterArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 const fn: DeployFunction = async function (hre) {

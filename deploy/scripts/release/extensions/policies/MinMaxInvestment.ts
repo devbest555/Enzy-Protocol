@@ -1,4 +1,4 @@
-import { MinMaxInvestmentArgs } from '@enzymefinance/protocol';
+import { MinMaxInvestmentArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 const fn: DeployFunction = async function (hre) {

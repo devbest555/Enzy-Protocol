@@ -1,4 +1,4 @@
-import { YearnVaultV2AdapterArgs } from '@enzymefinance/protocol';
+import { YearnVaultV2AdapterArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 const fn: DeployFunction = async function (hre) {

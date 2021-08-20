@@ -1,4 +1,4 @@
-import { encodeFunctionData, StandardToken, UniswapV2Router } from '@enzymefinance/protocol';
+import { encodeFunctionData, StandardToken, UniswapV2Router } from '@taodao/protocol';
 import { createNewFund, ProtocolDeployment, deployProtocolFixture } from '@enzymefinance/testutils';
 import { BigNumber, constants, utils } from 'ethers';
 

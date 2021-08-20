@@ -1,4 +1,4 @@
-import { IChainlinkAggregator, StandardToken } from '@enzymefinance/protocol';
+import { IChainlinkAggregator, StandardToken } from '@taodao/protocol';
 import { deployProtocolFixture } from '@enzymefinance/testutils';
 import { BigNumber, utils } from 'ethers';
 
@@ -32,9 +32,13 @@ describe('constructor', () => {
 
 describe('calcUnderlyingValues', () => {
   it('returns rate for underlying WETH', async () => {
-    const { wdgldPriceFeed, xauUsdAggregator, ethUsdAggregator, weth, wdgld: wdgldAddress } = await provider.snapshot(
-      snapshot,
-    );
+    const {
+      wdgldPriceFeed,
+      xauUsdAggregator,
+      ethUsdAggregator,
+      weth,
+      wdgld: wdgldAddress,
+    } = await provider.snapshot(snapshot);
     const wdgldDecimals = 8;
 
     const xauToUsdRate = await new IChainlinkAggregator(xauUsdAggregator, provider).latestAnswer();

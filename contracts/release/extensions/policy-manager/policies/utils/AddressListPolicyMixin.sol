@@ -1,20 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
 import "@openzeppelin/contracts/utils/EnumerableSet.sol";
 
 /// @title AddressListPolicyMixin Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice An abstract mixin contract for policies that use an address list
 abstract contract AddressListPolicyMixin {
     using EnumerableSet for EnumerableSet.AddressSet;

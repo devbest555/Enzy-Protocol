@@ -1,4 +1,4 @@
-import { ZeroExV2AdapterArgs } from '@enzymefinance/protocol';
+import { ZeroExV2AdapterArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

@@ -11,7 +11,7 @@ import {
   lendSelector,
   redeemSelector,
   VaultLib,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { BigNumberish, utils } from 'ethers';
 
 // prettier-ignore

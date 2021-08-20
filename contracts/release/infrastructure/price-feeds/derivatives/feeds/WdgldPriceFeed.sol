@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -17,7 +10,6 @@ import "../../../../utils/MakerDaoMath.sol";
 import "../IDerivativePriceFeed.sol";
 
 /// @title WdgldPriceFeed Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Price source oracle for WDGLD <https://dgld.ch/>
 contract WdgldPriceFeed is IDerivativePriceFeed, MakerDaoMath {
     using SafeMath for uint256;
@@ -87,8 +79,7 @@ contract WdgldPriceFeed is IDerivativePriceFeed, MakerDaoMath {
                 GTR_CONSTANT,
                 ((block.timestamp).sub(WDGLD_GENESIS_TIMESTAMP)).div(28800), // 60 * 60 * 8 (8 hour periods)
                 GTR_PRECISION
-            )
-                .div(10);
+            ).div(10);
     }
 
     /// @notice Checks if an asset is supported by this price feed

@@ -1,4 +1,4 @@
-import { IPolicy, PolicyHook, PolicyManager, policyManagerConfigArgs } from '@enzymefinance/protocol';
+import { IPolicy, PolicyHook, PolicyManager, policyManagerConfigArgs } from '@taodao/protocol';
 import { constants, Signer, utils } from 'ethers';
 
 // Policy Manager

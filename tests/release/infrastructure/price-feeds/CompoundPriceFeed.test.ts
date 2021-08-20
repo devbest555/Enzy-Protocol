@@ -1,5 +1,5 @@
 import { extractEvent, randomAddress } from '@enzymefinance/ethers';
-import { MockCTokenIntegratee } from '@enzymefinance/protocol';
+import { MockCTokenIntegratee } from '@taodao/protocol';
 import { deployProtocolFixture } from '@enzymefinance/testutils';
 import { utils } from 'ethers';
 
@@ -95,13 +95,8 @@ describe('addCTokens', () => {
   });
 
   it('adds multiple cTokens and emits an event per added cToken', async () => {
-    const {
-      compoundPriceFeed,
-      newCToken1,
-      newCToken2,
-      newCToken1Underlying,
-      newCToken2Underlying,
-    } = await provider.snapshot(snapshot);
+    const { compoundPriceFeed, newCToken1, newCToken2, newCToken1Underlying, newCToken2Underlying } =
+      await provider.snapshot(snapshot);
 
     // The cTokens should not be supported assets initially
     expect(await compoundPriceFeed.isSupportedAsset(newCToken1)).toBe(false);

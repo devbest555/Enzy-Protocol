@@ -1,4 +1,4 @@
-import { IChainlinkAggregator, StandardToken } from '@enzymefinance/protocol';
+import { IChainlinkAggregator, StandardToken } from '@taodao/protocol';
 import { ProtocolDeployment, deployProtocolFixture } from '@enzymefinance/testutils';
 import { utils } from 'ethers';
 

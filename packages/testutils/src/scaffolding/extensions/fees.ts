@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@enzymefinance/hardhat';
-import { FeeHook, FeeManager, feeManagerConfigArgs, FeeSettlementType, IFee } from '@enzymefinance/protocol';
+import { FeeHook, FeeManager, feeManagerConfigArgs, FeeSettlementType, IFee } from '@taodao/protocol';
 import { constants, utils } from 'ethers';
 
 export async function generateFeeManagerConfigWithMockFees({
@@ -37,7 +37,7 @@ export async function generateRegisteredMockFees({
   // Initialize mock fee return values
   await Promise.all([
     // Continuous fee the mimics ManagementFee
-    mockContinuousFeeSettleOnly.identifier.returns(`MOCK_CONTINUOUS_1`),
+    mockContinuousFeeSettleOnly.identifier.returns(`MANAGEMENT`),
     mockContinuousFeeSettleOnly.settle.returns(FeeSettlementType.None, constants.AddressZero, 0),
     mockContinuousFeeSettleOnly.payout.returns(false),
     mockContinuousFeeSettleOnly.addFundSettings.returns(undefined),
@@ -50,7 +50,7 @@ export async function generateRegisteredMockFees({
       false,
     ),
     // Continuous fee the mimics PerformanceFee
-    mockContinuousFeeWithGavAndUpdates.identifier.returns(`MOCK_CONTINUOUS_2`),
+    mockContinuousFeeWithGavAndUpdates.identifier.returns(`PERFORMANCE`),
     mockContinuousFeeWithGavAndUpdates.settle.returns(FeeSettlementType.None, constants.AddressZero, 0),
     mockContinuousFeeWithGavAndUpdates.payout.returns(false),
     mockContinuousFeeWithGavAndUpdates.addFundSettings.returns(undefined),

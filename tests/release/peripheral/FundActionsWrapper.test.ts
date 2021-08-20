@@ -5,7 +5,7 @@ import {
   managementFeeConfigArgs,
   performanceFeeConfigArgs,
   WETH,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { createNewFund, deployProtocolFixture } from '@enzymefinance/testutils';
 import { utils } from 'ethers';
 

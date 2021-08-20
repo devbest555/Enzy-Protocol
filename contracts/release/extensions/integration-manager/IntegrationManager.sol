@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -26,7 +19,6 @@ import "./integrations/IIntegrationAdapter.sol";
 import "./IIntegrationManager.sol";
 
 /// @title IntegrationManager
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Extension to handle DeFi integration actions for funds
 contract IntegrationManager is
     IIntegrationManager,
@@ -728,8 +720,9 @@ contract IntegrationManager is
                 outgoingAssets_[outgoingAssetsIndex] = _spendAssets[i];
                 outgoingAssetsIndex++;
             } else if (postCallSpendAssetBalances[i] > _preCallSpendAssetBalances[i]) {
-                increasedSpendAssetAmounts_[increasedSpendAssetsIndex] = postCallSpendAssetBalances[i]
-                    .sub(_preCallSpendAssetBalances[i]);
+                increasedSpendAssetAmounts_[
+                    increasedSpendAssetsIndex
+                ] = postCallSpendAssetBalances[i].sub(_preCallSpendAssetBalances[i]);
                 increasedSpendAssets_[increasedSpendAssetsIndex] = _spendAssets[i];
                 increasedSpendAssetsIndex++;
             }

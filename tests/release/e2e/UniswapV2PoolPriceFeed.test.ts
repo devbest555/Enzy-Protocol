@@ -1,4 +1,4 @@
-import { IUniswapV2Pair, StandardToken } from '@enzymefinance/protocol';
+import { IUniswapV2Pair, StandardToken } from '@taodao/protocol';
 import {
   buyShares,
   createNewFund,

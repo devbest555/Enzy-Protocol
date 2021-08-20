@@ -14,7 +14,7 @@ import {
   IntegrationManagerActionId,
   VaultLib,
   WETH,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import {
   assertEvent,
   createNewFund,

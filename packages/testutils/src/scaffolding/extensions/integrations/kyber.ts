@@ -10,7 +10,7 @@ import {
   takeOrderSelector,
   kyberTakeOrderArgs,
   IntegrationManagerActionId,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { BigNumber, BigNumberish, utils } from 'ethers';
 
 // prettier-ignore

@@ -1,4 +1,4 @@
-import { ICERC20, StandardToken } from '@enzymefinance/protocol';
+import { ICERC20, StandardToken } from '@taodao/protocol';
 import { ProtocolDeployment, deployProtocolFixture } from '@enzymefinance/testutils';
 import { BigNumber, utils } from 'ethers';
 

@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -15,7 +8,6 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "../../IDerivativePriceFeed.sol";
 
 /// @title SinglePeggedDerivativePriceFeedBase Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Price feed base for any single derivative that is pegged 1:1 to its underlying
 abstract contract SinglePeggedDerivativePriceFeedBase is IDerivativePriceFeed {
     address private immutable DERIVATIVE;

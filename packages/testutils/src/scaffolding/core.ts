@@ -11,7 +11,7 @@ import {
   SynthetixPriceFeed,
   ValueInterpreter,
   VaultLib,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { BytesLike, Signer } from 'ethers';
 
 export async function createFundDeployer({

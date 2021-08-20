@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 
@@ -16,7 +9,6 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 
 /// @title AssetHelpers Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice A util contract for common token actions
 abstract contract AssetHelpers {
     using SafeERC20 for ERC20;

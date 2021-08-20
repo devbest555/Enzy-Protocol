@@ -1,4 +1,4 @@
-import { InvestorWhitelistArgs } from '@enzymefinance/protocol';
+import { InvestorWhitelistArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 const fn: DeployFunction = async function (hre) {

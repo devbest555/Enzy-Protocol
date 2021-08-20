@@ -5,7 +5,7 @@ import {
   curveMinterMintSelector,
   curveMinterToggleApproveMintSelector,
   encodeArgs,
-} from '@enzymefinance/protocol';
+} from '@taodao/protocol';
 import { constants } from 'ethers';
 
 export function vaultCallCurveMinterMint({

@@ -1,5 +1,5 @@
 import { randomAddress } from '@enzymefinance/ethers';
-import { IYearnVaultV2, StandardToken } from '@enzymefinance/protocol';
+import { IYearnVaultV2, StandardToken } from '@taodao/protocol';
 import { deployProtocolFixture, ProtocolDeployment } from '@enzymefinance/testutils';
 import { BigNumber, utils } from 'ethers';
 

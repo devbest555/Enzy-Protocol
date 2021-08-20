@@ -1,5 +1,5 @@
 import { randomAddress } from '@enzymefinance/ethers';
-import { ComptrollerLib, FundDeployer, ReleaseStatusTypes } from '@enzymefinance/protocol';
+import { ComptrollerLib, FundDeployer, ReleaseStatusTypes } from '@taodao/protocol';
 import { constants } from 'ethers';
 
 describe('constructor', () => {

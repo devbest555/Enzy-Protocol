@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/*
-    This file is part of the Enzyme Protocol.
 
-    (c) Enzyme Council <council@enzyme.finance>
-
-    For the full license information, please view the LICENSE
-    file that was distributed with this source code.
-*/
 
 pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
@@ -16,7 +9,6 @@ import "../utils/actions/ParaSwapV4ActionsMixin.sol";
 import "../utils/AdapterBase2.sol";
 
 /// @title ParaSwapV4Adapter Contract
-/// @author Enzyme Council <security@enzyme.finance>
 /// @notice Adapter for interacting with ParaSwap (v4)
 /// @dev Does not allow any protocol that collects protocol fees in ETH, e.g., 0x v3
 contract ParaSwapV4Adapter is AdapterBase2, ParaSwapV4ActionsMixin {

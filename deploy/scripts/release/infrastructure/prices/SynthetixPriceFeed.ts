@@ -1,4 +1,4 @@
-import { SynthetixPriceFeedArgs } from '@enzymefinance/protocol';
+import { SynthetixPriceFeedArgs } from '@taodao/protocol';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 import { loadConfig } from '../../../../utils/config';

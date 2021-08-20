@@ -14,17 +14,21 @@ function project(name: string, roots: string[]) {
 }
 
 const projects = [
-  project('persistent', ['tests/persistent']),
-  project('core', ['tests/release/core']),
-  project('infrastructure', ['tests/release/infrastructure']),
-  project('policy', ['tests/release/extensions/policy-manager']),
-  project('integration', ['tests/release/extensions/integration-manager']),
-  project('fee', ['tests/release/extensions/fee-manager']),
-  project('peripheral', ['tests/release/peripheral']),
-  project('e2e', ['tests/release/e2e']),
+  // project('persistent', ['tests/persistent']),
+  // project('core', ['tests/release/core']),
+  // project('infrastructure', ['tests/release/infrastructure']),
+  // project('policy', ['tests/release/extensions/policy-manager']),
+  // project('integration', ['tests/release/extensions/integration-manager']),
+  // project('fee', ['tests/release/extensions/fee-manager']),
+  // project('peripheral', ['tests/release/peripheral']),
+  // project('e2e', ['tests/release/e2e']),
+  
+  // project('core', ['tests/SelfTest/test-feeManager']),
+  project('core', ['tests/SelfTest/test-performanceFee']),
+  // project('core', ['tests/SelfTest/test-managementFee']),
 ].filter((project) => !!project);
 
 export default {
   projects,
-  testTimeout: 240000,
+  testTimeout: 1200000,
 };

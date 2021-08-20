@@ -1,5 +1,5 @@
 import { randomAddress } from '@enzymefinance/ethers';
-import { ReleaseStatusTypes } from '@enzymefinance/protocol';
+import { ReleaseStatusTypes } from '@taodao/protocol';
 import { assertEvent, deployProtocolFixture, ProtocolDeployment } from '@enzymefinance/testutils';
 
 let fork: ProtocolDeployment;
