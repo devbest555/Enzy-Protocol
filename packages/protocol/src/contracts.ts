@@ -59,7 +59,9 @@ export * from './codegen/IFee';
 export * from './codegen/EntranceRateBurnFee';
 export * from './codegen/EntranceRateDirectFee';
 export * from './codegen/ManagementFee';
-export * from './codegen/PerformanceFee';
+export * from './codegen/PerformanceFeeHWM';
+export * from './codegen/PerformanceFeeHurdle';
+export * from './codegen/ProtocolFee';
 
 // Policies
 export * from './codegen/IPolicy';

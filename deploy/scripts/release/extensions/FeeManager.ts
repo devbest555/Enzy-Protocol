@@ -9,9 +9,10 @@ const fn: DeployFunction = async function (hre) {
 
   const deployer = (await getSigners())[0];
   const fundDeployer = await get('FundDeployer');
+  const protocolFee = await get('ProtocolFee');
 
   await deploy('FeeManager', {
-    args: [fundDeployer.address] as FeeManagerArgs,
+    args: [fundDeployer.address, protocolFee.address] as FeeManagerArgs,
     from: deployer.address,
     log: true,
     skipIfAlreadyDeployed: true,
@@ -19,6 +20,6 @@ const fn: DeployFunction = async function (hre) {
 };
 
 fn.tags = ['Release', 'FeeManager'];
-fn.dependencies = ['FundDeployer'];
+fn.dependencies = ['FundDeployer', 'ProtocolFee'];
 
 export default fn;

@@ -7,7 +7,7 @@ import {
   feeManagerConfigArgs,
   FeeSettlementType,
   // MockChainlinkPriceSource,
-  PerformanceFee,
+  PerformanceFeeHWM,
   performanceFeeConfigArgs,
   performanceFeeSharesDue,
   StandardToken,
@@ -38,7 +38,7 @@ async function snapshot() {
   await mockFeeManager.getFeeSharesOutstandingForFund.returns(0);
 
   // Create standalone PerformanceFee
-  const standalonePerformanceFee = await PerformanceFee.deploy(deployer, mockFeeManager);
+  const standalonePerformanceFee = await PerformanceFeeHWM.deploy(deployer, mockFeeManager);
 
   // Mock a denomination asset
   const mockDenominationAssetDecimals = 8;
@@ -97,7 +97,7 @@ async function activateWithInitialValues({
   mockFeeManager: MockContract<FeeManager>;
   mockComptrollerProxy: MockContract<ComptrollerLib>;
   mockVaultProxy: MockContract<VaultLib>;
-  performanceFee: PerformanceFee;
+  performanceFee: PerformanceFeeHWM;
   gav: BigNumberish;
   totalSharesSupply?: BigNumberish;
 }) {
@@ -126,7 +126,7 @@ async function assertAdjustedPerformance({
   mockFeeManager: MockContract<FeeManager>;
   mockComptrollerProxy: MockContract<ComptrollerLib>;
   mockVaultProxy: MockContract<VaultLib>;
-  performanceFee: PerformanceFee;
+  performanceFee: PerformanceFeeHWM;
   nextGav: BigNumberish;
   feeHook?: FeeHook;
   settlementData?: BytesLike;

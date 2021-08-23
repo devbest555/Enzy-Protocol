@@ -24,8 +24,9 @@ const projects = [
   // project('e2e', ['tests/release/e2e']),
   
   // project('core', ['tests/SelfTest/test-feeManager']),
-  project('core', ['tests/SelfTest/test-performanceFee']),
+  // project('core', ['tests/SelfTest/test-performanceFee']),
   // project('core', ['tests/SelfTest/test-managementFee']),
+  project('core', ['tests/SelfTest/test-hurdle']),
 ].filter((project) => !!project);
 
 export default {

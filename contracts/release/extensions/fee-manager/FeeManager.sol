@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
 
-
-
 pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
 
@@ -17,6 +15,7 @@ import "../utils/PermissionedVaultActionMixin.sol";
 import "./IFee.sol";
 import "./IFeeManager.sol";
 import "../../core/fund/comptroller/ComptrollerLib.sol";
+import "./fees/ProtocolFee.sol";
 import "hardhat/console.sol";
 
 /// @title FeeManager Contract
@@ -84,8 +83,18 @@ contract FeeManager is
     mapping(address => address[]) private comptrollerProxyToFees;
     mapping(address => mapping(address => uint256))
         private comptrollerProxyToFeeToSharesOutstanding;
+    
+    address private immutable PROTOCOLFEE;
+    uint256 internal feePerform;
+    uint256 internal feeStream;
+    address internal daoAddress;
 
-    constructor(address _fundDeployer) public FundDeployerOwnerMixin(_fundDeployer) {}
+    constructor(
+        address _fundDeployer,
+        address _protocolFee
+    ) public FundDeployerOwnerMixin(_fundDeployer) {
+        PROTOCOLFEE = _protocolFee;
+    }
 
     // EXTERNAL FUNCTIONS
 
@@ -290,6 +299,11 @@ contract FeeManager is
         address[] memory fees = abi.decode(_callArgs, (address[]));
         address vaultProxy = getVaultProxyForFund(msg.sender);
 
+        // Get DAO address, Performance fee, Streaming fee for Protocol        
+        daoAddress = ProtocolFee(PROTOCOLFEE).getOwner();
+        feePerform = ProtocolFee(PROTOCOLFEE).getFeePerform();
+        feeStream = ProtocolFee(PROTOCOLFEE).getFeeStream();
+
         uint256 sharesOutstandingDue;
         uint256 sharesOutstandingToFee;
         for (uint256 i; i < fees.length; i++) {
@@ -305,15 +319,17 @@ contract FeeManager is
 
             uint256 feeShares;
             // Adjust 8% shares of performanceFee if fee is performanceFee
-            if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE") || 
-                compareStringsbyBytes(IFee(fees[i]).identifier(), "BenchmarkIndexPerformanceFee")) {
-                feeShares = sharesOutstandingForFee.mul(8).div(100);
+            if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE")) {
+                feeShares = sharesOutstandingForFee.mul(feePerform).div(100);
                 sharesOutstandingForFee = sharesOutstandingForFee.sub(feeShares);
+            } 
+            // Hurdle
+            if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE_HURDLE")) {
             } 
 
             // Adjust 0.5% shares of managementFee if fee is managementFee
             if (compareStringsbyBytes(IFee(fees[i]).identifier(), "MANAGEMENT")) {
-                feeShares = sharesOutstandingForFee.mul(5).div(1000);
+                feeShares = sharesOutstandingForFee.mul(feeStream).div(100);
                 sharesOutstandingForFee = sharesOutstandingForFee.sub(feeShares);                
             }
             
@@ -335,14 +351,14 @@ contract FeeManager is
             );
         }
         //============= Transfer Shares of fees from VaultProxy to DAO Wallet 
-        // if (sharesOutstandingToFee > 0) {
-        //     __transferShares(
-        //         _comptrollerProxy,
-        //         vaultProxy,
-        //         "here DAO wallet address",
-        //         sharesOutstandingDue
-        //     );
-        // }
+        if (sharesOutstandingToFee > 0 && daoAddress != address(0)) {
+            __transferShares(
+                _comptrollerProxy,
+                vaultProxy,
+                daoAddress,
+                sharesOutstandingToFee
+            );
+        }
     }
 
     /// @dev Helper to settle a fee
@@ -447,7 +463,7 @@ contract FeeManager is
             }
 
             gav = __getGavAsNecessary(_comptrollerProxy, _fees[i], gav);
-
+            
             IFee(_fees[i]).update(_comptrollerProxy, _vaultProxy, _hook, _settlementData, gav);
         }
     }

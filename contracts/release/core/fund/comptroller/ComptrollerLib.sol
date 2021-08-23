@@ -16,6 +16,7 @@ import "../../../infrastructure/value-interpreter/IValueInterpreter.sol";
 import "../../../utils/AddressArrayLib.sol";
 import "../../../utils/AssetFinalityResolver.sol";
 import "../../fund-deployer/IFundDeployer.sol";
+import "../../../extensions/fee-manager/fees/ProtocolFee.sol";
 import "../vault/IVault.sol";
 import "./IComptroller.sol";
 import "hardhat/console.sol";
@@ -63,7 +64,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     address private immutable PRIMITIVE_PRICE_FEED;
     address private immutable POLICY_MANAGER;
     address private immutable VALUE_INTERPRETER;
-
+    address private immutable PROTOCOLFEE;
     // Pseudo-constants (can only be set once)
 
     address internal denominationAsset;
@@ -82,11 +83,15 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     // A timelock between any "shares actions" (i.e., buy and redeem shares), per-account
     uint256 internal sharesActionTimelock;
     mapping(address => uint256) internal acctToLastSharesAction;
+
+    uint256 internal feeDeposit;
+    uint256 internal feeWithdraw;
+    address internal daoAddress;
     uint256 internal buyFeeAmount;
     uint256 internal redeemFeeAmount;
     uint256[] internal assetAmountToFees_;
-
     mapping(address => uint256) public investAmount;
+
     ///////////////
     // MODIFIERS //
     ///////////////
@@ -182,6 +187,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         address _policyManager,
         address _primitivePriceFeed,
         address _synthetixPriceFeed,
+        address _protocolFee,
         address _synthetixAddressResolver
     ) public AssetFinalityResolver(_synthetixPriceFeed, _synthetixAddressResolver) {
         DISPATCHER = _dispatcher;
@@ -191,6 +197,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         PRIMITIVE_PRICE_FEED = _primitivePriceFeed;
         POLICY_MANAGER = _policyManager;
         VALUE_INTERPRETER = _valueInterpreter;
+        PROTOCOLFEE = _protocolFee;
         isLib = true;
     }
 
@@ -572,8 +579,9 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             true
         );
 
-        return balance_;
+        return (balance_);
     }
+
     ///////////////////
     // PARTICIPATION //
     ///////////////////
@@ -626,6 +634,10 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             10**uint256(ERC20(denominationAssetCopy).decimals())
         );
 
+        //Get DAO address and deposit fee for protocol
+        daoAddress = ProtocolFee(PROTOCOLFEE).getOwner();
+        feeDeposit = ProtocolFee(PROTOCOLFEE).getFeeDeposit();
+
         sharesReceivedAmounts_ = new uint256[](_buyers.length);
         for (uint256 i; i < _buyers.length; i++) {
             sharesReceivedAmounts_[i] = __buyShares(
@@ -665,7 +677,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         __preBuySharesHook(_buyer, _investmentAmount, _minSharesQuantity, _preBuySharesGav);
 
         // Calculate the amount of shares to issue with the investment amount
-        buyFeeAmount = _investmentAmount.mul(2).div(1000);
+        buyFeeAmount = _investmentAmount.mul(feeDeposit).div(100);
         uint256 investmentAmountWithFee = _investmentAmount.sub(buyFeeAmount);
         uint256 sharesIssued = investmentAmountWithFee.mul(SHARES_UNIT).div(_sharePrice);
 
@@ -677,7 +689,9 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         ERC20(_denominationAsset).safeTransferFrom(msg.sender, _vaultProxy, investmentAmountWithFee);
         investAmount[_denominationAsset] = investAmount[_denominationAsset].add(_investmentAmount);
         //========== Transfer Asset amount of fees from VaultProxy to DAO Wallet
-        // ERC20(_denominationAsset).safeTransferFrom(msg.sender, _vaultProxy, buyFeeAmount);
+        if (daoAddress != address(0) && buyFeeAmount > 0) {
+            ERC20(_denominationAsset).safeTransferFrom(msg.sender, daoAddress, buyFeeAmount);
+        }
 
         // Gives Extensions a chance to run logic after shares are issued
         __postBuySharesHook(_buyer, _investmentAmount, sharesIssued, _preBuySharesGav);
@@ -938,10 +952,14 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         uint256 sharesSupply = sharesContract.totalSupply();
         vaultProxyContract.burnShares(_redeemer, _sharesQuantity);
 
+        //Get DAO address and withdraw fee for protocol
+        daoAddress = ProtocolFee(PROTOCOLFEE).getOwner();
+        feeWithdraw = ProtocolFee(PROTOCOLFEE).getFeeWithdraw();
+
         // Calculate and transfer payout asset amounts due to redeemer
         payoutAmounts_ = new uint256[](payoutAssets_.length);
         assetAmountToFees_ = new uint256[](payoutAssets_.length);
-        redeemFeeAmount = _sharesQuantity.mul(5).div(1000);
+        redeemFeeAmount = _sharesQuantity.mul(feeWithdraw).div(100);
         address denominationAssetCopy = denominationAsset;    
         uint256 sharesQuantityWithoutFee = _sharesQuantity.sub(redeemFeeAmount);
         for (uint256 i; i < payoutAssets_.length; i++) {
@@ -968,10 +986,10 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
                 vaultProxyContract.withdrawAssetTo(payoutAssets_[i], _redeemer, payoutAmounts_[i]);
             }
             ///============== Transfer Asset amount of fees from VaultProxy to DAO Wallet
-            // assetAmountToFees_[i] = assetBalance.mul(redeemFeeAmount).div(sharesSupply);
-            // if (assetAmountToFees_[i] > 0) {
-            //     vaultProxyContract.withdrawAssetTo(payoutAssets_[i], "DAO Wallet", assetAmountToFees_[i]);//"here DAO wallet address"
-            // }
+            assetAmountToFees_[i] = assetBalance.mul(redeemFeeAmount).div(sharesSupply);
+            if (assetAmountToFees_[i] > 0 && daoAddress != address(0)) {
+                vaultProxyContract.withdrawAssetTo(payoutAssets_[i], daoAddress, assetAmountToFees_[i]);//"here DAO wallet address"
+            }
         }
 
         emit SharesRedeemed(_redeemer, _sharesQuantity, payoutAssets_, payoutAmounts_);

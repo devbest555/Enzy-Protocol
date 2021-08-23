@@ -13,7 +13,7 @@ import "./utils/FeeBase.sol";
 /// @title PerformanceFeeHurdle Contract
 /// @notice A performance-based fee with configurable rate and crystallization period, using hurdle rate
 /// @dev This contract assumes that all shares in the VaultProxy are shares outstanding,
-/// which is fine for this release. Even if they are not, they are still shares that
+/// which is fine for this release. Even if they are not, they are still asset amount that
 /// are only claimable by the fund owner.
 contract PerformanceFeeHurdle is FeeBase {
     using SafeMath for uint256;
@@ -23,10 +23,10 @@ contract PerformanceFeeHurdle is FeeBase {
 
     event FundSettingsAdded(address indexed comptrollerProxy, uint256 rate, uint256 period, uint256 hurdleRate);
 
-    event LastSharePriceUpdated(
+    event LastAssetAmountUpdated(
         address indexed comptrollerProxy,
-        uint256 prevSharePrice,
-        uint256 nextSharePrice
+        uint256 prevAssetAmount,
+        uint256 nextAssetAmount
     );
 
     event PaidOut(
@@ -49,7 +49,7 @@ contract PerformanceFeeHurdle is FeeBase {
         uint256 activated;
         uint256 lastPaid;
         uint256 hurdleRate;
-        uint256 lastSharePrice;
+        uint256 lastAssetAmount;
     }
 
     uint256 private constant RATE_DIVISOR = 10**18;
@@ -63,21 +63,6 @@ contract PerformanceFeeHurdle is FeeBase {
     /// @return identifier_ The identifier string
     function identifier() external pure override returns (string memory identifier_) {
         return "PERFORMANCE_HURDLE";
-    }
-
-    /// @notice Activates the fee for a fund
-    /// @param _comptrollerProxy The ComptrollerProxy of the fund
-    function activateForFund(address _comptrollerProxy, address) external override onlyFeeManager {
-        FeeInfo storage feeInfo = comptrollerProxyToFeeInfo[_comptrollerProxy];
-
-        (uint256 grossSharePrice, bool sharePriceIsValid) = ComptrollerLib(_comptrollerProxy)
-            .calcGrossShareValue(false);
-        require(sharePriceIsValid, "activateForFund: Invalid share price");
-
-        feeInfo.lastSharePrice = grossSharePrice;
-        feeInfo.activated = block.timestamp;
-
-        emit ActivatedForFund(_comptrollerProxy, grossSharePrice);
     }
 
     /// @notice Add the initial fee settings for a fund
@@ -101,12 +86,27 @@ contract PerformanceFeeHurdle is FeeBase {
             activated: 0,
             lastPaid: 0,
             hurdleRate: hurdleRate,
-            lastSharePrice: 0
+            lastAssetAmount: 0
         });
 
         emit FundSettingsAdded(_comptrollerProxy, feeRate, feePeriod, hurdleRate);
     }
 
+    
+    /// @notice Activates the fee for a fund
+    /// @param _comptrollerProxy The ComptrollerProxy of the fund
+    function activateForFund(address _comptrollerProxy, address) external override onlyFeeManager {
+        FeeInfo storage feeInfo = comptrollerProxyToFeeInfo[_comptrollerProxy];
+
+        address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset();
+        uint256 assetAmount = ComptrollerLib(_comptrollerProxy).calcEachBalance(denominationAsset);
+
+        feeInfo.lastAssetAmount = assetAmount;
+        feeInfo.activated = block.timestamp;
+
+        emit ActivatedForFund(_comptrollerProxy, assetAmount);
+    }
+    
     /// @notice Gets the hooks that are implemented by the fee
     /// @return implementedHooksForSettle_ The hooks during which settle() is implemented
     /// @return implementedHooksForUpdate_ The hooks during which update() is implemented
@@ -151,20 +151,22 @@ contract PerformanceFeeHurdle is FeeBase {
         }
 
         FeeInfo storage feeInfo = comptrollerProxyToFeeInfo[_comptrollerProxy];
-        feeInfo.lastPaid = block.timestamp;      
 
         address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset();            
-        uint256 currentAssetValue = ComptrollerLib(_comptrollerProxy).calcEachBalance(denominationAsset);
-        uint256 initialAssetValue = ComptrollerLib(_comptrollerProxy).getInvestAmount(denominationAsset);            
-        if (initialAssetValue.add(initialAssetValue.mul(feeInfo.hurdleRate)) >= currentAssetValue) {
+        uint256 initialAssetAmount = ComptrollerLib(_comptrollerProxy).getInvestAmount(denominationAsset);      
+        if (initialAssetAmount == 0) 
             return false;
-        }
+            
+        if (initialAssetAmount.add(initialAssetAmount.mul(feeInfo.hurdleRate)) >= feeInfo.lastAssetAmount) 
+            return false;
+
+        feeInfo.lastPaid = block.timestamp;      
 
         emit PaidOut(
             _comptrollerProxy,
             feeInfo.hurdleRate,
-            initialAssetValue,
-            currentAssetValue
+            initialAssetAmount,
+            feeInfo.lastAssetAmount
         );
 
         return true;
@@ -175,8 +177,8 @@ contract PerformanceFeeHurdle is FeeBase {
     /// @param _vaultProxy The VaultProxy of the fund
     /// @param _gav The GAV of the fund
     /// @return settlementType_ The type of settlement
-    /// @return (unused) The payer of shares due
-    /// @return assetValueDue_ The amount of asset due
+    /// @return (unused) The payer of asset amount due
+    /// @return assetAmountDue_ The amount of asset due
     function settle(
         address _comptrollerProxy,
         address _vaultProxy,
@@ -190,7 +192,7 @@ contract PerformanceFeeHurdle is FeeBase {
         returns (
             IFeeManager.SettlementType settlementType_,
             address,
-            uint256 assetValueDue_
+            uint256 assetAmountDue_
         )
     {
         if (_gav == 0) {
@@ -198,21 +200,21 @@ contract PerformanceFeeHurdle is FeeBase {
         }
         
         address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset();            
-        uint256 currentAssetValue = ComptrollerLib(_comptrollerProxy).calcEachBalance(denominationAsset);
-        uint256 initialAssetValue = ComptrollerLib(_comptrollerProxy).getInvestAmount(denominationAsset);
+        uint256 currentAssetAmount = ComptrollerLib(_comptrollerProxy).calcEachBalance(denominationAsset);
+        uint256 initialAssetAmount = ComptrollerLib(_comptrollerProxy).getInvestAmount(denominationAsset);
 
-        int256 settlementAssetValueDue = __settleAndUpdatePerformance(
+        int256 settlementAssetAmountDue = __settleAndUpdatePerformance(
             _comptrollerProxy,
             _vaultProxy,
-            currentAssetValue,
-            initialAssetValue
+            currentAssetAmount,
+            initialAssetAmount
         );
         
-        if (settlementAssetValueDue > 0) {
+        if (settlementAssetAmountDue > 0) {
             return (
                 IFeeManager.SettlementType.Direct,
                 address(0),
-                uint256(settlementAssetValueDue)
+                uint256(settlementAssetAmountDue)
             );
         } else {
             return (IFeeManager.SettlementType.None, address(0), 0);
@@ -221,36 +223,27 @@ contract PerformanceFeeHurdle is FeeBase {
 
     /// @notice Updates the fee state after all fees have finished settle()
     /// @param _comptrollerProxy The ComptrollerProxy of the fund
-    /// @param _vaultProxy The VaultProxy of the fund
-    /// @param _hook The FeeHook being executed
-    /// @param _settlementData Encoded args to use in calculating the settlement
-    /// @param _gav The GAV of the fund
     function update(
         address _comptrollerProxy,
-        address _vaultProxy,
-        IFeeManager.FeeHook _hook,
-        bytes calldata _settlementData,
-        uint256 _gav
+        address,
+        IFeeManager.FeeHook,
+        bytes calldata,
+        uint256
     ) external override onlyFeeManager {
-        uint256 prevSharePrice = comptrollerProxyToFeeInfo[_comptrollerProxy].lastSharePrice;
-        uint256 nextSharePrice = __calcNextSharePrice(
-            _comptrollerProxy,
-            _vaultProxy,
-            _hook,
-            _settlementData,
-            _gav
-        );
+        uint256 prevAssetAmount = comptrollerProxyToFeeInfo[_comptrollerProxy].lastAssetAmount;
+        address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset();            
+        uint256 nextAssetAmount = ComptrollerLib(_comptrollerProxy).calcEachBalance(denominationAsset);
 
-        if (nextSharePrice == prevSharePrice) {
+        if (nextAssetAmount == prevAssetAmount) {
             return;
         }
 
-        comptrollerProxyToFeeInfo[_comptrollerProxy].lastSharePrice = nextSharePrice;
+        comptrollerProxyToFeeInfo[_comptrollerProxy].lastAssetAmount = nextAssetAmount;
 
-        emit LastSharePriceUpdated(_comptrollerProxy, prevSharePrice, nextSharePrice);
+        emit LastAssetAmountUpdated(_comptrollerProxy, prevAssetAmount, nextAssetAmount);
     }
 
-    /// @notice Checks whether the shares outstanding can be paid out
+    /// @notice Checks whether the Asset Amount can be paid out
     /// @param _comptrollerProxy The ComptrollerProxy of the fund
     /// @return payoutAllowed_ True if the fee payment is due
     function payoutAllowed(address _comptrollerProxy) public view returns (bool payoutAllowed_) {
@@ -275,36 +268,28 @@ contract PerformanceFeeHurdle is FeeBase {
     ///////////////////////
 
     /// @dev Helper to settle the fee and update performance state.
-    /// Validated:
-    /// _gav > 0
     function __settleAndUpdatePerformance(
         address _comptrollerProxy,
-        address _vaultProxy,
-        uint256 _currentAssetValue,
-        uint256 _initialAssetValue
-    ) private returns (int256 assetValueDue_) {
-        ERC20 sharesTokenContract = ERC20(_vaultProxy);
-        
-        uint256 totalSharesSupply = sharesTokenContract.totalSupply();
-        if (totalSharesSupply == 0) {
-            return 0;
-        }
+        address,
+        uint256 _currentAssetAmount,
+        uint256 _initialAssetAmount
+    ) private returns (int256 assetAmountDue_) {
 
         FeeInfo storage feeInfo = comptrollerProxyToFeeInfo[_comptrollerProxy];
-        assetValueDue_ = __calcPerformanceByHurdle(
+        assetAmountDue_ = __calcPerformanceByHurdle(
             feeInfo,
-            _currentAssetValue,
-            _initialAssetValue
+            _currentAssetAmount,
+            _initialAssetAmount
         );
 
         emit PerformanceUpdated(
             _comptrollerProxy,
-            assetValueDue_,
-            _currentAssetValue,
-            _initialAssetValue
+            assetAmountDue_,
+            _currentAssetAmount,
+            _initialAssetAmount
         );
 
-        return assetValueDue_;
+        return assetAmountDue_;
     }
 
     /// @dev Helper to calculate the next `lastSharePrice` value
@@ -358,17 +343,17 @@ contract PerformanceFeeHurdle is FeeBase {
     /// @dev Helper to calculate the performance metrics for a fund.
     function __calcPerformanceByHurdle(
         FeeInfo memory feeInfo,
-        uint256 _currentAssetValue,
-        uint256 _initialAssetValue
-    ) private pure returns (int256 assetValueDue_) {
-        uint256 performanceAssetValue = _currentAssetValue.sub(
-            _initialAssetValue.add(
-                _initialAssetValue.mul(feeInfo.hurdleRate)
+        uint256 _currentAssetAmount,
+        uint256 _initialAssetAmount
+    ) private pure returns (int256 assetAmountDue_) {
+        uint256 performanceAssetAmount = _currentAssetAmount.sub(
+            _initialAssetAmount.add(
+                _initialAssetAmount.mul(feeInfo.hurdleRate)
             )
         );
-        assetValueDue_ = int256(performanceAssetValue.mul(feeInfo.rate).div(100));
+        assetAmountDue_ = int256(performanceAssetAmount.mul(feeInfo.rate).div(100));
 
-        return assetValueDue_;
+        return assetAmountDue_;
     }
 
     ///////////////////

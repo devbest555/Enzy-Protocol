@@ -28,6 +28,7 @@
     "format:eslint": "yarn lint:eslint --fix",
     "format:solhint": "yarn lint:solhint --fix",
     "fork:mainnet": "hardhat node --fork https://mainnet.infura.io/v3/b8af1adb9cbe494cb0be1611d283e4c7",
+    "fork:kovan": "hardhat node --fork https://kovan.infura.io/v3/b8af1adb9cbe494cb0be1611d283e4c7",
     "test": "jest",
     "test:watch": "NODE_OPTIONS=TS_JEST_DISABLE_VER_CHECKER=true jest --watchAll",
     "test:coverage": "jest --coverage",

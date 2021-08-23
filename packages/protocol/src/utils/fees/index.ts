@@ -4,3 +4,4 @@ export * from './settlement';
 export * from './entrance';
 export * from './management';
 export * from './performance';
+export * from './hurdle';

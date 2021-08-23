@@ -19,6 +19,7 @@ const fn: DeployFunction = async function (hre) {
   const policyManager = await get('PolicyManager');
   const chainlinkPriceFeed = await get('ChainlinkPriceFeed');
   const synthetixPriceFeed = await get('SynthetixPriceFeed');
+  const protocolFee = await get('ProtocolFee');
 
   const comptrollerLib = await deploy('ComptrollerLib', {
     args: [
@@ -30,6 +31,7 @@ const fn: DeployFunction = async function (hre) {
       policyManager.address,
       chainlinkPriceFeed.address,
       synthetixPriceFeed.address,
+      protocolFee.address,
       config.synthetix.addressResolver,
     ] as ComptrollerLibArgs,
     from: deployer.address,
@@ -54,6 +56,7 @@ fn.dependencies = [
   'PolicyManager',
   'ChainlinkPriceFeed',
   'SynthetixPriceFeed',
+  'ProtocolFee'
 ];
 
 export default fn;
