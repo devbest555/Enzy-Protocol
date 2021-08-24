@@ -30,7 +30,7 @@ const primitives = {
   zrx: '0x8955cd6b7826a86e820f0774278d89b76db25c46',
 } as const;
 
-const weth = '0xd0a1e359811322d97991e03f863a0c30c2cf029c';//ETH
+const weth = '0x87DA91E531e091B97D16B8da68584d0c1dB07c52';//'0xd0a1e359811322d97991e03f863a0c30c2cf029c';//ETH
 
 const aggregators = {
   bat: ['0x0e4fcec26c9f85c3d714370c98f43c4e02fc35ae', ChainlinkRateAsset.ETH],

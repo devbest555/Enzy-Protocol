@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "../../../core/fund/comptroller/ComptrollerLib.sol";
 import "../FeeManager.sol";
 import "./utils/FeeBase.sol";
+import "hardhat/console.sol";
 
 /// @title PerformanceFeeHurdle Contract
 /// @notice A performance-based fee with configurable rate and crystallization period, using hurdle rate
@@ -153,11 +154,12 @@ contract PerformanceFeeHurdle is FeeBase {
         FeeInfo storage feeInfo = comptrollerProxyToFeeInfo[_comptrollerProxy];
 
         address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset();            
-        uint256 initialAssetAmount = ComptrollerLib(_comptrollerProxy).getInvestAmount(denominationAsset);      
+        uint256 initialAssetAmount = ComptrollerLib(_comptrollerProxy).getInvestAmount(denominationAsset);               
+        uint256 currentAssetAmount = ComptrollerLib(_comptrollerProxy).calcEachBalance(denominationAsset);      
         if (initialAssetAmount == 0) 
             return false;
             
-        if (initialAssetAmount.add(initialAssetAmount.mul(feeInfo.hurdleRate)) >= feeInfo.lastAssetAmount) 
+        if (initialAssetAmount.add(initialAssetAmount.mul(feeInfo.hurdleRate).div(100)) >= currentAssetAmount) 
             return false;
 
         feeInfo.lastPaid = block.timestamp;      
@@ -199,17 +201,16 @@ contract PerformanceFeeHurdle is FeeBase {
             return (IFeeManager.SettlementType.None, address(0), 0);
         }
         
-        address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset();            
+        address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset(); 
         uint256 currentAssetAmount = ComptrollerLib(_comptrollerProxy).calcEachBalance(denominationAsset);
         uint256 initialAssetAmount = ComptrollerLib(_comptrollerProxy).getInvestAmount(denominationAsset);
-
         int256 settlementAssetAmountDue = __settleAndUpdatePerformance(
             _comptrollerProxy,
             _vaultProxy,
             currentAssetAmount,
             initialAssetAmount
         );
-        
+
         if (settlementAssetAmountDue > 0) {
             return (
                 IFeeManager.SettlementType.Direct,
@@ -233,13 +234,15 @@ contract PerformanceFeeHurdle is FeeBase {
         uint256 prevAssetAmount = comptrollerProxyToFeeInfo[_comptrollerProxy].lastAssetAmount;
         address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset();            
         uint256 nextAssetAmount = ComptrollerLib(_comptrollerProxy).calcEachBalance(denominationAsset);
-
+        
+        console.log("====sol-update-nextAssetAmount::", nextAssetAmount);
+        console.log("====sol-update-prevAssetAmount::", prevAssetAmount);
         if (nextAssetAmount == prevAssetAmount) {
             return;
         }
 
-        comptrollerProxyToFeeInfo[_comptrollerProxy].lastAssetAmount = nextAssetAmount;
-
+        comptrollerProxyToFeeInfo[_comptrollerProxy].lastAssetAmount = nextAssetAmount;        
+        console.log("====sol-update-lastAssetAmount::", comptrollerProxyToFeeInfo[_comptrollerProxy].lastAssetAmount);
         emit LastAssetAmountUpdated(_comptrollerProxy, prevAssetAmount, nextAssetAmount);
     }
 
@@ -345,10 +348,10 @@ contract PerformanceFeeHurdle is FeeBase {
         FeeInfo memory feeInfo,
         uint256 _currentAssetAmount,
         uint256 _initialAssetAmount
-    ) private pure returns (int256 assetAmountDue_) {
+    ) private view returns (int256 assetAmountDue_) {
         uint256 performanceAssetAmount = _currentAssetAmount.sub(
             _initialAssetAmount.add(
-                _initialAssetAmount.mul(feeInfo.hurdleRate)
+                _initialAssetAmount.mul(feeInfo.hurdleRate).div(100)
             )
         );
         assetAmountDue_ = int256(performanceAssetAmount.mul(feeInfo.rate).div(100));

@@ -75,7 +75,8 @@ describe('constructor', () => {
         entranceRateBurnFee,
         entranceRateDirectFee,
         managementFee,
-        performanceFee,
+        performanceFeeHWM,
+        performanceFeeHurdle
       },
       fees,
     } = await provider.snapshot(snapshot);
@@ -85,7 +86,8 @@ describe('constructor', () => {
       entranceRateDirectFee,
       entranceRateBurnFee,
       managementFee,
-      performanceFee,
+      performanceFeeHWM,
+      performanceFeeHurdle,
       ...Object.values(fees),
     ]);
 

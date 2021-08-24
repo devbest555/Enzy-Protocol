@@ -327,7 +327,7 @@ describe('integration', () => {
       config: {
         primitives: { usdc },
       },
-      deployment: { performanceFee, fundDeployer },
+      deployment: { performanceFeeHWM, fundDeployer },
     } = await provider.snapshot(snapshot);
 
     const denominationAsset = new StandardToken(usdc, deployer);
@@ -342,7 +342,7 @@ describe('integration', () => {
       fundOwner: fundOwner,
       fundName: 'TestFund',
       feeManagerConfig: feeManagerConfigArgs({
-        fees: [performanceFee],
+        fees: [performanceFeeHWM],
         settings: [
           performanceFeeConfigArgs({
             rate: utils.parseEther('.05'),//5%
@@ -365,7 +365,7 @@ describe('integration', () => {
     });
 
     // Performance fee state should be in expected initial configuration
-    const initialFeeInfo = await performanceFee.getFeeInfoForFund(comptrollerProxy);
+    const initialFeeInfo = await performanceFeeHWM.getFeeInfoForFund(comptrollerProxy);
     
     // expect(initialFeeInfo.lastSharePrice).toEqBigNumber(denominationAssetUnit);
     // expect(initialFeeInfo.aggregateValueDue).toEqBigNumber(0);
@@ -393,7 +393,7 @@ describe('integration', () => {
     expect(failureEvents1.length).toBe(0);
 
     // Performance fee state should be exactly the same
-    const feeInfo1 = await performanceFee.getFeeInfoForFund(comptrollerProxy);
+    const feeInfo1 = await performanceFeeHWM.getFeeInfoForFund(comptrollerProxy);
     // expect(feeInfo1.lastSharePrice).toEqBigNumber(initialFeeInfo.lastSharePrice);//1000000 = 1002004
     expect(feeInfo1.aggregateValueDue).toEqBigNumber(initialFeeInfo.aggregateValueDue);
 
@@ -446,7 +446,7 @@ describe('integration', () => {
 
     // Performance fee state should have updated correctly
     const gavPostRedeem2 = (await comptrollerProxy.calcGav.args(true).call()).gav_;
-    const feeInfo3 = await performanceFee.getFeeInfoForFund(comptrollerProxy);
+    const feeInfo3 = await performanceFeeHWM.getFeeInfoForFund(comptrollerProxy);
 
     console.log("=====after Redeem2-redeemAmount, vaultProxyAmount, vaultTotal, lastSharePrice, aggregateValueDue, highWaterMark, gav ::", 
     Number(BigNumber.from(redeemAmount2)),//24.95*10**18

@@ -23,6 +23,8 @@ interface IComptroller {
 
     function calcGrossShareValue(bool) external returns (uint256, bool);
 
+    function calcEachBalance(address) external returns (uint256);
+
     function callOnExtension(
         address,
         uint256,

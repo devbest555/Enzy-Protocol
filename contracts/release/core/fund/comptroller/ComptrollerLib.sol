@@ -566,12 +566,12 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
 
     /// @notice Calculates the denomination balance of the fund
     /// @return balance_ The denomination balance
-    function calcEachBalance(address _asset) public returns (uint256 balance_) {
+    function calcEachBalance(address _asset) external override returns (uint256 balance_) {
         address vaultProxyAddress = vaultProxy;
         
-        if (!IVault(vaultProxyAddress).isTrackedAsset(_asset)) {
-            return 0;
-        }
+        // if (!IVault(vaultProxyAddress).isTrackedAsset(_asset)) {
+        //     return 0;
+        // }
 
         balance_ = __finalizeIfSynthAndGetAssetBalance(
             vaultProxyAddress,
@@ -579,7 +579,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             true
         );
 
-        return (balance_);
+        return balance_;
     }
 
     ///////////////////
