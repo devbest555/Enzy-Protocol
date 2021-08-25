@@ -128,7 +128,6 @@ describe('payout', () => {
     const mockVaultProxy = await VaultLib.mock(deployer);
     await mockVaultProxy.totalSupply.returns(0);
     await mockVaultProxy.balanceOf.returns(0);
-    // await mockVaultProxy.addTrackedAsset.returns(mockDenominationAsset);
 
     // Mock a ComptrollerProxy
     const mockComptrollerProxy = await ComptrollerLib.mock(deployer);
@@ -136,11 +135,11 @@ describe('payout', () => {
     await mockComptrollerProxy.calcGav.returns(initAssetAmount, true);
     await mockVaultProxy.totalSupply.returns(initAssetAmount);
     await mockComptrollerProxy.getVaultProxy.returns(mockVaultProxy);
-    await mockComptrollerProxy.getInvestAmount.returns(initAssetAmount);
+    await mockComptrollerProxy.calcEachBalance.returns(initAssetAmount);
     
     // Add fee settings for ComptrollerProxy
-    const performanceFeeRate = 10;//utils.parseEther('.1'); // 10%
-    const hurdleRate = 5;//utils.parseEther('.05'); // 5%
+    const performanceFeeRate = utils.parseEther('.1'); // 10%
+    const hurdleRate = utils.parseEther('.05'); // 5%
     const performanceFeePeriod = BigNumber.from(60 * 60 * 24 * 365); // 365 days
     const performanceFeeConfig = hurdleConfigArgs({
       rate: performanceFeeRate,
@@ -148,61 +147,53 @@ describe('payout', () => {
       hurdleRate: hurdleRate
     });
 
-    // console.log("======data::", mockFeeManager.address, mockComptrollerProxy.address, mockVaultProxy.address, 
-    // mockDenominationAsset.address, performanceFeeHurdle.address);
-
     // Raise next high water mark by increasing price
     // await mockComptrollerProxy.calcEachBalance.returns(nextAssetAmount);
-
-    // Calculate expected performance results for next settlement    
+   
     await mockFeeManager.forward(performanceFeeHurdle.addFundSettings, mockComptrollerProxy, performanceFeeConfig);
     const feeInfo = await performanceFeeHurdle.getFeeInfoForFund(mockComptrollerProxy);
     console.log("=====000 => ::", 
     Number(BigNumber.from(feeInfo.rate)),//           10**17=10%   
     Number(BigNumber.from(feeInfo.hurdleRate)),//     5/100*10**18=5%
-    Number(BigNumber.from(feeInfo.lastAssetAmount))); //       
+    Number(BigNumber.from(feeInfo.lastAssetAmount))); //0
 
-    const _initialAssetValue = await mockComptrollerProxy.getInvestAmount(mockDenominationAsset);
+    await mockFeeManager.forward(performanceFeeHurdle.activateForFund, mockComptrollerProxy, mockVaultProxy);
+    const feeInfoActive = await performanceFeeHurdle.getFeeInfoForFund(mockComptrollerProxy);
+    console.log("=====001 => ::", 
+    Number(BigNumber.from(feeInfoActive.rate)),//           10**17=10%   
+    Number(BigNumber.from(feeInfoActive.hurdleRate)),//     5/100*10**18=5%
+    Number(BigNumber.from(feeInfoActive.lastAssetAmount))); //10**18  
+
+    const _initialAssetValue = utils.parseEther('1');
     const _currentAssetValue = utils.parseEther('2'); //await mockComptrollerProxy.calcEachBalance(mockDenominationAsset);
-    console.log("=====001 => ::", Number(BigNumber.from(_initialAssetValue)), Number(BigNumber.from(_currentAssetValue)));
+    const unit = utils.parseEther('1');
+    console.log("=====002 => ::", Number(BigNumber.from(_initialAssetValue)), Number(BigNumber.from(_currentAssetValue)));
     const _hurdleRate = feeInfo.hurdleRate;
     const _rate = feeInfo.rate;
     const performanceAssetValue = BigNumber.from(_currentAssetValue).sub(
-      _initialAssetValue.add(_initialAssetValue.mul(_hurdleRate).div(100))
+      _initialAssetValue.add(_initialAssetValue.mul(_hurdleRate).div(unit))
     );  
-    const assetValueDue = performanceAssetValue.mul(_rate).div(100);
+    const assetValueDue = performanceAssetValue.mul(_rate).div(unit);
 
     // Determine fee settlement type
     let feeSettlementType = FeeSettlementType.None;
     if (assetValueDue.gt(0)) {
       feeSettlementType = FeeSettlementType.Direct;
     } 
-    console.log("=====111 => ::", 
+    console.log("=====003 => ::", 
     Number(BigNumber.from(assetValueDue)), 
     Number(BigNumber.from(performanceAssetValue)),
     feeSettlementType); 
-
-    // settle.call()
-    const feeHook = FeeHook.Continuous;
-    const settlementData = constants.HashZero;
-    await mockComptrollerProxy.calcEachBalance.returns(nextAssetAmount);
-      
-    const feeInfo1 = await performanceFeeHurdle.getFeeInfoForFund(mockComptrollerProxy);
-    console.log("=====222 => ::", 
-    Number(BigNumber.from(feeInfo1.rate)),//           10**17=10%   
-    Number(BigNumber.from(feeInfo1.hurdleRate)),//     5/100*10**18=5%
-    Number(BigNumber.from(feeInfo1.lastAssetAmount))); //       
+   
 
     // Warp to the end of the period
     await provider.send('evm_increaseTime', [performanceFeePeriod.toNumber()]);
     await provider.send('evm_mine', []);
-    
-    const payoutCall = await performanceFeeHurdle.payout
-      .args(mockComptrollerProxy, mockVaultProxy)
-      .from(mockFeeManager)
-      .call();
-    expect(payoutCall).toBe(true);
 
+    // settle.call()
+    const feeHook = FeeHook.Continuous;
+    const settlementData = constants.HashZero;   
+    await mockComptrollerProxy.calcEachBalance.returns(nextAssetAmount);
     const settleCall = await performanceFeeHurdle.settle
       .args(mockComptrollerProxy, mockVaultProxy, feeHook, settlementData, 3)
       .from(mockFeeManager)
@@ -212,66 +203,42 @@ describe('payout', () => {
       assetAmountDue_: assetValueDue.abs(),
     });
 
-    // update 
-    // Execute update() tx
-    const updateReceipt = await mockFeeManager.forward(
-      performanceFeeHurdle.update,
-      mockComptrollerProxy,
-      mockVaultProxy,
-      feeHook,
-      settlementData,
-      3,
-    );
+    const payoutCall = await performanceFeeHurdle.payout
+      .args(mockComptrollerProxy, mockVaultProxy)
+      .from(mockFeeManager)
+      .call();
+    expect(payoutCall).toBe(true);
+    const feeInfo3 = await performanceFeeHurdle.getFeeInfoForFund(mockComptrollerProxy);
+    console.log("=====333 => ::", 
+    Number(BigNumber.from(feeInfo3.rate)),//           10**17=10%   
+    Number(BigNumber.from(feeInfo3.hurdleRate)),//     5/100*10**18=5%
+    Number(BigNumber.from(feeInfo3.lastAssetAmount))); //   
 
-    // Assert event
-    assertEvent(updateReceipt, 'LastAssetAmountUpdated', {
+    const payoutReceipt = await mockFeeManager.forward(
+      performanceFeeHurdle.payout,
+      mockComptrollerProxy,
+      mockVaultProxy
+    );
+    
+    const feeInfoPayout = await performanceFeeHurdle.getFeeInfoForFund(mockComptrollerProxy);
+    const currentAssetAmount = feeInfoPayout.lastAssetAmount;
+    const hurlde = feeInfoPayout.hurdleRate;
+    assertEvent(payoutReceipt, 'PaidOut', {
       comptrollerProxy: mockComptrollerProxy,
-      prevAssetAmount: feeInfo.lastAssetAmount,
-      nextAssetAmount,
+      hurdleRate:hurlde, 
+      currentAssetAmount:currentAssetAmount
     });
+    
+    await mockComptrollerProxy.calcEachBalance.returns(nextAssetAmount);
     await performanceFeeHurdle.update
       .args(mockComptrollerProxy, mockVaultProxy, feeHook, settlementData, 3)
       .from(mockFeeManager)
       .call();
 
     const feeInfoUpdate = await performanceFeeHurdle.getFeeInfoForFund(mockComptrollerProxy);
-    console.log("=====333 => ::", 
+    console.log("=====555 => ::", 
     Number(BigNumber.from(feeInfoUpdate.rate)),  
     Number(BigNumber.from(feeInfoUpdate.hurdleRate)),
     Number(BigNumber.from(feeInfoUpdate.lastAssetAmount)));
-    // // Warp to the end of the period
-    // await provider.send('evm_increaseTime', [performanceFeePeriod.toNumber()]);
-    // await provider.send('evm_mine', []);
-
-    // // call() function to assert return value
-    // const payoutCall = await performanceFeeHurdle.payout
-    //   .args(mockComptrollerProxy, mockVaultProxy)
-    //   .from(mockFeeManager)
-    //   .call();
-
-    // expect(payoutCall).toBe(true);
-
-    // // send() function
-    // const receipt = await mockFeeManager.forward(performanceFeeHurdle.payout, mockComptrollerProxy, mockVaultProxy);
-
-    // // Assert event
-    // assertEvent(receipt, 'PaidOut', {
-    //   comptrollerProxy: mockComptrollerProxy,
-    //   hurdleRate: hurdleRate,
-    //   initialAssetValue: feeInfoPrePayout.lastAssetAmount,
-    //   currentAssetValue: utils.parseEther('2'),
-    // });
-
-    // // Assert state
-    // const getFeeInfoForFundCall = await performanceFeeHurdle.getFeeInfoForFund(mockComptrollerProxy);
-    // const payoutTimestamp = await transactionTimestamp(receipt);
-    // expect(getFeeInfoForFundCall).toMatchFunctionOutput(performanceFeeHurdle.getFeeInfoForFund, {
-    //   rate: feeInfoPrePayout.rate,
-    //   period: feeInfoPrePayout.period,
-    //   activated: feeInfoPrePayout.activated,
-    //   lastPaid: BigNumber.from(payoutTimestamp), // updated
-    //   hurdleRate: feeInfoPrePayout.hurdleRate, // updated
-    //   lastAssetAmount: feeInfoPrePayout.lastAssetAmount,
-    // });
   });
 });

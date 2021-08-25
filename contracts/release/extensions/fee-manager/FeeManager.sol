@@ -81,13 +81,13 @@ contract FeeManager is
     mapping(address => mapping(FeeHook => bool)) private feeToHookToImplementsUpdate;
 
     mapping(address => address[]) private comptrollerProxyToFees;
-    mapping(address => mapping(address => uint256))
-        private comptrollerProxyToFeeToSharesOutstanding;
+    mapping(address => mapping(address => uint256)) private comptrollerProxyToFeeToSharesOutstanding;
     
     address private immutable PROTOCOLFEE;
     uint256 internal feePerform;
     uint256 internal feeStream;
     address internal daoAddress;
+    uint256 private constant RATE_DIVISOR = 10**18;
 
     constructor(
         address _fundDeployer,
@@ -312,24 +312,41 @@ contract FeeManager is
             }
 
             uint256 sharesOutstandingForFee = comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][fees[i]];
-            
+
             if (sharesOutstandingForFee == 0) {
                 continue;
             }
 
+            // Hurdle
+            if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE_HURDLE")) {
+                uint256 protocolFeeAssetAmount = sharesOutstandingForFee.mul(feePerform).div(RATE_DIVISOR);
+                uint256 diffAssetAmount = sharesOutstandingForFee.sub(protocolFeeAssetAmount);
+                address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset(); 
+
+                //ProtocolFee Asset amount(ex : 0.18 ETH) send to DAO wallet
+                ERC20(denominationAsset).transferFrom(vaultProxy, daoAddress, protocolFeeAssetAmount);
+                // Hurdle Performance fee asset amount send to fund owner
+                ERC20(denominationAsset).transferFrom(vaultProxy, IVault(vaultProxy).getOwner(), diffAssetAmount);
+                // after transfer Asset, format variable
+                comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][fees[i]] = 0;
+
+                emit SharesOutstandingPaidForFund(_comptrollerProxy, fees[i], sharesOutstandingForFee);
+                
+                continue;
+            }
+
+            
+
             uint256 feeShares;
             // Adjust 8% shares of performanceFee if fee is performanceFee
             if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE")) {
-                feeShares = sharesOutstandingForFee.mul(feePerform).div(100);
+                feeShares = sharesOutstandingForFee.mul(feePerform).div(RATE_DIVISOR);
                 sharesOutstandingForFee = sharesOutstandingForFee.sub(feeShares);
-            } 
-            // Hurdle
-            if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE_HURDLE")) {
-            } 
+            }             
 
             // Adjust 0.5% shares of managementFee if fee is managementFee
             if (compareStringsbyBytes(IFee(fees[i]).identifier(), "MANAGEMENT")) {
-                feeShares = sharesOutstandingForFee.mul(feeStream).div(100);
+                feeShares = sharesOutstandingForFee.mul(feeStream).div(RATE_DIVISOR);
                 sharesOutstandingForFee = sharesOutstandingForFee.sub(feeShares);                
             }
             
@@ -385,10 +402,9 @@ contract FeeManager is
         address payee;
         if (compareStringsbyBytes(IFee(_fee).identifier(), "PERFORMANCE_HURDLE")) {
             if (settlementType == SettlementType.Direct) {
-                payee = IVault(_vaultProxy).getOwner();
-                address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset();  
-                //Asset amount(ex : 0.18 ETH) send to fund manager
-                ERC20(denominationAsset).transferFrom(payer, payee, sharesDue);
+                // shareDue : Asset Amount for Hurdle Performance
+                comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][_fee] 
+                = comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][_fee].add(sharesDue);
             } 
             return;
         }

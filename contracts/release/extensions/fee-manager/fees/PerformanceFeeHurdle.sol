@@ -33,15 +33,13 @@ contract PerformanceFeeHurdle is FeeBase {
     event PaidOut(
         address indexed comptrollerProxy,
         uint256 hurdleRate,
-        uint256 initialAssetValue,
-        uint256 currentAssetValue
+        uint256 currentAssetAmount
     );
 
     event PerformanceUpdated(
         address indexed comptrollerProxy,
-        int256 sharesOutstandingDiff,
-        uint256 currentAssetValue,
-        uint256 initialAssetValue
+        int256 assetAmountDue,
+        uint256 currentAssetValue
     );
 
     struct FeeInfo {
@@ -69,7 +67,7 @@ contract PerformanceFeeHurdle is FeeBase {
     /// @notice Add the initial fee settings for a fund
     /// @param _comptrollerProxy The ComptrollerProxy of the fund
     /// @param _settingsData Encoded settings to apply to the policy for the fund
-    /// @dev `hurdleRate`, `lastSharePrice`, and `activated` are set during activation
+    /// @dev `hurdleRate`, `lastAssetAmount`, and `activated` are set during activation
     /// @dev feePeriod: Minimum crystallization period is 30 Days
     function addFundSettings(address _comptrollerProxy, bytes calldata _settingsData)
         external
@@ -152,24 +150,22 @@ contract PerformanceFeeHurdle is FeeBase {
         }
 
         FeeInfo storage feeInfo = comptrollerProxyToFeeInfo[_comptrollerProxy];
-
-        address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset();            
-        uint256 initialAssetAmount = ComptrollerLib(_comptrollerProxy).getInvestAmount(denominationAsset);               
+         
+        uint256 prevAssetAmount = feeInfo.lastAssetAmount;               
+        address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset();   
         uint256 currentAssetAmount = ComptrollerLib(_comptrollerProxy).calcEachBalance(denominationAsset);      
-        if (initialAssetAmount == 0) 
+        if (prevAssetAmount == 0) 
             return false;
             
-        if (initialAssetAmount.add(initialAssetAmount.mul(feeInfo.hurdleRate).div(100)) >= currentAssetAmount) 
+        if (prevAssetAmount.add(prevAssetAmount.mul(feeInfo.hurdleRate).div(RATE_DIVISOR)) >= currentAssetAmount) 
             return false;
-
+        console.log("=====sol-payout-prevAssetAmount::", prevAssetAmount);
+        console.log("=====sol-payout-currentAssetAmount::", currentAssetAmount);
         feeInfo.lastPaid = block.timestamp;      
+        feeInfo.lastAssetAmount = currentAssetAmount;
+        console.log("=====sol-payout-lastAssetAmount::", feeInfo.lastAssetAmount);
 
-        emit PaidOut(
-            _comptrollerProxy,
-            feeInfo.hurdleRate,
-            initialAssetAmount,
-            feeInfo.lastAssetAmount
-        );
+        emit PaidOut(_comptrollerProxy, feeInfo.hurdleRate, currentAssetAmount);
 
         return true;
     }
@@ -201,14 +197,16 @@ contract PerformanceFeeHurdle is FeeBase {
             return (IFeeManager.SettlementType.None, address(0), 0);
         }
         
+        FeeInfo storage feeInfo = comptrollerProxyToFeeInfo[_comptrollerProxy];
+        uint256 prevAssetAmount = feeInfo.lastAssetAmount;
         address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset(); 
         uint256 currentAssetAmount = ComptrollerLib(_comptrollerProxy).calcEachBalance(denominationAsset);
-        uint256 initialAssetAmount = ComptrollerLib(_comptrollerProxy).getInvestAmount(denominationAsset);
+        
         int256 settlementAssetAmountDue = __settleAndUpdatePerformance(
             _comptrollerProxy,
             _vaultProxy,
             currentAssetAmount,
-            initialAssetAmount
+            prevAssetAmount
         );
 
         if (settlementAssetAmountDue > 0) {
@@ -231,7 +229,8 @@ contract PerformanceFeeHurdle is FeeBase {
         bytes calldata,
         uint256
     ) external override onlyFeeManager {
-        uint256 prevAssetAmount = comptrollerProxyToFeeInfo[_comptrollerProxy].lastAssetAmount;
+        FeeInfo storage feeInfo = comptrollerProxyToFeeInfo[_comptrollerProxy];
+        uint256 prevAssetAmount = feeInfo.lastAssetAmount;
         address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset();            
         uint256 nextAssetAmount = ComptrollerLib(_comptrollerProxy).calcEachBalance(denominationAsset);
         
@@ -241,7 +240,7 @@ contract PerformanceFeeHurdle is FeeBase {
             return;
         }
 
-        comptrollerProxyToFeeInfo[_comptrollerProxy].lastAssetAmount = nextAssetAmount;        
+        feeInfo.lastAssetAmount = nextAssetAmount;        
         console.log("====sol-update-lastAssetAmount::", comptrollerProxyToFeeInfo[_comptrollerProxy].lastAssetAmount);
         emit LastAssetAmountUpdated(_comptrollerProxy, prevAssetAmount, nextAssetAmount);
     }
@@ -275,22 +274,17 @@ contract PerformanceFeeHurdle is FeeBase {
         address _comptrollerProxy,
         address,
         uint256 _currentAssetAmount,
-        uint256 _initialAssetAmount
+        uint256 _pervAssetAmount
     ) private returns (int256 assetAmountDue_) {
 
         FeeInfo storage feeInfo = comptrollerProxyToFeeInfo[_comptrollerProxy];
         assetAmountDue_ = __calcPerformanceByHurdle(
             feeInfo,
             _currentAssetAmount,
-            _initialAssetAmount
+            _pervAssetAmount
         );
 
-        emit PerformanceUpdated(
-            _comptrollerProxy,
-            assetAmountDue_,
-            _currentAssetAmount,
-            _initialAssetAmount
-        );
+        emit PerformanceUpdated(_comptrollerProxy, assetAmountDue_, _currentAssetAmount);
 
         return assetAmountDue_;
     }
@@ -347,14 +341,14 @@ contract PerformanceFeeHurdle is FeeBase {
     function __calcPerformanceByHurdle(
         FeeInfo memory feeInfo,
         uint256 _currentAssetAmount,
-        uint256 _initialAssetAmount
-    ) private view returns (int256 assetAmountDue_) {
+        uint256 _prevlAssetAmount
+    ) private pure returns (int256 assetAmountDue_) {
         uint256 performanceAssetAmount = _currentAssetAmount.sub(
-            _initialAssetAmount.add(
-                _initialAssetAmount.mul(feeInfo.hurdleRate).div(100)
+            _prevlAssetAmount.add(
+                _prevlAssetAmount.mul(feeInfo.hurdleRate).div(RATE_DIVISOR)
             )
         );
-        assetAmountDue_ = int256(performanceAssetAmount.mul(feeInfo.rate).div(100));
+        assetAmountDue_ = int256(performanceAssetAmount.mul(feeInfo.rate).div(RATE_DIVISOR));
 
         return assetAmountDue_;
     }
