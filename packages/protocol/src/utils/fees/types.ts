@@ -21,6 +21,7 @@ export enum FeeSettlementType {
   Burn,
   MintSharesOutstanding,
   BurnSharesOutstanding,
+  TransferAsset
 }
 
 export interface FeeSharesDueInfo {

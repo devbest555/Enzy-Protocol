@@ -23,7 +23,8 @@ interface IFeeManager {
         Mint,
         Burn,
         MintSharesOutstanding,
-        BurnSharesOutstanding
+        BurnSharesOutstanding,
+        TransferAsset
     }
 
     function invokeHook(

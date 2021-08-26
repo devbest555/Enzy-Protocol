@@ -1,15 +1,17 @@
 import { extractEvent } from '@enzymefinance/ethers';
 import {
-  IMigrationHookHandler,
-  MockVaultLib,
-  IFee,
-  settlePreBuySharesArgs,
+  // IMigrationHookHandler,
+  // MockVaultLib,
+  // IFee,
+  // settlePreBuySharesArgs,
   feeManagerConfigArgs,
+  protocolFeesArgs,
   FeeSettlementType,
-  FeeHook,
+  // FeeHook,
   FeeManagerActionId,
   payoutSharesOutstandingForFeesArgs,
-  StandardToken,
+  ProtocolFee,
+  Dispatcher,
   WETH,
 } from '@taodao/protocol';
 import {
@@ -18,7 +20,7 @@ import {
   callOnExtension,
   createNewFund,
   generateRegisteredMockFees,
-  assertNoEvent,
+  // assertNoEvent,
   deployProtocolFixture,
 } from '@enzymefinance/testutils';
 import { BigNumber, constants, utils } from 'ethers';
@@ -38,8 +40,18 @@ async function snapshot() {
 
   const denominationAsset = new WETH(config.weth, deployer);
 
+  const protocolFeeConfig= protocolFeesArgs({
+    feeDeposit: utils.parseEther('0.2'),
+    feeWithdraw: utils.parseEther('0.5'),
+    feePerform: utils.parseEther('8'),
+    feeStream: utils.parseEther('0.5'),
+  });
+  // const mockDispatcher = await Dispatcher.mock(deployer);
+  const mockProtocolFee = await ProtocolFee.deploy(deployer, deployment.dispatcher);
+  // mockDispatcher.forward(mockProtocolFee.addFeeSettings, protocolFeeConfig)
+  
   const createFund = () => {
-    const feesSettingsData = [utils.randomBytes(10), utils.randomBytes(2), constants.HashZero];
+    const feesSettingsData = [utils.randomBytes(10), utils.randomBytes(2), constants.HashZero, utils.randomBytes(2)];
 
     const feeManagerConfig = feeManagerConfigArgs({
       fees: Object.values(fees),
@@ -64,6 +76,7 @@ async function snapshot() {
     denominationAsset,
     fundOwner,
     createFund,
+    mockProtocolFee,
   };
 }
 
@@ -78,7 +91,7 @@ describe('receiveCallFromComptroller', () => {
       denominationAsset,
     } = await provider.snapshot(snapshot);
 
-    const investmentAmount = utils.parseEther('10');
+    const investmentAmount = utils.parseEther('1');
     await denominationAsset.transfer(fundInvestor, investmentAmount);
 
     const { comptrollerProxy } = await createFund();
@@ -92,45 +105,47 @@ describe('receiveCallFromComptroller', () => {
       investmentAmounts: [investmentAmount],
     });
 
-    // Mint mock continuous fee
+    // Direct mock continuous fee
     await mockContinuousFeeSettleOnly.settle.returns(
-      FeeSettlementType.Mint,
+      FeeSettlementType.TransferAsset,
       constants.AddressZero,
-      utils.parseEther('5'),
+      utils.parseEther('0.5'),//500000000000000000
     );
 
     // Settling the fee
     const receipt = await callOnExtension({
       comptrollerProxy,
       extension: feeManager,
-      actionId: FeeManagerActionId.InvokeContinuousHook,
+      actionId: FeeManagerActionId.InvokeContinuousHook,//0 = __invokeHook()
     });
-
+    
+    // _comptrollerProxy, _fee, settlementType, payer, payee, sharesDue
     // Check that the FeeSettledForFund event has been emitted
     const feeSettledForFundEvent = feeManager.abi.getEvent('FeeSettledForFund');
     assertEvent(receipt, feeSettledForFundEvent, {
-      settlementType: FeeSettlementType.Mint,
+      settlementType: FeeSettlementType.TransferAsset,
       comptrollerProxy,
       fee: mockContinuousFeeSettleOnly,
       payer: constants.AddressZero,
       payee: fundOwner,
-      sharesDue: expect.anything(),
+      sharesDue: utils.parseEther('0.5'),
     });
   });
 });
 
 describe('__payoutSharesOutstandingForFees', () => {
-  it('pays out shares outstanding (if payable) and emits one event per payout', async () => {
+  it('pays out asset outstanding (if payable) and emits one event per payout', async () => {
     const {
       accounts: [buyer],
       deployment: { feeManager },
-      fees: { mockContinuousFeeSettleOnly, mockContinuousFeeWithGavAndUpdates },
+      fees: { mockContinuousFeeSettleOnly, mockContinuousFeeWithGavAndUpdates, mockHurdleFeeSettle },
       fundOwner,
       denominationAsset,
       createFund,
+      mockProtocolFee
     } = await provider.snapshot(snapshot);
 
-    const investmentAmount = utils.parseEther('10');
+    const investmentAmount = utils.parseEther('1');
     await denominationAsset.transfer(buyer, investmentAmount);
 
     const { vaultProxy, comptrollerProxy } = await createFund();
@@ -145,71 +160,82 @@ describe('__payoutSharesOutstandingForFees', () => {
       investmentAmounts: [investmentAmount],
     });
 
-    const preFundOwnerSharesCall = await vaultProxy.balanceOf(fundOwner);
-    const preSharesOutstandingCall = await vaultProxy.balanceOf(vaultProxy);
-
+    const preFundOwnerAssetCall = await denominationAsset.balanceOf(fundOwner);
+    const preAssetOutstandingCall = await denominationAsset.balanceOf(vaultProxy);
+    const investAssetAmount = await comptrollerProxy.getInvestAmount.args(denominationAsset).call();
     const gav_1 = (await comptrollerProxy.calcGav.args(true).call()).gav_;
     console.log("=====after buyShares ::", 
     Number(BigNumber.from(investmentAmount)),
     Number(BigNumber.from(await vaultProxy.balanceOf(buyer))),
     Number(BigNumber.from(await vaultProxy.totalSupply())),
-    Number(BigNumber.from(preFundOwnerSharesCall)),
-    Number(BigNumber.from(preSharesOutstandingCall)),
+    Number(BigNumber.from(preFundOwnerAssetCall)),//0
+    Number(BigNumber.from(preAssetOutstandingCall)),
+    Number(BigNumber.from(investAssetAmount)),
     Number(BigNumber.from(gav_1))); 
 
 
-    // Define both fees the same way, but with different fee amounts
-    const feeAmount1 = utils.parseEther('5');
-    const feeAmount2 = utils.parseUnits('2');
-    const unit = utils.parseUnits('1');
-    const feeAmount22 = feeAmount2.sub(feeAmount2.mul(8).div(unit));
-    const settlementType = FeeSettlementType.MintSharesOutstanding;
-    await mockContinuousFeeSettleOnly.settle.returns(settlementType, constants.AddressZero, feeAmount1);
-    await mockContinuousFeeWithGavAndUpdates.settle.returns(settlementType, constants.AddressZero, feeAmount2);
+    // Define both fees the same way, but with different fee amounts    
+    const unit = utils.parseEther('1');
+    const divider = utils.parseEther('.08');
+    
+    const feeAmount1 = utils.parseEther('0.5');
+    await mockContinuousFeeSettleOnly.settle.returns(FeeSettlementType.Mint, constants.AddressZero, feeAmount1);
+    const feeAmount2 = utils.parseEther('0.2');
+    await mockContinuousFeeWithGavAndUpdates.settle.returns(FeeSettlementType.Mint, constants.AddressZero, feeAmount2);
+    const feeAmount3 = utils.parseEther('0.4');
+    await mockHurdleFeeSettle.settle.returns(FeeSettlementType.TransferAsset, constants.AddressZero, feeAmount3);
+    const feeAmount2_2 = feeAmount2.sub(feeAmount2.mul(divider).div(unit));
 
     console.log("=====values::",
-    Number(BigNumber.from(feeAmount2)),
-    Number(BigNumber.from(feeAmount22)));
+    Number(BigNumber.from(feeAmount2)),   //200000000000000000
+    Number(BigNumber.from(feeAmount2_2)));//184000000000000000
     // Define param for all calls on extension
     const extension = feeManager;
-    const fees = [mockContinuousFeeSettleOnly, mockContinuousFeeWithGavAndUpdates];
+    const fees = [mockContinuousFeeSettleOnly, mockContinuousFeeWithGavAndUpdates, mockHurdleFeeSettle];
 
     // Settle once via callOnExtension to mint shares outstanding with no payout
     await callOnExtension({
       comptrollerProxy,
       extension,
-      actionId: FeeManagerActionId.InvokeContinuousHook,
+      actionId: FeeManagerActionId.InvokeContinuousHook,//0 = __invokeHook()
     });
-
-    // Define params for payout shares outstanding calls
-    const callArgs = payoutSharesOutstandingForFeesArgs(fees);
-    const actionId = FeeManagerActionId.PayoutSharesOutstandingForFees;
+    const feePerform = await mockProtocolFee.getFeePerform.args().call();
+    console.log("=====callOnExtension-1::", "ok="+Number(BigNumber.from(feePerform)));
 
     // Attempting to payout should not mint shares while `payout` returns false
+    const actionId = FeeManagerActionId.PayoutSharesOutstandingForFees;//1 = __payoutSharesOutstandingForFees(),
+    const callArgs = payoutSharesOutstandingForFeesArgs(fees);//
     await callOnExtension({
       comptrollerProxy,
       extension,
       actionId,
       callArgs,
-    });
-    
-    expect(await vaultProxy.balanceOf(fundOwner)).toEqBigNumber(preFundOwnerSharesCall);
+    });    
+    console.log("=====callOnExtension-2::", 
+    Number(BigNumber.from(await denominationAsset.balanceOf(fundOwner))),
+    Number(BigNumber.from(preFundOwnerAssetCall)),
+    Number(BigNumber.from(await denominationAsset.balanceOf(vaultProxy))),
+    Number(BigNumber.from(await denominationAsset.balanceOf(buyer))));
+    expect(await denominationAsset.balanceOf(fundOwner)).toEqBigNumber(preFundOwnerAssetCall);//0=0
 
     // Set payout() to return true on both fees
     await mockContinuousFeeSettleOnly.payout.returns(true);
     await mockContinuousFeeWithGavAndUpdates.payout.returns(true);
+    await mockHurdleFeeSettle.payout.returns(true);
 
     // Payout fees
     const receipt = await callOnExtension({
       comptrollerProxy,
       extension,
       actionId,
-      callArgs,
+      callArgs
     });
 
-    const postFundOwnerSharesCall = await vaultProxy.balanceOf(fundOwner);
-    const postSharesOutstandingCall = await vaultProxy.balanceOf(vaultProxy);
-
+    const postFundOwnerAssetCall = await denominationAsset.balanceOf(fundOwner);
+    const postAssetOutstandingCall = await denominationAsset.balanceOf(vaultProxy);
+    console.log("=====callOnExtension-3::", 
+    Number(BigNumber.from(postFundOwnerAssetCall)),
+    Number(BigNumber.from(postAssetOutstandingCall)));
     // One event should have been emitted for each fee
     const events = extractEvent(receipt, feeManager.abi.getEvent('SharesOutstandingPaidForFund'));
     expect(events.length).toBe(2);
@@ -218,28 +244,23 @@ describe('__payoutSharesOutstandingForFees', () => {
       fee: mockContinuousFeeSettleOnly,
       sharesDue: feeAmount1,
     });
-    // expect(events[1]).toMatchEventArgs({
-    //   comptrollerProxy,
-    //   fee: mockContinuousFeeWithGavAndUpdates,
-    //   sharesDue: feeAmount22,
-    // });
+    expect(events[1]).toMatchEventArgs({
+      comptrollerProxy,
+      fee: mockContinuousFeeWithGavAndUpdates,
+      sharesDue: feeAmount2,
+    });
 
     // Both fees should be paid out to the fund owner
-    const expectedSharesOutstandingPaid = feeAmount1.add(feeAmount22);
-    // expect(postFundOwnerSharesCall).toEqBigNumber(preFundOwnerSharesCall.add(expectedSharesOutstandingPaid));
-
-    // There should be no change in shares in the VaultProxy
-    // expect(postSharesOutstandingCall).toEqBigNumber(feeAmount2.mul(8).div(100));
-
-
+    const expectedAssetOutstandingPaid = feeAmount1.add(feeAmount2_2);
+    expect(postFundOwnerAssetCall).toEqBigNumber(preFundOwnerAssetCall.add(expectedAssetOutstandingPaid));
 
     const gav = (await comptrollerProxy.calcGav.args(true).call()).gav_;    
     console.log("=====gav ::", 
     Number(BigNumber.from(await vaultProxy.balanceOf(buyer))),
     Number(BigNumber.from(await vaultProxy.totalSupply())),
-    Number(BigNumber.from(postFundOwnerSharesCall)),
-    Number(BigNumber.from(postSharesOutstandingCall)),
-    Number(BigNumber.from(expectedSharesOutstandingPaid)),
+    Number(BigNumber.from(postFundOwnerAssetCall)),
+    Number(BigNumber.from(postAssetOutstandingCall)),
+    Number(BigNumber.from(expectedAssetOutstandingPaid)),
     Number(BigNumber.from(gav))); 
   });
 });

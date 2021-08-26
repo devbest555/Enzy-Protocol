@@ -211,7 +211,7 @@ contract PerformanceFeeHurdle is FeeBase {
 
         if (settlementAssetAmountDue > 0) {
             return (
-                IFeeManager.SettlementType.Direct,
+                IFeeManager.SettlementType.TransferAsset,
                 address(0),
                 uint256(settlementAssetAmountDue)
             );

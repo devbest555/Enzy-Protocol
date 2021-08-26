@@ -33,6 +33,7 @@ export async function generateRegisteredMockFees({
   const mockContinuousFeeSettleOnly = await IFee.mock(deployer);
   const mockContinuousFeeWithGavAndUpdates = await IFee.mock(deployer);
   const mockPostBuySharesFee = await IFee.mock(deployer);
+  const mockHurdleFeeSettle = await IFee.mock(deployer);
 
   // Initialize mock fee return values
   await Promise.all([
@@ -62,6 +63,19 @@ export async function generateRegisteredMockFees({
       true,
       true,
     ),
+    // Continuous fee the mimics PerformanceFee
+    mockHurdleFeeSettle.identifier.returns(`PERFORMANCE_HURDLE`),
+    mockHurdleFeeSettle.settle.returns(FeeSettlementType.None, constants.AddressZero, 0),
+    mockHurdleFeeSettle.payout.returns(false),
+    mockHurdleFeeSettle.addFundSettings.returns(undefined),
+    mockHurdleFeeSettle.activateForFund.returns(undefined),
+    mockHurdleFeeSettle.update.returns(undefined),
+    mockHurdleFeeSettle.implementedHooks.returns(
+      [FeeHook.Continuous, FeeHook.PreBuyShares, FeeHook.PreRedeemShares],
+      [FeeHook.Continuous, FeeHook.PostBuyShares, FeeHook.PreRedeemShares],
+      true,
+      true,
+    ),    
     // PostBuyShares fee
     mockPostBuySharesFee.identifier.returns(`MOCK_POST_BUY_SHARES`),
     mockPostBuySharesFee.settle.returns(FeeSettlementType.None, constants.AddressZero, 0),
@@ -77,11 +91,13 @@ export async function generateRegisteredMockFees({
     mockContinuousFeeSettleOnly,
     mockContinuousFeeWithGavAndUpdates,
     mockPostBuySharesFee,
+    mockHurdleFeeSettle,
   ]);
 
   return {
     mockContinuousFeeSettleOnly,
     mockContinuousFeeWithGavAndUpdates,
     mockPostBuySharesFee,
+    mockHurdleFeeSettle,
   };
 }

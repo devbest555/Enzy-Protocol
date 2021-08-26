@@ -23,10 +23,11 @@ const projects = [
   // project('peripheral', ['tests/release/peripheral']),
   // project('e2e', ['tests/release/e2e']),
   
-  project('core', ['tests/SelfTest/test-feeManager']),
+  // project('core', ['tests/SelfTest/test-feeManager']),
   // project('core', ['tests/SelfTest/test-performanceFee']),
   // project('core', ['tests/SelfTest/test-managementFee']),
   // project('core', ['tests/SelfTest/test-hurdle']),
+  project('core', ['tests/SelfTest/test-feemanager-hurdle']),
 ].filter((project) => !!project);
 
 export default {
