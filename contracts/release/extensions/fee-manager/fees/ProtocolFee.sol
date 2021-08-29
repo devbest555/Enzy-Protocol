@@ -52,6 +52,8 @@ contract ProtocolFee {
         feePerform = feePerform_;
         feeStream = feeStream_;
         owner = IDispatcher(DISPATCHER).getOwner();
+        console.log("=====protocol-owner::", owner);
+        console.log("=====protocol-feePerform::", feePerform);
         emit FeeSettingsAdded(owner, feeDeposit_, feeWithdraw_, feePerform_, feeStream_);
     }
 

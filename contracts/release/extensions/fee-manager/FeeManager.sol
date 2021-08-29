@@ -320,31 +320,32 @@ contract FeeManager is
 
             uint256 feeShares;
             // Hurdle
-            if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE_HURDLE")) {
-                console.log("=====feePerform::", feePerform);
-                console.log("=====daoAddress::", daoAddress);
-                console.log("=====fundOwner::", IVault(vaultProxy).getOwner());
-                feeShares = sharesOutstandingForFee.mul(feePerform).div(RATE_DIVISOR);
-                uint256 diffAssetAmount = sharesOutstandingForFee.sub(feeShares);
-                address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset(); 
-                console.log("=====feeShares::", feeShares);
+            // if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE_HURDLE")) {
+            //     console.log("=====feePerform::", feePerform);
+            //     console.log("=====daoAddress::", daoAddress);
+            //     console.log("=====fundOwner::", IVault(vaultProxy).getOwner());
+            //     feeShares = sharesOutstandingForFee.mul(feePerform).div(RATE_DIVISOR);
+            //     uint256 diffAssetAmount = sharesOutstandingForFee.sub(feeShares);
+            //     address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset(); 
+            //     console.log("=====feeShares::", feeShares);
 
-                //ProtocolFee Asset amount(ex : 0.18 ETH) send to DAO wallet
-                ERC20(denominationAsset).transferFrom(vaultProxy, daoAddress, feeShares);
-                // Hurdle Performance fee asset amount send to fund owner
-                ERC20(denominationAsset).transferFrom(vaultProxy, IVault(vaultProxy).getOwner(), diffAssetAmount);
-                // after transfer Asset, format variable
-                comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][fees[i]] = 0;
+            //     //ProtocolFee Asset amount(ex : 0.18 ETH) send to DAO wallet
+            //     ERC20(denominationAsset).transferFrom(vaultProxy, daoAddress, feeShares);
+            //     // Hurdle Performance fee asset amount send to fund owner
+            //     ERC20(denominationAsset).transferFrom(vaultProxy, IVault(vaultProxy).getOwner(), diffAssetAmount);
+            //     // after transfer Asset, format variable
+            //     comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][fees[i]] = 0;
 
-                emit SharesOutstandingPaidForFund(_comptrollerProxy, fees[i], sharesOutstandingForFee);
+            //     emit SharesOutstandingPaidForFund(_comptrollerProxy, fees[i], sharesOutstandingForFee);
                 
-                continue;
-            }
+            //     continue;
+            // }
 
             
 
             // Adjust 8% shares of performanceFee if fee is performanceFee
-            if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE")) {
+            if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE") || 
+                compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE_HURDLE")) {
                 feeShares = sharesOutstandingForFee.mul(feePerform).div(RATE_DIVISOR);
                 sharesOutstandingForFee = sharesOutstandingForFee.sub(feeShares);
             }             
@@ -429,12 +430,14 @@ contract FeeManager is
 
             payer = _vaultProxy;
             __burnShares(_comptrollerProxy, payer, sharesDue);
-        } else if (settlementType == SettlementType.TransferAsset) {//PerformanceHurdle
-            // shareDue : Asset Amount for Hurdle Performance
-            comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][_fee] 
-            = comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][_fee].add(sharesDue);
-            payee = IVault(_vaultProxy).getOwner();//fundOwner
-        } else {
+        } 
+        // else if (settlementType == SettlementType.TransferAsset) {//PerformanceHurdle
+        //     // shareDue : Asset Amount for Hurdle Performance
+        //     comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][_fee] 
+        //     = comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][_fee].add(sharesDue);
+        //     payee = IVault(_vaultProxy).getOwner();//fundOwner
+        // } 
+        else {
             revert("__settleFee: Invalid SettlementType");
         }
 

@@ -38,17 +38,7 @@ async function snapshot() {
     feeManager: deployment.feeManager,
   });
 
-  const denominationAsset = new WETH(config.weth, deployer);
-
-  const protocolFeeConfig= protocolFeesArgs({
-    feeDeposit: utils.parseEther('0.2'),
-    feeWithdraw: utils.parseEther('0.5'),
-    feePerform: utils.parseEther('8'),
-    feeStream: utils.parseEther('0.5'),
-  });
-  // const mockDispatcher = await Dispatcher.mock(deployer);
-  const mockProtocolFee = await ProtocolFee.deploy(deployer, deployment.dispatcher);
-  // mockDispatcher.forward(mockProtocolFee.addFeeSettings, protocolFeeConfig)
+  const denominationAsset = new WETH(config.weth, deployer);    
   
   const createFund = () => {
     const feesSettingsData = [utils.randomBytes(10), utils.randomBytes(2), constants.HashZero, utils.randomBytes(2)];
@@ -76,7 +66,6 @@ async function snapshot() {
     denominationAsset,
     fundOwner,
     createFund,
-    mockProtocolFee,
   };
 }
 
@@ -137,12 +126,12 @@ describe('__payoutSharesOutstandingForFees', () => {
   it('pays out asset outstanding (if payable) and emits one event per payout', async () => {
     const {
       accounts: [buyer],
-      deployment: { feeManager },
+      deployment,
       fees: { mockContinuousFeeSettleOnly, mockContinuousFeeWithGavAndUpdates, mockHurdleFeeSettle },
       fundOwner,
-      denominationAsset,
+      deployer,
+      denominationAsset,      
       createFund,
-      mockProtocolFee
     } = await provider.snapshot(snapshot);
 
     const investmentAmount = utils.parseEther('1');
@@ -186,11 +175,8 @@ describe('__payoutSharesOutstandingForFees', () => {
     await mockHurdleFeeSettle.settle.returns(FeeSettlementType.TransferAsset, constants.AddressZero, feeAmount3);
     const feeAmount2_2 = feeAmount2.sub(feeAmount2.mul(divider).div(unit));
 
-    console.log("=====values::",
-    Number(BigNumber.from(feeAmount2)),   //200000000000000000
-    Number(BigNumber.from(feeAmount2_2)));//184000000000000000
     // Define param for all calls on extension
-    const extension = feeManager;
+    const extension = deployment.feeManager;
     const fees = [mockContinuousFeeSettleOnly, mockContinuousFeeWithGavAndUpdates, mockHurdleFeeSettle];
 
     // Settle once via callOnExtension to mint shares outstanding with no payout
@@ -198,9 +184,7 @@ describe('__payoutSharesOutstandingForFees', () => {
       comptrollerProxy,
       extension,
       actionId: FeeManagerActionId.InvokeContinuousHook,//0 = __invokeHook()
-    });
-    const feePerform = await mockProtocolFee.getFeePerform.args().call();
-    console.log("=====callOnExtension-1::", "ok="+Number(BigNumber.from(feePerform)));
+    });    
 
     // Attempting to payout should not mint shares while `payout` returns false
     const actionId = FeeManagerActionId.PayoutSharesOutstandingForFees;//1 = __payoutSharesOutstandingForFees(),
@@ -210,19 +194,24 @@ describe('__payoutSharesOutstandingForFees', () => {
       extension,
       actionId,
       callArgs,
-    });    
-    console.log("=====callOnExtension-2::", 
-    Number(BigNumber.from(await denominationAsset.balanceOf(fundOwner))),
-    Number(BigNumber.from(preFundOwnerAssetCall)),
-    Number(BigNumber.from(await denominationAsset.balanceOf(vaultProxy))),
-    Number(BigNumber.from(await denominationAsset.balanceOf(buyer))));
-    expect(await denominationAsset.balanceOf(fundOwner)).toEqBigNumber(preFundOwnerAssetCall);//0=0
+    });  
 
     // Set payout() to return true on both fees
     await mockContinuousFeeSettleOnly.payout.returns(true);
     await mockContinuousFeeWithGavAndUpdates.payout.returns(true);
     await mockHurdleFeeSettle.payout.returns(true);
 
+    const protocolFeeConfig= protocolFeesArgs({
+      feeDeposit: utils.parseEther('0.2'),
+      feeWithdraw: utils.parseEther('0.5'),
+      feePerform: utils.parseEther('8'),
+      feeStream: utils.parseEther('0.5'),
+    });
+    const mockDispatcher = await Dispatcher.mock(deployer);
+    const protocolFeeInstance = await ProtocolFee.deploy(deployer, mockDispatcher);
+    await protocolFeeInstance.connect(deployer).addFeeSettings(protocolFeeConfig)
+    // await mockDispatcher.forward(protocolFeeInstance.addFeeSettings, protocolFeeConfig);
+    console.log("===passed", mockDispatcher.address, deployer.address, protocolFeeInstance.address);
     // Payout fees
     const receipt = await callOnExtension({
       comptrollerProxy,
@@ -237,7 +226,7 @@ describe('__payoutSharesOutstandingForFees', () => {
     Number(BigNumber.from(postFundOwnerAssetCall)),
     Number(BigNumber.from(postAssetOutstandingCall)));
     // One event should have been emitted for each fee
-    const events = extractEvent(receipt, feeManager.abi.getEvent('SharesOutstandingPaidForFund'));
+    const events = extractEvent(receipt, deployment.feeManager.abi.getEvent('SharesOutstandingPaidForFund'));
     expect(events.length).toBe(2);
     expect(events[0]).toMatchEventArgs({
       comptrollerProxy,
