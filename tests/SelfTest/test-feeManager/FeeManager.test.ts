@@ -39,7 +39,7 @@ async function snapshot() {
   const denominationAsset = new WETH(config.weth, deployer);
 
   const createFund = () => {
-    const feesSettingsData = [utils.randomBytes(10), utils.randomBytes(2), constants.HashZero];
+    const feesSettingsData = [utils.randomBytes(10), utils.randomBytes(2), constants.HashZero, utils.randomBytes(2)];
 
     const feeManagerConfig = feeManagerConfigArgs({
       fees: Object.values(fees),
@@ -160,8 +160,8 @@ describe('__payoutSharesOutstandingForFees', () => {
 
     // Define both fees the same way, but with different fee amounts
     const feeAmount1 = utils.parseEther('5');
-    const feeAmount2 = utils.parseUnits('2');
-    const unit = utils.parseUnits('1');
+    const feeAmount2 = utils.parseEther('2');
+    const unit = utils.parseEther('1');
     const feeAmount22 = feeAmount2.sub(feeAmount2.mul(8).div(unit));
     const settlementType = FeeSettlementType.MintSharesOutstanding;
     await mockContinuousFeeSettleOnly.settle.returns(settlementType, constants.AddressZero, feeAmount1);

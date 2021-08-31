@@ -4,23 +4,25 @@ pragma solidity 0.6.12;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "../../../../persistent/dispatcher/IDispatcher.sol";
+import "./IProtocolFee.sol";
 import "hardhat/console.sol";
 
-contract ProtocolFee {    
+contract ProtocolFee is IProtocolFee {    
     using SafeMath for uint256;
 
-    event FeeSettingsAdded(address indexed owner, uint256 feeDeposit, uint256 feeWithdraw, uint256 feePerform, uint256 feeStream);
+    event FeeSettingsAdded(address indexed daoAddress, uint256 feeDeposit, uint256 feeWithdraw, uint256 feePerform, uint256 feeStream);
 
-    address private owner;
-    uint256 private feeDeposit; 
-    uint256 private feeWithdraw; 
-    uint256 private feePerform; 
-    uint256 private feeStream;    
+    address internal daoAddress;
+    uint256 internal feeDeposit; 
+    uint256 internal feeWithdraw; 
+    uint256 internal feePerform; 
+    uint256 internal feeStream;    
     address private immutable DISPATCHER;    
 
     modifier onlyDispatcherOwner() {
-        owner = IDispatcher(DISPATCHER).getOwner();
-        require(msg.sender == owner, "Only owner callable");
+        address owner = IDispatcher(DISPATCHER).getOwner();
+        address denomOwner = IDispatcher(DISPATCHER).getNominatedOwner();
+        require(msg.sender == owner || msg.sender == denomOwner, "Only owner callable");
         _;
     }
 
@@ -33,6 +35,7 @@ contract ProtocolFee {
     /// @dev `feeDeposit`, `feeWithdraw`, `feeStream` and `feePerform` are set
     function addFeeSettings(bytes calldata _settingsData)
         external
+        override
         onlyDispatcherOwner
     {
         (
@@ -51,35 +54,42 @@ contract ProtocolFee {
         feeWithdraw = feeWithdraw_;
         feePerform = feePerform_;
         feeStream = feeStream_;
-        owner = IDispatcher(DISPATCHER).getOwner();
-        console.log("=====protocol-owner::", owner);
-        console.log("=====protocol-feePerform::", feePerform);
-        emit FeeSettingsAdded(owner, feeDeposit_, feeWithdraw_, feePerform_, feeStream_);
+        daoAddress = IDispatcher(DISPATCHER).getOwner();
+        
+        emit FeeSettingsAdded(daoAddress, feeDeposit_, feeWithdraw_, feePerform_, feeStream_);
+    }
+
+    /// @notice Sets the new daoAddress
+    /// @param _daoAddress The address to set as the new owner
+    function setDAOAddress(address _daoAddress) public override onlyDispatcherOwner {
+        require(_daoAddress != address(0), "setDAOAddress: daoAddress must not be empty");
+        require(_daoAddress != daoAddress, "setDAOAddress: daoAddress must not be pre address");
+        daoAddress = _daoAddress;
     }
 
     /// @notice Get Deposit fee for Protocol
-    function getFeeDeposit() external view returns(uint256) {
+    function getFeeDeposit() external view override returns (uint256) {
         return feeDeposit;
     }
 
     /// @notice Get Withdraw fee for Protocol
-    function getFeeWithdraw() external view returns(uint256) {
+    function getFeeWithdraw() external view override returns (uint256) {
         return feeWithdraw;
     }
 
     /// @notice Get protocol fee of PerformanceFee
-    function getFeePerform() external view returns(uint256) {
+    function getFeePerform() public view override returns (uint256 feePerform_) {
         return feePerform;
     }
 
     /// @notice Get Streaming fee for Protocol
-    function getFeeStream() external view returns(uint256) {
+    function getFeeStream() external view override returns (uint256) {
         return feeStream;
     }
 
     /// @notice Get Owner for DAO Protocol
-    function getOwner() external view returns(address) {
-        return owner;
+    function getDaoAddress() external view override returns (address daoAddress_) {
+        return daoAddress;
     }
 
 }

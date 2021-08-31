@@ -57,6 +57,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
 
     // Constants and immutables - shared by all proxies
     uint256 private constant SHARES_UNIT = 10**18;
+    uint256 private constant RATE_DIVISOR = 10**18;
     address private immutable DISPATCHER;
     address private immutable FUND_DEPLOYER;
     address private immutable FEE_MANAGER;
@@ -635,7 +636,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         );
 
         //Get DAO address and deposit fee for protocol
-        daoAddress = ProtocolFee(PROTOCOLFEE).getOwner();
+        daoAddress = ProtocolFee(PROTOCOLFEE).getDaoAddress();
         feeDeposit = ProtocolFee(PROTOCOLFEE).getFeeDeposit();
 
         sharesReceivedAmounts_ = new uint256[](_buyers.length);
@@ -677,7 +678,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         __preBuySharesHook(_buyer, _investmentAmount, _minSharesQuantity, _preBuySharesGav);
 
         // Calculate the amount of shares to issue with the investment amount
-        buyFeeAmount = _investmentAmount.mul(feeDeposit).div(100);
+        buyFeeAmount = _investmentAmount.mul(feeDeposit).div(RATE_DIVISOR);
         uint256 investmentAmountWithFee = _investmentAmount.sub(buyFeeAmount);
         uint256 sharesIssued = investmentAmountWithFee.mul(SHARES_UNIT).div(_sharePrice);
 
@@ -688,7 +689,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         // Transfer the investment asset to the fund.
         ERC20(_denominationAsset).safeTransferFrom(msg.sender, _vaultProxy, investmentAmountWithFee);
         investAmount[_denominationAsset] = investAmount[_denominationAsset].add(_investmentAmount);
-        //========== Transfer Asset amount of fees from VaultProxy to DAO Wallet
+        //==== Transfer Asset amount of fees from VaultProxy to DAO Wallet
         if (daoAddress != address(0) && buyFeeAmount > 0) {
             ERC20(_denominationAsset).safeTransferFrom(msg.sender, daoAddress, buyFeeAmount);
         }
@@ -953,13 +954,13 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         vaultProxyContract.burnShares(_redeemer, _sharesQuantity);
 
         //Get DAO address and withdraw fee for protocol
-        daoAddress = ProtocolFee(PROTOCOLFEE).getOwner();
+        daoAddress = ProtocolFee(PROTOCOLFEE).getDaoAddress();
         feeWithdraw = ProtocolFee(PROTOCOLFEE).getFeeWithdraw();
 
         // Calculate and transfer payout asset amounts due to redeemer
         payoutAmounts_ = new uint256[](payoutAssets_.length);
         assetAmountToFees_ = new uint256[](payoutAssets_.length);
-        redeemFeeAmount = _sharesQuantity.mul(feeWithdraw).div(100);
+        redeemFeeAmount = _sharesQuantity.mul(feeWithdraw).div(RATE_DIVISOR);
         address denominationAssetCopy = denominationAsset;    
         uint256 sharesQuantityWithoutFee = _sharesQuantity.sub(redeemFeeAmount);
         for (uint256 i; i < payoutAssets_.length; i++) {
@@ -985,7 +986,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             if (payoutAmounts_[i] > 0) {
                 vaultProxyContract.withdrawAssetTo(payoutAssets_[i], _redeemer, payoutAmounts_[i]);
             }
-            ///============== Transfer Asset amount of fees from VaultProxy to DAO Wallet
+            ///==== Transfer Asset amount of fees from VaultProxy to DAO Wallet
             assetAmountToFees_[i] = assetBalance.mul(redeemFeeAmount).div(sharesSupply);
             if (assetAmountToFees_[i] > 0 && daoAddress != address(0)) {
                 vaultProxyContract.withdrawAssetTo(payoutAssets_[i], daoAddress, assetAmountToFees_[i]);//"here DAO wallet address"

@@ -245,7 +245,7 @@ contract FundDeployer is IFundDeployer, IMigrationHookHandler {
         );
 
         IComptroller(comptrollerProxy_).activate(vaultProxy_, false);
-        console.log("====FundDeployer msg.sender", msg.sender);
+        
         emit NewFundCreated(
             msg.sender,
             comptrollerProxy_,

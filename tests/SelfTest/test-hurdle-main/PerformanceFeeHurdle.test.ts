@@ -3,23 +3,23 @@ import {
   ComptrollerLib,
   FeeHook,
   FeeManager,
-//   FeeManagerActionId,
+  FeeManagerActionId,
   feeManagerConfigArgs,
   FeeSettlementType,
-  // MockChainlinkPriceSource,
+  MockChainlinkPriceSource,
   hurdleConfigArgs,
-//   StandardToken,
+  StandardToken,
   VaultLib,
   WETH,
   PerformanceFeeHurdle,
   hurdleSharesDue,
 } from '@taodao/protocol';
 import {
-//   addTrackedAssets,
+  addTrackedAssets,
   assertEvent,
 //   assertNoEvent,
   buyShares,
-//   callOnExtension,
+  callOnExtension,
 //   createFundDeployer,
 //   createMigratedFundConfig,
   createNewFund,
@@ -29,6 +29,7 @@ import {
   // updateChainlinkAggregator,
 } from '@enzymefinance/testutils';
 import { BigNumber, BigNumberish, BytesLike, constants, utils } from 'ethers';
+import { config } from 'dotenv';
 
 async function snapshot() {
   const { accounts, deployment, config, deployer } = await deployProtocolFixture();
@@ -329,8 +330,7 @@ describe('payout', () => {
     Number(BigNumber.from(feeInfoPrePayout.period)),//   31536000
     Number(BigNumber.from(feeInfoPrePayout.activated)),//1628580950
     Number(BigNumber.from(payoutTimestamp)),//           1660116958
-    Number(BigNumber.from(feeInfoPrePayout.lastSharePrice)),//110000000
-    Number(BigNumber.from(feeInfoPrePayout.lastSharePrice))
+    Number(BigNumber.from(feeInfoPrePayout.lastSharePrice)),//2*10**18
     );
   });
 });
@@ -367,7 +367,7 @@ describe('integration', () => {
     });
     
 
-    const initialInvestmentAmount = utils.parseEther('100');
+    const initialInvestmentAmount = utils.parseEther('1');
     await denominationAsset.transfer(investor, initialInvestmentAmount);
 
     await buyShares({
@@ -381,18 +381,18 @@ describe('integration', () => {
     // Performance fee state should be in expected initial configuration
     const initialFeeInfo = await performanceFeeHurdle.getFeeInfoForFund(comptrollerProxy);
     
-    // expect(initialFeeInfo.lastSharePrice).toEqBigNumber(denominationAssetUnit);
-    // expect(initialFeeInfo.aggregateValueDue).toEqBigNumber(0);
+    expect(initialFeeInfo.lastSharePrice).toEqBigNumber(utils.parseEther('1'));
+    expect(initialFeeInfo.aggregateValueDue).toEqBigNumber(0);
     const gavBeforeRedeem1 = (await comptrollerProxy.calcGav.args(true).call()).gav_;
     
     console.log("=====after BuyShares-initInvestAmount, vaultProxyAmount, vaultTotal, lastSharePrice, aggregateValueDue, highWaterMark, gav ::", 
-    Number(BigNumber.from(initialInvestmentAmount)),//100*10**18 
-    Number(BigNumber.from(await vaultProxy.balanceOf(investor))),//100*10**18 
-    Number(BigNumber.from(await vaultProxy.totalSupply())),//100*10**18
+    Number(BigNumber.from(initialInvestmentAmount)),//1*10**18 
+    Number(BigNumber.from(await vaultProxy.balanceOf(investor))),//1*10**18 
+    Number(BigNumber.from(await vaultProxy.totalSupply())),//1*10**18
     Number(BigNumber.from(initialFeeInfo.lastSharePrice)),//10**18 
     Number(BigNumber.from(initialFeeInfo.aggregateValueDue)),//0
     Number(BigNumber.from(initialFeeInfo.hurdleRate)),//0.05*10**18 
-    Number(BigNumber.from(gavBeforeRedeem1))); //100*10**18
+    Number(BigNumber.from(gavBeforeRedeem1))); //1*10**18
 
     //============================= Redeem1 small amount of shares
     const redeemAmount1 = (await vaultProxy.balanceOf(investor)).div(2);
@@ -480,219 +480,4 @@ describe('integration', () => {
     // );
   });
 
-  // it('can create a new fund with this fee, works correctly while buying shares, and is paid out when allowed', async () => {
-  //   const {
-  //     deployer,
-  //     accounts: [fundOwner, fundInvestor],
-  //     config: { primitives:{usdc} },
-  //     deployment: {
-  //       // chainlinkPriceFeed,
-  //       feeManager,
-  //       trackedAssetsAdapter,
-  //       integrationManager,
-  //       performanceFee,
-  //       fundDeployer,
-  //     },
-  //   } = await provider.snapshot(snapshot);
-    
-  //   const denominationAsset = new StandardToken(usdc, deployer);
-  //   const investmentAmount = utils.parseUnits('200', await denominationAsset.decimals());
-  //   await denominationAsset.transfer(fundInvestor, investmentAmount.mul(2));
-
-  //   // const mockPriceSource = await MockChainlinkPriceSource.deploy(deployer, 6);
-  //   // chainlinkPriceFeed.updatePrimitives([usdc], [mockPriceSource]);
-
-  //   const performanceFeeRate = utils.parseEther('.1'); // 10%
-  //   const performanceFeePeriod = BigNumber.from(60 * 60 * 24 * 365); // 365 days
-  //   const performanceFeeConfigSettings = performanceFeeConfigArgs({
-  //     rate: performanceFeeRate,
-  //     period: performanceFeePeriod,
-  //   });
-
-  //   const feeManagerConfig = feeManagerConfigArgs({
-  //     fees: [performanceFee],
-  //     settings: [performanceFeeConfigSettings],
-  //   });
-
-  //   const { comptrollerProxy, vaultProxy } = await createNewFund({
-  //     signer: fundOwner,
-  //     fundDeployer,
-  //     denominationAsset,
-  //     fundOwner: fundOwner,
-  //     fundName: 'TestFund',
-  //     feeManagerConfig,
-  //   });
-
-  //   const feeInfo = await performanceFee.getFeeInfoForFund(comptrollerProxy.address);
-
-  //   // check that the fee has been registered and the parameters are correct
-  //   expect(feeInfo.rate).toEqBigNumber(performanceFeeRate);
-  //   expect(feeInfo.period).toEqBigNumber(performanceFeePeriod);
-
-  //   // check whether payout is allowed before the fee period has passed
-  //   const falsePayoutCall = await performanceFee.payoutAllowed(comptrollerProxy);
-
-  //   // time warp to end of fee period
-  //   await provider.send('evm_increaseTime', [performanceFeePeriod.toNumber()]);
-  //   await provider.send('evm_mine', []);
-
-  //   // check whether payout is allowed at the end of the fee period
-  //   const truePayoutCall = await performanceFee.payoutAllowed(comptrollerProxy);
-
-  //   expect(falsePayoutCall).toBe(false);
-  //   expect(truePayoutCall).toBe(true);
-
-  //   // invest in the fund so there are shares
-  //   await buyShares({
-  //     comptrollerProxy,
-  //     signer: fundInvestor,
-  //     buyers: [fundInvestor],
-  //     denominationAsset,
-  //     investmentAmounts: [investmentAmount],
-  //     minSharesAmounts: [utils.parseEther('1')],
-  //   });
-
-  //   // add assets to fund
-  //   const mln = new StandardToken(usdc, deployer);
-  //   const amount = utils.parseUnits('75', await mln.decimals());
-  //   await mln.transfer(vaultProxy, amount);
-
-  //   // track them
-  //   await addTrackedAssets({
-  //     comptrollerProxy,
-  //     integrationManager,
-  //     fundOwner,
-  //     trackedAssetsAdapter,
-  //     incomingAssets: [mln],
-  //   });
-
-  //   // make sure you're past the next performanceFeePeriod
-  //   await provider.send('evm_increaseTime', [performanceFeePeriod.toNumber()]);
-  //   await provider.send('evm_mine', []);
-
-  //   // count shares of fund
-  //   const profitCaseSharesBeforeSettlement = await vaultProxy.totalSupply();
-
-  //   // update price feed to accommodate time warp
-  //   // await updateChainlinkAggregator(mockPriceSource);
-
-  //   // settle fees
-  //   await callOnExtension({
-  //     signer: fundOwner,
-  //     comptrollerProxy,
-  //     extension: feeManager,
-  //     actionId: FeeManagerActionId.InvokeContinuousHook,
-  //   });
-
-  //   // recount shares of the fund
-  //   const profitCaseSharesAfterSettlement = await vaultProxy.totalSupply();
-
-  //   // with gains, contract settles by minting new shares - shares after settlement should be > shares before
-  //   expect(profitCaseSharesAfterSettlement).toBeGtBigNumber(profitCaseSharesBeforeSettlement);
-
-  //   // fast forward to payout
-  //   await provider.send('evm_increaseTime', [performanceFeePeriod.toNumber()]);
-  //   await provider.send('evm_mine', []);
-
-  //   // count shares of the fund
-  //   const lossCaseSharesBeforeSettlement = await vaultProxy.totalSupply();
-
-  //   // update price feed to accommodate time warp and tick down the price of MLN to decrease GAV
-  //   // await updateChainlinkAggregator(mockPriceSource, utils.parseEther('.75'));
-
-  //   // buy shares to settle fees
-  //   await buyShares({
-  //     comptrollerProxy,
-  //     signer: fundInvestor,
-  //     buyers: [fundInvestor],
-  //     denominationAsset,
-  //     investmentAmounts: [investmentAmount],
-  //     minSharesAmounts: [utils.parseEther('.01')],
-  //   });
-
-  //   // count shares of fund
-  //   const lossCaseSharesAfterSettlement = await vaultProxy.totalSupply();
-
-  //   // with losses, fees are settled by burning shares, new total supply of shares after investment
-  //   // should be less than lossCaseBefore plus investment amount
-  //   expect(lossCaseSharesAfterSettlement).toBeLtBigNumber(lossCaseSharesBeforeSettlement.add(investmentAmount));
-  // });
-
-  // it('can create a migrated fund with this fee', async () => {
-  //   const {
-  //     deployer,
-  //     accounts: [fundOwner],
-  //     config: {
-  //       weth,
-  //       synthetix: { addressResolver: synthetixAddressResolverAddress },
-  //     },
-  //     deployment: {
-  //       chainlinkPriceFeed,
-  //       dispatcher,
-  //       feeManager,
-  //       fundDeployer,
-  //       integrationManager,
-  //       policyManager,
-  //       synthetixPriceFeed,
-  //       valueInterpreter,
-  //       vaultLib,
-  //       performanceFee,
-  //     },
-  //   } = await provider.snapshot(snapshot);
-
-  //   const denominationAsset = new WETH(weth, whales.weth);
-
-  //   const performanceFeeRate = utils.parseEther('.1'); // 10%
-  //   const performanceFeePeriod = BigNumber.from(60 * 60 * 24 * 365); // 365 days
-  //   const performanceFeeConfigSettings = performanceFeeConfigArgs({
-  //     rate: performanceFeeRate,
-  //     period: performanceFeePeriod,
-  //   });
-
-  //   const feeManagerConfig = feeManagerConfigArgs({
-  //     fees: [performanceFee],
-  //     settings: [performanceFeeConfigSettings],
-  //   });
-
-  //   const { vaultProxy } = await createNewFund({
-  //     signer: fundOwner,
-  //     fundDeployer,
-  //     denominationAsset,
-  //     fundOwner,
-  //     fundName: 'TestFund',
-  //     feeManagerConfig,
-  //   });
-
-  //   const nextFundDeployer = await createFundDeployer({
-  //     deployer,
-  //     chainlinkPriceFeed,
-  //     dispatcher,
-  //     feeManager,
-  //     integrationManager,
-  //     policyManager,
-  //     synthetixPriceFeed,
-  //     synthetixAddressResolverAddress,
-  //     valueInterpreter,
-  //     vaultLib,
-  //   });
-
-  //   const { comptrollerProxy: nextComptrollerProxy } = await createMigratedFundConfig({
-  //     signer: fundOwner,
-  //     fundDeployer: nextFundDeployer,
-  //     denominationAsset,
-  //     feeManagerConfigData: feeManagerConfig,
-  //   });
-
-  //   const signedNextFundDeployer = nextFundDeployer.connect(fundOwner);
-  //   await signedNextFundDeployer.signalMigration(vaultProxy, nextComptrollerProxy);
-
-  //   const migrationTimelock = await dispatcher.getMigrationTimelock();
-  //   await provider.send('evm_increaseTime', [migrationTimelock.toNumber()]);
-
-  //   await signedNextFundDeployer.executeMigration(vaultProxy);
-
-  //   const feeInfo = await performanceFee.getFeeInfoForFund(nextComptrollerProxy);
-  //   expect(feeInfo.rate).toEqBigNumber(performanceFeeRate);
-  //   expect(feeInfo.period).toEqBigNumber(performanceFeePeriod);
-  // });
 });

@@ -169,8 +169,6 @@ async function assertAdjustedPerformance({
   Number(BigNumber.from(feeInfo.aggregateValueDue)),//0
   Number(BigNumber.from(gav_1))); //2*10**18
 
-  95000000000000000 2000000000000000000 49868766404199470
-  100000000000000000 2000000000000000000 52631578947368424
   console.log("=====112 => ::", 
   Number(BigNumber.from(nextAggregateValueDue)),//0.1*10**18  0100000000000000000
   Number(BigNumber.from(nextSharePrice)),//2*10**18

@@ -15,7 +15,7 @@ import "../utils/PermissionedVaultActionMixin.sol";
 import "./IFee.sol";
 import "./IFeeManager.sol";
 import "../../core/fund/comptroller/ComptrollerLib.sol";
-import "./fees/ProtocolFee.sol";
+import "./fees/IProtocolFee.sol";
 import "hardhat/console.sol";
 
 /// @title FeeManager Contract
@@ -299,11 +299,12 @@ contract FeeManager is
         address[] memory fees = abi.decode(_callArgs, (address[]));
         address vaultProxy = getVaultProxyForFund(msg.sender);
 
-        // Get DAO address, Performance fee, Streaming fee for Protocol        
-        daoAddress = ProtocolFee(PROTOCOLFEE).getOwner();
-        feePerform = ProtocolFee(PROTOCOLFEE).getFeePerform();
-        feeStream = ProtocolFee(PROTOCOLFEE).getFeeStream();
-
+        // Get DAO address, Performance fee, Streaming fee for Protocol      
+        console.log("=====PROTOCOLFEE::", PROTOCOLFEE);  
+        daoAddress = IProtocolFee(PROTOCOLFEE).getDaoAddress();
+        feePerform = IProtocolFee(PROTOCOLFEE).getFeePerform();
+        feeStream = IProtocolFee(PROTOCOLFEE).getFeeStream();
+        console.log("=====daoAddress::", daoAddress);
         uint256 sharesOutstandingDue;
         uint256 sharesOutstandingToFee;
         for (uint256 i; i < fees.length; i++) {
@@ -341,20 +342,29 @@ contract FeeManager is
             //     continue;
             // }
 
-            
-
-            // Adjust 8% shares of performanceFee if fee is performanceFee
-            if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE") || 
-                compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE_HURDLE")) {
-                feeShares = sharesOutstandingForFee.mul(feePerform).div(RATE_DIVISOR);
-                sharesOutstandingForFee = sharesOutstandingForFee.sub(feeShares);
-            }             
-
             // Adjust 0.5% shares of managementFee if fee is managementFee
             if (compareStringsbyBytes(IFee(fees[i]).identifier(), "MANAGEMENT")) {
+                console.log("=====feeStream::", feeStream);
                 feeShares = sharesOutstandingForFee.mul(feeStream).div(RATE_DIVISOR);
+                console.log("=====m-feeShares::", feeShares);
                 sharesOutstandingForFee = sharesOutstandingForFee.sub(feeShares);                
             }
+
+            // Adjust 8% shares of performanceFeeHWM if fee is performanceFeeHWM
+            if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE")) {
+                console.log("=====feePerformHWM::", feePerform);
+                feeShares = sharesOutstandingForFee.mul(feePerform).div(RATE_DIVISOR);
+                console.log("=====p-feeSharesHWM::", feeShares);
+                sharesOutstandingForFee = sharesOutstandingForFee.sub(feeShares);
+            }  
+
+            // Adjust 8% shares of performanceFeeHurdle if fee is performanceFeeHurdle
+            if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE_HURDLE")) {
+                console.log("=====feePerformHurdle::", feePerform);
+                feeShares = sharesOutstandingForFee.mul(feePerform).div(RATE_DIVISOR);
+                console.log("=====p-feeSharesHurdle::", feeShares);
+                sharesOutstandingForFee = sharesOutstandingForFee.sub(feeShares);
+            }          
             
             sharesOutstandingDue = sharesOutstandingDue.add(sharesOutstandingForFee);
             sharesOutstandingToFee = sharesOutstandingToFee.add(feeShares);
