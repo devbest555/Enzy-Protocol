@@ -50,4 +50,5 @@ interface IFee {
         bytes calldata _settlementData,
         uint256 _gav
     ) external;
+
 }

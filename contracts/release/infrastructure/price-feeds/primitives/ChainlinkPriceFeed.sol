@@ -10,7 +10,6 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "../../../extensions/utils/FundDeployerOwnerMixin.sol";
 import "../../../interfaces/IChainlinkAggregator.sol";
 import "./IPrimitivePriceFeed.sol";
-import "hardhat/console.sol";
 
 /// @title ChainlinkPriceFeed Contract
 /// @notice A price feed that uses Chainlink oracles as price sources

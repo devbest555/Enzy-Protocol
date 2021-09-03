@@ -62,6 +62,7 @@ export * from './codegen/ManagementFee';
 export * from './codegen/PerformanceFeeHWM';
 export * from './codegen/PerformanceFeeHurdle';
 export * from './codegen/ProtocolFee';
+export * from './codegen/StreamingFee';
 
 // Policies
 export * from './codegen/IPolicy';

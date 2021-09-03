@@ -19,7 +19,6 @@ import "../../fund-deployer/IFundDeployer.sol";
 import "../../../extensions/fee-manager/fees/ProtocolFee.sol";
 import "../vault/IVault.sol";
 import "./IComptroller.sol";
-import "hardhat/console.sol";
 
 /// @title ComptrollerLib Contract
 /// @notice The core logic library shared by all funds

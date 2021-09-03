@@ -15,7 +15,7 @@ import "../utils/PermissionedVaultActionMixin.sol";
 import "./IFee.sol";
 import "./IFeeManager.sol";
 import "../../core/fund/comptroller/ComptrollerLib.sol";
-import "./fees/IProtocolFee.sol";
+import "./fees/ProtocolFee.sol";
 import "hardhat/console.sol";
 
 /// @title FeeManager Contract
@@ -85,7 +85,6 @@ contract FeeManager is
     
     address private immutable PROTOCOLFEE;
     uint256 internal feePerform;
-    uint256 internal feeStream;
     address internal daoAddress;
     uint256 private constant RATE_DIVISOR = 10**18;
 
@@ -299,75 +298,44 @@ contract FeeManager is
         address[] memory fees = abi.decode(_callArgs, (address[]));
         address vaultProxy = getVaultProxyForFund(msg.sender);
 
-        // Get DAO address, Performance fee, Streaming fee for Protocol      
-        console.log("=====PROTOCOLFEE::", PROTOCOLFEE);  
-        daoAddress = IProtocolFee(PROTOCOLFEE).getDaoAddress();
-        feePerform = IProtocolFee(PROTOCOLFEE).getFeePerform();
-        feeStream = IProtocolFee(PROTOCOLFEE).getFeeStream();
-        console.log("=====daoAddress::", daoAddress);
+        // Get DAO address, Performance fee for Protocol   
+        daoAddress = ProtocolFee(PROTOCOLFEE).getDaoAddress();
+        feePerform = ProtocolFee(PROTOCOLFEE).getFeePerform();
+        
         uint256 sharesOutstandingDue;
-        uint256 sharesOutstandingToFee;
+        uint256 sharesOutstandingToProtocol;
         for (uint256 i; i < fees.length; i++) {
             if (!IFee(fees[i]).payout(_comptrollerProxy, vaultProxy)) {
                 continue;
             }
 
             uint256 sharesOutstandingForFee = comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][fees[i]];
-            console.log("=====outstanding::", sharesOutstandingForFee);
-            console.log("=====identifier::", IFee(fees[i]).identifier());
+            
             if (sharesOutstandingForFee == 0) {
                 continue;
             }
 
             uint256 feeShares;
-            // Hurdle
-            // if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE_HURDLE")) {
-            //     console.log("=====feePerform::", feePerform);
-            //     console.log("=====daoAddress::", daoAddress);
-            //     console.log("=====fundOwner::", IVault(vaultProxy).getOwner());
-            //     feeShares = sharesOutstandingForFee.mul(feePerform).div(RATE_DIVISOR);
-            //     uint256 diffAssetAmount = sharesOutstandingForFee.sub(feeShares);
-            //     address denominationAsset = ComptrollerLib(_comptrollerProxy).getDenominationAsset(); 
-            //     console.log("=====feeShares::", feeShares);
-
-            //     //ProtocolFee Asset amount(ex : 0.18 ETH) send to DAO wallet
-            //     ERC20(denominationAsset).transferFrom(vaultProxy, daoAddress, feeShares);
-            //     // Hurdle Performance fee asset amount send to fund owner
-            //     ERC20(denominationAsset).transferFrom(vaultProxy, IVault(vaultProxy).getOwner(), diffAssetAmount);
-            //     // after transfer Asset, format variable
-            //     comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][fees[i]] = 0;
-
-            //     emit SharesOutstandingPaidForFund(_comptrollerProxy, fees[i], sharesOutstandingForFee);
-                
-            //     continue;
-            // }
-
-            // Adjust 0.5% shares of managementFee if fee is managementFee
-            if (compareStringsbyBytes(IFee(fees[i]).identifier(), "MANAGEMENT")) {
-                console.log("=====feeStream::", feeStream);
-                feeShares = sharesOutstandingForFee.mul(feeStream).div(RATE_DIVISOR);
-                console.log("=====m-feeShares::", feeShares);
-                sharesOutstandingForFee = sharesOutstandingForFee.sub(feeShares);                
+            // streamingFee if fee is streamingFee
+            if (compareStringsbyBytes(IFee(fees[i]).identifier(), "STREAMING")) {
+                feeShares = sharesOutstandingForFee;            
+                sharesOutstandingForFee = sharesOutstandingForFee.sub(feeShares);    
             }
 
             // Adjust 8% shares of performanceFeeHWM if fee is performanceFeeHWM
             if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE")) {
-                console.log("=====feePerformHWM::", feePerform);
                 feeShares = sharesOutstandingForFee.mul(feePerform).div(RATE_DIVISOR);
-                console.log("=====p-feeSharesHWM::", feeShares);
                 sharesOutstandingForFee = sharesOutstandingForFee.sub(feeShares);
             }  
 
             // Adjust 8% shares of performanceFeeHurdle if fee is performanceFeeHurdle
             if (compareStringsbyBytes(IFee(fees[i]).identifier(), "PERFORMANCE_HURDLE")) {
-                console.log("=====feePerformHurdle::", feePerform);
                 feeShares = sharesOutstandingForFee.mul(feePerform).div(RATE_DIVISOR);
-                console.log("=====p-feeSharesHurdle::", feeShares);
                 sharesOutstandingForFee = sharesOutstandingForFee.sub(feeShares);
             }          
             
             sharesOutstandingDue = sharesOutstandingDue.add(sharesOutstandingForFee);
-            sharesOutstandingToFee = sharesOutstandingToFee.add(feeShares);
+            sharesOutstandingToProtocol = sharesOutstandingToProtocol.add(feeShares);
 
             // Delete shares outstanding and distribute from VaultProxy to the fees recipient
             comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][fees[i]] = 0;
@@ -384,14 +352,14 @@ contract FeeManager is
                 sharesOutstandingDue
             );
         }
-        //============= Transfer Shares of fees from VaultProxy to DAO Wallet 
-        if (sharesOutstandingToFee > 0 && daoAddress != address(0)) {
-            console.log("=====fee-2::", sharesOutstandingToFee);
+        //==== Transfer Shares of fees from VaultProxy to DAO Wallet 
+        if (sharesOutstandingToProtocol > 0 && daoAddress != address(0)) {
+            console.log("=====fee-2::", sharesOutstandingToProtocol);
             __transferShares(
                 _comptrollerProxy,
                 vaultProxy,
                 daoAddress,
-                sharesOutstandingToFee
+                sharesOutstandingToProtocol
             );
         }
     }
@@ -441,12 +409,6 @@ contract FeeManager is
             payer = _vaultProxy;
             __burnShares(_comptrollerProxy, payer, sharesDue);
         } 
-        // else if (settlementType == SettlementType.TransferAsset) {//PerformanceHurdle
-        //     // shareDue : Asset Amount for Hurdle Performance
-        //     comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][_fee] 
-        //     = comptrollerProxyToFeeToSharesOutstanding[_comptrollerProxy][_fee].add(sharesDue);
-        //     payee = IVault(_vaultProxy).getOwner();//fundOwner
-        // } 
         else {
             revert("__settleFee: Invalid SettlementType");
         }

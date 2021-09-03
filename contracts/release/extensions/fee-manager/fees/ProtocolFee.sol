@@ -4,10 +4,10 @@ pragma solidity 0.6.12;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "../../../../persistent/dispatcher/IDispatcher.sol";
-import "./IProtocolFee.sol";
+import "./ProtocolFee.sol";
 import "hardhat/console.sol";
 
-contract ProtocolFee is IProtocolFee {    
+contract ProtocolFee {    
     using SafeMath for uint256;
 
     event FeeSettingsAdded(address indexed daoAddress, uint256 feeDeposit, uint256 feeWithdraw, uint256 feePerform, uint256 feeStream);
@@ -35,7 +35,6 @@ contract ProtocolFee is IProtocolFee {
     /// @dev `feeDeposit`, `feeWithdraw`, `feeStream` and `feePerform` are set
     function addFeeSettings(bytes calldata _settingsData)
         external
-        override
         onlyDispatcherOwner
     {
         (
@@ -61,34 +60,34 @@ contract ProtocolFee is IProtocolFee {
 
     /// @notice Sets the new daoAddress
     /// @param _daoAddress The address to set as the new owner
-    function setDAOAddress(address _daoAddress) public override onlyDispatcherOwner {
+    function setDAOAddress(address _daoAddress) public onlyDispatcherOwner {
         require(_daoAddress != address(0), "setDAOAddress: daoAddress must not be empty");
         require(_daoAddress != daoAddress, "setDAOAddress: daoAddress must not be pre address");
         daoAddress = _daoAddress;
     }
 
     /// @notice Get Deposit fee for Protocol
-    function getFeeDeposit() external view override returns (uint256) {
+    function getFeeDeposit() external view returns (uint256) {
         return feeDeposit;
     }
 
     /// @notice Get Withdraw fee for Protocol
-    function getFeeWithdraw() external view override returns (uint256) {
+    function getFeeWithdraw() external view returns (uint256) {
         return feeWithdraw;
     }
 
     /// @notice Get protocol fee of PerformanceFee
-    function getFeePerform() public view override returns (uint256 feePerform_) {
+    function getFeePerform() public view returns (uint256 feePerform_) {
         return feePerform;
     }
 
     /// @notice Get Streaming fee for Protocol
-    function getFeeStream() external view override returns (uint256) {
+    function getFeeStream() external view returns (uint256) {
         return feeStream;
     }
 
     /// @notice Get Owner for DAO Protocol
-    function getDaoAddress() external view override returns (address daoAddress_) {
+    function getDaoAddress() external view returns (address daoAddress_) {
         return daoAddress;
     }
 

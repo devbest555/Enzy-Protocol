@@ -35,7 +35,7 @@ export function performanceFeeAssetDue({
   return assetValueDue_;
 }
 
-export interface PerformanceFeeSharesDueInfo {
+export interface PerformanceHurdleFeeSharesDueInfo {
   sharesDue: BigNumber;
   nextAggregateValueDue: BigNumber;
   nextSharePrice: BigNumber;
@@ -70,7 +70,7 @@ export function hurdleSharesDue({
     buySharesInvestmentAmount?: BigNumberish;
     redeemSharesSharesAmount?: BigNumberish;
   };
-}): PerformanceFeeSharesDueInfo {
+}): PerformanceHurdleFeeSharesDueInfo {
   const rateDivisor = utils.parseEther('1');
   const shareUnit = utils.parseEther('1');
   const netSharesSupply = BigNumber.from(totalSharesSupply).sub(totalSharesOutstanding);

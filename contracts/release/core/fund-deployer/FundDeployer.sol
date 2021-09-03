@@ -11,7 +11,6 @@ import "../fund/comptroller/IComptroller.sol";
 import "../fund/comptroller/ComptrollerProxy.sol";
 import "../fund/vault/IVault.sol";
 import "./IFundDeployer.sol";
-import "hardhat/console.sol";
 
 /// @title FundDeployer Contract
 /// @notice The top-level contract of the release.

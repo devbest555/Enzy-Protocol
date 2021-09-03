@@ -27,7 +27,9 @@ const projects = [
   // project('core', ['tests/SelfTest/test-performanceFee']),
   // project('core', ['tests/SelfTest/test-managementFee']),
   // project('core', ['tests/SelfTest/test-hurdle-main']),
-  project('core', ['tests/SelfTest/test-feemanager-hurdle']),
+  // project('core', ['tests/SelfTest/test-feemanager-hurdle']),
+  // project('core', ['tests/SelfTest/test-streaming']),
+  project('core', ['tests/SelfTest/test-feemanager-stream']),
 ].filter((project) => !!project);
 
 export default {

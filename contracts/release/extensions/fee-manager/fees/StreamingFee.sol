@@ -8,17 +8,18 @@ pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "../../../core/fund/vault/VaultLib.sol";
 import "../../../utils/MakerDaoMath.sol";
-import "./utils/FeeBase.sol";
+import "../IFeeManager.sol";
+import "./ProtocolFee.sol";
 import "hardhat/console.sol";
 
-/// @title ManagementFee Contract
-/// @notice A management fee with a configurable annual rate
-contract ManagementFee is FeeBase, MakerDaoMath {
+/// @title StreamingFee Contract
+/// @notice A Streaming fee with a configurable streaming fee rate
+contract StreamingFee is MakerDaoMath {
     using SafeMath for uint256;
 
     event ActivatedForMigratedFund(address indexed comptrollerProxy);
 
-    event FundSettingsAdded(address indexed comptrollerProxy, uint256 scaledPerSecondRate);
+    event FundSettingsAdded(address indexed comptrollerProxy, uint256 feeRate);
 
     event Settled(
         address indexed comptrollerProxy,
@@ -27,15 +28,27 @@ contract ManagementFee is FeeBase, MakerDaoMath {
     );
 
     struct FeeInfo {
-        uint256 scaledPerSecondRate;
+        uint256 feeRate;
         uint256 lastSettled;
     }
 
-    uint256 private constant RATE_SCALE_BASE = 10**27;
-
+    uint256 private constant RATE_SCALE_BASE = 10**27;    
+    address private immutable PROTOCOLFEE;  
+    address private immutable FEE_MANAGER;
     mapping(address => FeeInfo) private comptrollerProxyToFeeInfo;
 
-    constructor(address _feeManager) public FeeBase(_feeManager) {}
+    modifier onlyFeeManager() {
+        require(msg.sender == FEE_MANAGER, "Only the FeeManger can make this call");
+        _;
+    }
+
+    constructor(
+        address _feeManager,
+        address _protocolFee
+    ) public {
+        FEE_MANAGER = _feeManager;
+        PROTOCOLFEE = _protocolFee;
+    }
 
     // EXTERNAL FUNCTIONS
 
@@ -44,7 +57,6 @@ contract ManagementFee is FeeBase, MakerDaoMath {
     /// @param _vaultProxy The VaultProxy of the fund
     function activateForFund(address _comptrollerProxy, address _vaultProxy)
         external
-        override
         onlyFeeManager
     {
         // It is only necessary to set `lastSettled` for a migrated fund
@@ -57,30 +69,29 @@ contract ManagementFee is FeeBase, MakerDaoMath {
 
     /// @notice Add the initial fee settings for a fund
     /// @param _comptrollerProxy The ComptrollerProxy of the fund
-    /// @param _settingsData Encoded settings to apply to the fee for a fund
-    function addFundSettings(address _comptrollerProxy, bytes calldata _settingsData)
+    function addFundSettings(address _comptrollerProxy, bytes calldata)
         external
-        override
         onlyFeeManager
-    {
-        uint256 scaledPerSecondRate = abi.decode(_settingsData, (uint256));
+    {   
+        uint256 feeRate = ProtocolFee(PROTOCOLFEE).getFeeStream();
+        console.log("====s-feeRate::", feeRate);
         require(
-            scaledPerSecondRate > 0,
-            "addFundSettings: scaledPerSecondRate must be greater than 0"
+            feeRate > 0,
+            "addFundSettings: feeRate must be greater than 0"
         );
 
         comptrollerProxyToFeeInfo[_comptrollerProxy] = FeeInfo({
-            scaledPerSecondRate: scaledPerSecondRate,
+            feeRate: feeRate,
             lastSettled: 0
         });
 
-        emit FundSettingsAdded(_comptrollerProxy, scaledPerSecondRate);
+        emit FundSettingsAdded(_comptrollerProxy, feeRate);
     }
 
     /// @notice Provides a constant string identifier for a fee
     /// @return identifier_ The identifier string
-    function identifier() external pure override returns (string memory identifier_) {
-        return "MANAGEMENT";
+    function identifier() external pure returns (string memory identifier_) {
+        return "STREAMING";
     }
 
     /// @notice Gets the hooks that are implemented by the fee
@@ -91,8 +102,7 @@ contract ManagementFee is FeeBase, MakerDaoMath {
     /// @dev Used only during fee registration
     function implementedHooks()
         external
-        view
-        override
+        pure
         returns (
             IFeeManager.FeeHook[] memory implementedHooksForSettle_,
             IFeeManager.FeeHook[] memory implementedHooksForUpdate_,
@@ -122,7 +132,6 @@ contract ManagementFee is FeeBase, MakerDaoMath {
         uint256
     )
         external
-        override
         onlyFeeManager
         returns (
             IFeeManager.SettlementType settlementType_,
@@ -146,19 +155,18 @@ contract ManagementFee is FeeBase, MakerDaoMath {
             // which is fine for this release. Even if they are not, they are still shares that
             // are only claimable by the fund owner.
             uint256 netSharesSupply = sharesSupply.sub(vaultProxyContract.balanceOf(_vaultProxy));
-            if (netSharesSupply > 0) {
-                console.log("====settle-0::", feeInfo.scaledPerSecondRate);
+            if (netSharesSupply > 0) {                
                 console.log("====settle-1::", sharesSupply);
                 console.log("====settle-2::", netSharesSupply);
                 console.log("====settle-3::", __rpow(
-                            feeInfo.scaledPerSecondRate,
+                            feeInfo.feeRate,
                             secondsSinceSettlement,
                             RATE_SCALE_BASE
                         ));
                 sharesDue_ = netSharesSupply
                     .mul(
                         __rpow(
-                            feeInfo.scaledPerSecondRate,
+                            feeInfo.feeRate,
                             secondsSinceSettlement,
                             RATE_SCALE_BASE
                         ).sub(RATE_SCALE_BASE)

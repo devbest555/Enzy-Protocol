@@ -31,6 +31,7 @@ export async function generateRegisteredMockFees({
 }) {
   // Create mock fees
   const mockContinuousFeeSettleOnly = await IFee.mock(deployer);
+  const mockStreamingFeeSettle = await IFee.mock(deployer);
   const mockContinuousFeeWithGavAndUpdates = await IFee.mock(deployer);
   const mockPostBuySharesFee = await IFee.mock(deployer);
   const mockHurdleFeeSettle = await IFee.mock(deployer);
@@ -45,6 +46,19 @@ export async function generateRegisteredMockFees({
     mockContinuousFeeSettleOnly.activateForFund.returns(undefined),
     mockContinuousFeeSettleOnly.update.returns(undefined),
     mockContinuousFeeSettleOnly.implementedHooks.returns(
+      [FeeHook.Continuous, FeeHook.PreBuyShares, FeeHook.PreRedeemShares],
+      [],
+      false,
+      false,
+    ),
+    // Continuous fee the mimics StreamingFee
+    mockStreamingFeeSettle.identifier.returns(`STREAMING`),
+    mockStreamingFeeSettle.settle.returns(FeeSettlementType.None, constants.AddressZero, 0),
+    mockStreamingFeeSettle.payout.returns(false),
+    mockStreamingFeeSettle.addFundSettings.returns(undefined),
+    mockStreamingFeeSettle.activateForFund.returns(undefined),
+    mockStreamingFeeSettle.update.returns(undefined),
+    mockStreamingFeeSettle.implementedHooks.returns(
       [FeeHook.Continuous, FeeHook.PreBuyShares, FeeHook.PreRedeemShares],
       [],
       false,
@@ -89,6 +103,7 @@ export async function generateRegisteredMockFees({
   // Register all mock fees
   await feeManager.registerFees([
     mockContinuousFeeSettleOnly,
+    mockStreamingFeeSettle,
     mockContinuousFeeWithGavAndUpdates,
     mockPostBuySharesFee,
     mockHurdleFeeSettle,
@@ -96,6 +111,7 @@ export async function generateRegisteredMockFees({
 
   return {
     mockContinuousFeeSettleOnly,
+    mockStreamingFeeSettle,
     mockContinuousFeeWithGavAndUpdates,
     mockPostBuySharesFee,
     mockHurdleFeeSettle,

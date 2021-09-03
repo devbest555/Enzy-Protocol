@@ -97,7 +97,7 @@ contract PerformanceFeeHWM is FeeBase {
     {
         (uint256 feeRate, uint256 feePeriod) = abi.decode(_settingsData, (uint256, uint256));
         require(feeRate > 0, "addFundSettings: feeRate must be greater than 0");
-        require(feePeriod > 30 days, "addFundSettings: feePeriod must be greater than 30 days");  
+        require(feePeriod >= 30 days, "addFundSettings: feePeriod must be greater than 30 days");  
         comptrollerProxyToFeeInfo[_comptrollerProxy] = FeeInfo({
             rate: feeRate,
             period: feePeriod,

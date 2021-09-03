@@ -9,6 +9,7 @@ import {
   ManagementFee,
   managementFeeConfigArgs,
   managementFeeSharesDue,
+  protocolFeesArgs,
   VaultLib,
   WETH,
 } from '@taodao/protocol';
@@ -33,8 +34,20 @@ async function snapshot() {
     deployer,
   } = await deployProtocolFixture();
 
-  const denominationAsset = new WETH(config.weth, whales.weth);
-
+  const denominationAsset = new WETH(config.weth, deployer);
+  // // get fees from ProtocolFee
+  // const feeDeposit = utils.parseEther('0.02');//0.2%
+  // const feeWithdraw = utils.parseEther('0.05');//0.5%
+  // const feePerform = utils.parseEther('0.08');//8%
+  // const feeStreaming = utils.parseEther('0.1');//0.5%
+  // const feeRate = convertRateToScaledPerSecondRate(feeStreaming);
+  // const protocolFeeConfig= protocolFeesArgs({
+  //   feeDeposit: feeDeposit,
+  //   feeWithdraw: feeWithdraw,
+  //   feePerform: feePerform,
+  //   feeStream: feeRate,
+  // });
+  // await deployment.protocolFee.connect(deployer).addFeeSettings(protocolFeeConfig);
   // Create standalone ManagementFee
   const standaloneManagementFee = await ManagementFee.deploy(deployer, EOAFeeManager);
 
@@ -48,8 +61,9 @@ async function snapshot() {
   await mockComptrollerProxy.getVaultProxy.returns(mockVaultProxy);
 
   // Add fee settings for ComptrollerProxy
-  const managementFeeRate = utils.parseEther('0.1'); // 10%
+  const managementFeeRate = utils.parseEther('0.1'); // 10% //
   const scaledPerSecondRate = convertRateToScaledPerSecondRate(managementFeeRate);
+  console.log("====scaledPerSecondRate::", Number(BigNumber.from(scaledPerSecondRate)));
   const managementFeeConfig = managementFeeConfigArgs(scaledPerSecondRate);
   await standaloneManagementFee.connect(EOAFeeManager).addFundSettings(mockComptrollerProxy, managementFeeConfig);
 
@@ -372,6 +386,7 @@ describe('integration', () => {
     } = await provider.snapshot(snapshot);
 
     const investmentAmount = utils.parseEther('1');
+    console.log("=====fundInvestor::", fundInvestor.address, fundOwner.address, feeManager.address, fundDeployer.address);
     await denominationAsset.transfer(fundInvestor, investmentAmount);
 
     const rate = utils.parseEther('0.1'); // 10%
@@ -402,7 +417,7 @@ describe('integration', () => {
       buyers: [fundInvestor],
       denominationAsset,
       investmentAmounts: [investmentAmount],
-      minSharesAmounts: [utils.parseEther('1')],
+      minSharesAmounts: [utils.parseEther('1').div(2)],
     });
 
     // Mine a block after a time delay
@@ -479,7 +494,7 @@ describe('integration', () => {
       buyers: [fundInvestor],
       denominationAsset,
       investmentAmounts: [investmentAmount],
-      minSharesAmounts: [utils.parseEther('1')],
+      minSharesAmounts: [utils.parseEther('1').div(2)],
     });
 
     // Mine a block after a time delay
@@ -595,7 +610,7 @@ describe('integration', () => {
       buyers: [fundInvestor],
       denominationAsset,
       investmentAmounts: [investmentAmount],
-      minSharesAmounts: [utils.parseEther('1')],
+      minSharesAmounts: [utils.parseEther('1').div(2)],
     });
 
     // Mine a block after a time delay
@@ -682,7 +697,7 @@ describe('integration', () => {
       buyers: [fundInvestor],
       denominationAsset,
       investmentAmounts: [investmentAmount],
-      minSharesAmounts: [utils.parseEther('1')],
+      minSharesAmounts: [utils.parseEther('1').div(2)],
     });
 
     const sharesBeforePayout = await vaultProxy.totalSupply(); // 1.0
