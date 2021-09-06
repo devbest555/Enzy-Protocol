@@ -6,7 +6,7 @@ import {
   MockToken,
   StandardToken,
 } from '@taodao/protocol';
-import { ProtocolDeployment, deployProtocolFixture } from '@enzymefinance/testutils';
+import { ProtocolDeployment, deployProtocolFixture } from '@taodao/testutils';
 import { BigNumber, constants, Signer, utils } from 'ethers';
 
 // Unused chf/usd aggregator

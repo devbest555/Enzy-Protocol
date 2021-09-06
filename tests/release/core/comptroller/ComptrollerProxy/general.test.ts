@@ -1,6 +1,6 @@
 import { AddressLike, Contract, contract, randomAddress, Send } from '@enzymefinance/ethers';
 import { encodeArgs, ReleaseStatusTypes, sighash, StandardToken } from '@taodao/protocol';
-import { assertEvent, callOnExtension, createNewFund, deployProtocolFixture } from '@enzymefinance/testutils';
+import { assertEvent, callOnExtension, createNewFund, deployProtocolFixture } from '@taodao/testutils';
 import { BigNumber, BigNumberish, utils } from 'ethers';
 
 // prettier-ignore

@@ -1,12 +1,12 @@
 {
-  "name": "@enzymefinance/testutils",
-  "version": "2.0.0",
+  "name": "@taodao/testutils",
+  "version": "1.0.0",
   "private": true,
-  "main": "dist/enzymefinance-testutils.cjs.js",
-  "module": "dist/enzymefinance-testutils.esm.js",
+  "main": "dist/taodao-testutils.cjs.js",
+  "module": "dist/taodao-testutils.esm.js",
   "browser": {
-    "./dist/enzymefinance-testutils.cjs.js": "./dist/enzymefinance-testutils.browser.cjs.js",
-    "./dist/enzymefinance-testutils.esm.js": "./dist/enzymefinance-testutils.browser.esm.js"
+    "./dist/taodao-testutils.cjs.js": "./dist/taodao-testutils.browser.cjs.js",
+    "./dist/taodao-testutils.esm.js": "./dist/taodao-testutils.browser.esm.js"
   },
   "dependencies": {
     "@babel/runtime": "^7.14.0",

@@ -22,7 +22,7 @@ const projects = [
   // project('fee', ['tests/release/extensions/fee-manager']),
   // project('peripheral', ['tests/release/peripheral']),
   // project('e2e', ['tests/release/e2e']),
-  
+
   // project('core', ['tests/SelfTest/test-feeManager']),
   // project('core', ['tests/SelfTest/test-performanceFee']),
   // project('core', ['tests/SelfTest/test-managementFee']),
@@ -30,6 +30,7 @@ const projects = [
   // project('core', ['tests/SelfTest/test-feemanager-hurdle']),
   // project('core', ['tests/SelfTest/test-streaming']),
   project('core', ['tests/SelfTest/test-feemanager-stream']),
+  // project('core', ['tests/SelfTest/test-vault']),
 ].filter((project) => !!project);
 
 export default {

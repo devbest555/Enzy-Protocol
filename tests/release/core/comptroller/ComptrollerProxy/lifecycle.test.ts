@@ -7,7 +7,7 @@ import {
   StandardToken,
   VaultLib,
 } from '@taodao/protocol';
-import { assertEvent, createComptrollerProxy, deployProtocolFixture } from '@enzymefinance/testutils';
+import { assertEvent, createComptrollerProxy, deployProtocolFixture } from '@taodao/testutils';
 import { BigNumber, utils } from 'ethers';
 
 async function snapshot() {

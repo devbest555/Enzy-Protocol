@@ -20,6 +20,7 @@ const fn: DeployFunction = async function (hre) {
 
     const aggregator = config.chainlink.aggregators[key];
     const primitive = config.primitives[key];
+
     return [primitive, ...aggregator] as const;
   });
 

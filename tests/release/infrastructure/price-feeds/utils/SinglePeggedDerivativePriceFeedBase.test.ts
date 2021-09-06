@@ -1,6 +1,6 @@
 import { randomAddress } from '@enzymefinance/ethers';
 import { MockToken, TestSinglePeggedDerivativePriceFeed } from '@taodao/protocol';
-import { getNamedSigner } from '@enzymefinance/testutils';
+import { getNamedSigner } from '@taodao/testutils';
 
 async function snapshot() {
   const deployer = await getNamedSigner('deployer');

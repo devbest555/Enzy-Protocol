@@ -6,7 +6,7 @@ import {
   MockToken,
   ValueInterpreter,
 } from '@taodao/protocol';
-import { deployProtocolFixture } from '@enzymefinance/testutils';
+import { deployProtocolFixture } from '@taodao/testutils';
 import { constants, utils } from 'ethers';
 
 async function snapshot() {

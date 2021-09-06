@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import '@enzymefinance/hardhat/plugin';
-
 // import { utils } from 'ethers';
+
 import { HardhatUserConfig } from 'hardhat/types';
 
 function node(networkName: string) {
@@ -20,7 +20,7 @@ function accounts(networkName: string) {
     .filter(Boolean);
 }
 
-const mnemonic = process.env.MNEMONIC; // = 'test test test test test test test test test test test junk';
+const mnemonic = process.env.MNEMONIC; //'test test test test test test test test test test test junk';//
 
 const config: HardhatUserConfig = {
   codeCoverage: {
@@ -79,8 +79,8 @@ const config: HardhatUserConfig = {
   },
   namedAccounts: {
     deployer: 0,
-  },  
-  defaultNetwork: "hardhat",
+  },
+  defaultNetwork: 'hardhat',
   networks: {
     hardhat: {
       hardfork: 'istanbul',
@@ -89,16 +89,16 @@ const config: HardhatUserConfig = {
         // count: 5,
         mnemonic,
       },
-      chainId: 42,
+      chainId: 42, //42
       forking: {
-        // blockNumber: 12540501,
+        // blockNumber: 11095000,
         url: node('kovan'),
       },
       gas: 9500000,
       gasPrice: 0, // TODO: Consider removing this again.
-      // ...(process.env.COVERAGE && {
-      //   allowUnlimitedContractSize: true,
-      // }),
+      ...(process.env.COVERAGE && {
+        allowUnlimitedContractSize: true,
+      }),
     },
     kovan: {
       hardfork: 'istanbul',

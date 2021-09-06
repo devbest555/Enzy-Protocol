@@ -1,6 +1,6 @@
 import { randomAddress } from '@enzymefinance/ethers';
 import { ReleaseStatusTypes } from '@taodao/protocol';
-import { assertEvent, deployProtocolFixture, ProtocolDeployment } from '@enzymefinance/testutils';
+import { assertEvent, deployProtocolFixture, ProtocolDeployment } from '@taodao/testutils';
 
 let fork: ProtocolDeployment;
 beforeEach(async () => {

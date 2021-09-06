@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
 
-
-
 pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
 
@@ -9,7 +7,6 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "../../../core/fund/vault/VaultLib.sol";
 import "../../../utils/MakerDaoMath.sol";
 import "./utils/FeeBase.sol";
-import "hardhat/console.sol";
 
 /// @title ManagementFee Contract
 /// @notice A management fee with a configurable annual rate
@@ -147,14 +144,6 @@ contract ManagementFee is FeeBase, MakerDaoMath {
             // are only claimable by the fund owner.
             uint256 netSharesSupply = sharesSupply.sub(vaultProxyContract.balanceOf(_vaultProxy));
             if (netSharesSupply > 0) {
-                console.log("====settle-0::", feeInfo.scaledPerSecondRate);
-                console.log("====settle-1::", sharesSupply);
-                console.log("====settle-2::", netSharesSupply);
-                console.log("====settle-3::", __rpow(
-                            feeInfo.scaledPerSecondRate,
-                            secondsSinceSettlement,
-                            RATE_SCALE_BASE
-                        ));
                 sharesDue_ = netSharesSupply
                     .mul(
                         __rpow(

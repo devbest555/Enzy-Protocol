@@ -1,6 +1,6 @@
 import { randomAddress } from '@enzymefinance/ethers';
 import { MockToken, TestPeggedDerivativesPriceFeed } from '@taodao/protocol';
-import { deployProtocolFixture } from '@enzymefinance/testutils';
+import { deployProtocolFixture } from '@taodao/testutils';
 
 async function snapshot() {
   const {

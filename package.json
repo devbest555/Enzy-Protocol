@@ -1,5 +1,5 @@
 {
-  "name": "@enzymefinance/protocol-monorepo-root",
+  "name": "@taodao/protocol-root",
   "private": true,
   "workspaces": [
     "packages/*"
@@ -29,6 +29,8 @@
     "format:solhint": "yarn lint:solhint --fix",
     "fork:mainnet": "hardhat node --fork https://mainnet.infura.io/v3/b8af1adb9cbe494cb0be1611d283e4c7",
     "fork:kovan": "hardhat node --fork https://kovan.infura.io/v3/b8af1adb9cbe494cb0be1611d283e4c7",
+    "fork:alkovan": "hardhat node --fork https://eth-kovan.alchemyapi.io/v2/-BPEIJTGZJkx7WbtkL89BYsF-_t3Scwg",
+    "fork:almainnet": "hardhat node --fork https://eth-mainnet.alchemyapi.io/v2/-BPEIJTGZJkx7WbtkL89BYsF-_t3Scwg",
     "test": "jest",
     "test:watch": "NODE_OPTIONS=TS_JEST_DISABLE_VER_CHECKER=true jest --watchAll",
     "test:coverage": "jest --coverage",
@@ -47,7 +49,7 @@
     "@manypkg/cli": "^0.18.0",
     "@openzeppelin/contracts": "^3.4.1",
     "@preconstruct/cli": "^2.1.0",
-    "@taodao/protocol": "1.0.0",
+    "@taodao/protocol": "^1.0.0",
     "@types/jest": "^26.0.23",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",

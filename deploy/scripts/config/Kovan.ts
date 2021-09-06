@@ -21,16 +21,16 @@ const primitives = {
   ren: '0xd9436124f61685e63cd87370d1a9b32e79b75601',
   rep: '0x56a7c6766b5e7a9e6bc704f7becc001f2755a713',
   snx: '0x4c22d46c07ab880f94e8213e0256727af471a9f4',
-  susd: '0x190cece40aef39a2a15d8858cafa691f01a909c5',//sUSD
+  susd: '0x190cece40aef39a2a15d8858cafa691f01a909c5', //sUSD
   uni: '0x86684577af5598b229a27c5774b658d303e2e044',
-  usdc: '0x16266fcb1eba66db68ee07b78c2a6f02bc5b8763',//USDC=''
-  usdt: '0x50e7615a526f715556c478749303c75571f1e6b5',//USDT
-  wbtc: '0x08adedfb5f473a7dffd05da2c0f33651553668a9',//BTC
+  usdc: '0x16266fcb1eba66db68ee07b78c2a6f02bc5b8763', //USDC=''
+  usdt: '0x50e7615a526f715556c478749303c75571f1e6b5', //USDT
+  wbtc: '0x08adedfb5f473a7dffd05da2c0f33651553668a9', //BTC
   yfi: '0x3a854556f28f77dcc803538032ca64fdf42a0783',
   zrx: '0x8955cd6b7826a86e820f0774278d89b76db25c46',
 } as const;
 
-const weth = '0x87DA91E531e091B97D16B8da68584d0c1dB07c52';//'0xd0a1e359811322d97991e03f863a0c30c2cf029c';//ETH
+const weth = '0xd0a1e359811322d97991e03f863a0c30c2cf029c'; //'0x87DA91E531e091B97D16B8da68584d0c1dB07c52';
 
 const aggregators = {
   bat: ['0x0e4fcec26c9f85c3d714370c98f43c4e02fc35ae', ChainlinkRateAsset.ETH],

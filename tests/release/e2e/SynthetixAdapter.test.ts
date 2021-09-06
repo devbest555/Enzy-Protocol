@@ -7,7 +7,7 @@ import {
   synthetixAssignExchangeDelegate,
   synthetixResolveAddress,
   synthetixTakeOrder,
-} from '@enzymefinance/testutils';
+} from '@taodao/testutils';
 import { BigNumber, utils } from 'ethers';
 
 const sbtcCurrencyKey = utils.formatBytes32String('sBTC');

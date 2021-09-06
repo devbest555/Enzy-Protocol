@@ -16,7 +16,7 @@ import {
   synthetixAssignExchangeDelegate,
   synthetixResolveAddress,
   synthetixTakeOrder,
-} from '@enzymefinance/testutils';
+} from '@taodao/testutils';
 import { utils } from 'ethers';
 
 async function warpBeyondWaitingPeriod() {

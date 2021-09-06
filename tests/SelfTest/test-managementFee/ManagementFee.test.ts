@@ -23,7 +23,7 @@ import {
   deployProtocolFixture,
   redeemShares,
   transactionTimestamp,
-} from '@enzymefinance/testutils';
+} from '@taodao/testutils';
 import { BigNumber, utils } from 'ethers';
 
 async function snapshot() {
@@ -63,7 +63,7 @@ async function snapshot() {
   // Add fee settings for ComptrollerProxy
   const managementFeeRate = utils.parseEther('0.1'); // 10% //
   const scaledPerSecondRate = convertRateToScaledPerSecondRate(managementFeeRate);
-  console.log("====scaledPerSecondRate::", Number(BigNumber.from(scaledPerSecondRate)));
+  console.log('====scaledPerSecondRate::', Number(BigNumber.from(scaledPerSecondRate)));
   const managementFeeConfig = managementFeeConfigArgs(scaledPerSecondRate);
   await standaloneManagementFee.connect(EOAFeeManager).addFundSettings(mockComptrollerProxy, managementFeeConfig);
 
@@ -386,7 +386,13 @@ describe('integration', () => {
     } = await provider.snapshot(snapshot);
 
     const investmentAmount = utils.parseEther('1');
-    console.log("=====fundInvestor::", fundInvestor.address, fundOwner.address, feeManager.address, fundDeployer.address);
+    console.log(
+      '=====fundInvestor::',
+      fundInvestor.address,
+      fundOwner.address,
+      feeManager.address,
+      fundDeployer.address,
+    );
     await denominationAsset.transfer(fundInvestor, investmentAmount);
 
     const rate = utils.parseEther('0.1'); // 10%

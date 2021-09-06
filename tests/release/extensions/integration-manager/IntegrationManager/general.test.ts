@@ -8,7 +8,7 @@ import {
   VaultLib,
   WETH,
 } from '@taodao/protocol';
-import { addNewAssetsToFund, assertEvent, createNewFund, deployProtocolFixture } from '@enzymefinance/testutils';
+import { addNewAssetsToFund, assertEvent, createNewFund, deployProtocolFixture } from '@taodao/testutils';
 import { constants, utils } from 'ethers';
 
 async function snapshot() {

@@ -1,6 +1,6 @@
 import { extractEvent, randomAddress } from '@enzymefinance/ethers';
 import { MockCTokenIntegratee } from '@taodao/protocol';
-import { deployProtocolFixture } from '@enzymefinance/testutils';
+import { deployProtocolFixture } from '@taodao/testutils';
 import { utils } from 'ethers';
 
 async function snapshot() {

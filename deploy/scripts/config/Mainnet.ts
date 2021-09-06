@@ -47,20 +47,20 @@ const primitives = {
   rlc: '0x607f4c5bb672230e8672085532f7e901544a7375',
   rune: '0x3155ba85d5f96b2d030a4966af206230e46849cb',
   snx: '0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f',
-  susd: '0x57ab1ec28d129707052df4df418d58a2d46d5f51',//=sUSD
+  susd: '0x57ab1ec28d129707052df4df418d58a2d46d5f51', //=sUSD
   sushi: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
   sxp: '0x8ce9137d39326ad0cd6491fb5cc0cba0e089b6a9',
   uma: '0x04fa0d235c4abf4bcf4787af4cf447de572ef828',
   uni: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
-  usdc: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',//USDC
-  usdt: '0xdac17f958d2ee523a2206206994597c13d831ec7',//USDT
-  wbtc: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',//BTC
+  usdc: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', //USDC
+  usdt: '0xdac17f958d2ee523a2206206994597c13d831ec7', //USDT
+  wbtc: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599', //BTC
   wnxm: '0x0d438f3b5175bebc262bf23753c1e53d03432bde',
   yfi: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
   zrx: '0xe41d2489571d322189246dafa5ebde1f4699f498',
 } as const;
 
-const weth = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';//ETH
+const weth = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'; //ETH
 
 const aggregators = {
   '1inch': ['0x72afaecf99c9d9c8215ff44c77b94b99c28741e8', ChainlinkRateAsset.ETH],
@@ -351,7 +351,7 @@ const mainnetConfig: DeploymentConfig = {
     wdgld: '0x123151402076fc819B7564510989e475c9cD93CA',
     xauusd: xauUsdAggregator,
   },
-  weth: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+  weth,
   yearn: {
     vaultV2: {
       registry: '0x50c1a2eA0a861A967D9d0FFE2AE4012c2E053804',

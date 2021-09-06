@@ -1,11 +1,5 @@
 import { extractEvent } from '@enzymefinance/ethers';
-import {
-  feeManagerConfigArgs,
-  MockReentrancyToken,
-  ReleaseStatusTypes,
-  StandardToken,
-  WETH,
-} from '@taodao/protocol';
+import { feeManagerConfigArgs, MockReentrancyToken, ReleaseStatusTypes, StandardToken, WETH } from '@taodao/protocol';
 import {
   assertEvent,
   buyShares,
@@ -16,7 +10,7 @@ import {
   generateRegisteredMockFees,
   getAssetBalances,
   redeemShares,
-} from '@enzymefinance/testutils';
+} from '@taodao/testutils';
 import { constants, utils } from 'ethers';
 
 async function snapshot() {

@@ -6,7 +6,7 @@ import {
   performanceFeeConfigArgs,
   WETH,
 } from '@taodao/protocol';
-import { createNewFund, deployProtocolFixture } from '@enzymefinance/testutils';
+import { createNewFund, deployProtocolFixture } from '@taodao/testutils';
 import { utils } from 'ethers';
 
 async function snapshot() {

@@ -1,6 +1,6 @@
 import { randomAddress } from '@enzymefinance/ethers';
 import { IYearnVaultV2, StandardToken } from '@taodao/protocol';
-import { deployProtocolFixture, ProtocolDeployment } from '@enzymefinance/testutils';
+import { deployProtocolFixture, ProtocolDeployment } from '@taodao/testutils';
 import { BigNumber, utils } from 'ethers';
 
 let fork: ProtocolDeployment;

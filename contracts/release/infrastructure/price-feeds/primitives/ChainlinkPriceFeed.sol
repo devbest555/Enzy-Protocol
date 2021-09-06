@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
 
-
-
 pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
 
@@ -10,6 +8,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "../../../extensions/utils/FundDeployerOwnerMixin.sol";
 import "../../../interfaces/IChainlinkAggregator.sol";
 import "./IPrimitivePriceFeed.sol";
+import "hardhat/console.sol";
 
 /// @title ChainlinkPriceFeed Contract
 /// @notice A price feed that uses Chainlink oracles as price sources
@@ -377,6 +376,9 @@ contract ChainlinkPriceFeed is IPrimitivePriceFeed, FundDeployerOwnerMixin {
     /// @param _aggregator The Chainlink aggregator of which to check staleness
     /// @return rateIsStale_ True if the rate is considered stale
     function rateIsStale(address _aggregator) public view returns (bool rateIsStale_) {
+        console.log("===time-1::", IChainlinkAggregator(_aggregator).latestTimestamp());
+        console.log("===time-1::", block.timestamp);
+        console.log("===time-1::", staleRateThreshold);
         return
             IChainlinkAggregator(_aggregator).latestTimestamp() <
             block.timestamp.sub(staleRateThreshold);
@@ -409,7 +411,7 @@ contract ChainlinkPriceFeed is IPrimitivePriceFeed, FundDeployerOwnerMixin {
                 aggregator: _aggregators[i],
                 rateAsset: _rateAssets[i]
             });
-            
+
             // Store the amount that makes up 1 unit given the asset's decimals
             uint256 unit = 10**uint256(ERC20(_primitives[i]).decimals());
             primitiveToUnit[_primitives[i]] = unit;
@@ -422,10 +424,11 @@ contract ChainlinkPriceFeed is IPrimitivePriceFeed, FundDeployerOwnerMixin {
     function __validateAggregator(address _aggregator) private view {
         require(_aggregator != address(0), "__validateAggregator: Empty _aggregator");
 
-        // require(
-        //     IChainlinkAggregator(_aggregator).latestAnswer() > 0,
-        //     "__validateAggregator: No rate detected"
-        // );
+        require(
+            IChainlinkAggregator(_aggregator).latestAnswer() > 0,
+            "__validateAggregator: No rate detected"
+        );
+
         // require(!rateIsStale(_aggregator), "__validateAggregator: Stale rate detected");
     }
 

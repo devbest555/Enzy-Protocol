@@ -27,7 +27,7 @@ import {
   redeemShares,
   transactionTimestamp,
   updateChainlinkAggregator,
-} from '@enzymefinance/testutils';
+} from '@taodao/testutils';
 import { BigNumber, BigNumberish, BytesLike, constants, utils } from 'ethers';
 
 async function snapshot() {
@@ -252,10 +252,16 @@ describe('constructor', () => {
     expect(feeSettlesOnHookPreRedeemSharesValue).toBe(true);
 
     // Settle - false
-    const feeSettlesOnHookPreBuySharesValue = await feeManager.feeSettlesOnHook(performanceFeeHWM, FeeHook.PreBuyShares);
+    const feeSettlesOnHookPreBuySharesValue = await feeManager.feeSettlesOnHook(
+      performanceFeeHWM,
+      FeeHook.PreBuyShares,
+    );
     expect(feeSettlesOnHookPreBuySharesValue).toBe(false);
 
-    const feeSettlesOnHookPostBuySharesValue = await feeManager.feeSettlesOnHook(performanceFeeHWM, FeeHook.PostBuyShares);
+    const feeSettlesOnHookPostBuySharesValue = await feeManager.feeSettlesOnHook(
+      performanceFeeHWM,
+      FeeHook.PostBuyShares,
+    );
     expect(feeSettlesOnHookPostBuySharesValue).toBe(false);
 
     // Update - true
@@ -275,10 +281,16 @@ describe('constructor', () => {
     expect(feeUpdatesOnHookPreRedeemSharesValue).toBe(true);
 
     // Update - false
-    const feeUpdatesOnHookPreBuySharesValue = await feeManager.feeUpdatesOnHook(performanceFeeHWM, FeeHook.PreBuyShares);
+    const feeUpdatesOnHookPreBuySharesValue = await feeManager.feeUpdatesOnHook(
+      performanceFeeHWM,
+      FeeHook.PreBuyShares,
+    );
     expect(feeUpdatesOnHookPreBuySharesValue).toBe(false);
 
-    const feeUpdatesOnHookPostBuySharesValue = await feeManager.feeUpdatesOnHook(performanceFeeHWM, FeeHook.PostBuyShares);
+    const feeUpdatesOnHookPostBuySharesValue = await feeManager.feeUpdatesOnHook(
+      performanceFeeHWM,
+      FeeHook.PostBuyShares,
+    );
     expect(feeUpdatesOnHookPostBuySharesValue).toBe(false);
 
     // Uses GAV

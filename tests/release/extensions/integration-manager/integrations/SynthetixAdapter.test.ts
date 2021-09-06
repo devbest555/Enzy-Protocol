@@ -14,7 +14,7 @@ import {
   synthetixAssignExchangeDelegate,
   synthetixTakeOrder,
   synthetixResolveAddress,
-} from '@enzymefinance/testutils';
+} from '@taodao/testutils';
 import { BigNumber, utils } from 'ethers';
 
 async function snapshot() {

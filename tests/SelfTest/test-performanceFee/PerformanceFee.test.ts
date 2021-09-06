@@ -26,13 +26,13 @@ import {
   redeemShares,
   transactionTimestamp,
   // updateChainlinkAggregator,
-} from '@enzymefinance/testutils';
+} from '@taodao/testutils';
 import { BigNumber, BigNumberish, BytesLike, constants, utils } from 'ethers';
 // import { config } from 'dotenv';
 
 async function snapshot() {
   const { accounts, deployment, config, deployer } = await deployProtocolFixture();
-  
+
   // Mock a FeeManager
   const mockFeeManager = await FeeManager.mock(deployer);
   await mockFeeManager.getFeeSharesOutstandingForFund.returns(0);
@@ -65,7 +65,7 @@ async function snapshot() {
     rate: performanceFeeRate,
     period: performanceFeePeriod,
   });
-  
+
   // console.log("=====02::", performanceFeeConfig);//0x000000000000000000000000000000000000000000000000016345785d8a00000000000000000000000000000000000000000000000000000000000001e13380
 
   await mockFeeManager.forward(standalonePerformanceFee.addFundSettings, mockComptrollerProxy, performanceFeeConfig);
@@ -156,23 +156,27 @@ async function assertAdjustedPerformance({
     prevSharePrice: feeInfo.lastSharePrice,
     prevAggregateValueDue: feeInfo.aggregateValueDue,
   });
-  
-  const gav_1 = (await mockComptrollerProxy.calcGav.args(true).call()).gav_;
-  console.log("=====111 => ::", 
-  Number(BigNumber.from(feeInfo.rate)),//0.1*10**18=10%
-  Number(BigNumber.from(prevTotalSharesSupply)),//10**18
-  Number(BigNumber.from(prevTotalSharesOutstanding)),//0
-  Number(BigNumber.from(prevPerformanceFeeSharesOutstanding)),//0
-  Number(BigNumber.from(nextGav)),//2*10**18
-  Number(BigNumber.from(feeInfo.highWaterMark)),//10**18
-  Number(BigNumber.from(feeInfo.lastSharePrice)),//10**18
-  Number(BigNumber.from(feeInfo.aggregateValueDue)),//0
-  Number(BigNumber.from(gav_1))); //2*10**18
 
-  console.log("=====112 => ::", 
-  Number(BigNumber.from(nextAggregateValueDue)),//0.1*10**18  0100000000000000000
-  Number(BigNumber.from(nextSharePrice)),//2*10**18
-  Number(BigNumber.from(sharesDue))); //0.052631578947368424*10**18
+  const gav_1 = (await mockComptrollerProxy.calcGav.args(true).call()).gav_;
+  console.log(
+    '=====111 => ::',
+    Number(BigNumber.from(feeInfo.rate)), //0.1*10**18=10%
+    Number(BigNumber.from(prevTotalSharesSupply)), //10**18
+    Number(BigNumber.from(prevTotalSharesOutstanding)), //0
+    Number(BigNumber.from(prevPerformanceFeeSharesOutstanding)), //0
+    Number(BigNumber.from(nextGav)), //2*10**18
+    Number(BigNumber.from(feeInfo.highWaterMark)), //10**18
+    Number(BigNumber.from(feeInfo.lastSharePrice)), //10**18
+    Number(BigNumber.from(feeInfo.aggregateValueDue)), //0
+    Number(BigNumber.from(gav_1)),
+  ); //2*10**18
+
+  console.log(
+    '=====112 => ::',
+    Number(BigNumber.from(nextAggregateValueDue)), //0.1*10**18  0100000000000000000
+    Number(BigNumber.from(nextSharePrice)), //2*10**18
+    Number(BigNumber.from(sharesDue)),
+  ); //0.052631578947368424*10**18
 
   // Determine fee settlement type
   let feeSettlementType = FeeSettlementType.None;
@@ -260,7 +264,7 @@ describe('payout', () => {
 
     const initialSharePrice = (await mockComptrollerProxy.calcGrossShareValue.call()).grossShareValue_;
     // console.log("=====initialSharePrice::", Number(BigNumber.from(initialSharePrice)));//100000000
-    
+
     // Raise next high water mark by increasing price
     await assertAdjustedPerformance({
       mockFeeManager,
@@ -296,7 +300,7 @@ describe('payout', () => {
       nextHighWaterMark: feeInfoPrePayout.lastSharePrice,
       aggregateValueDue: feeInfoPrePayout.aggregateValueDue,
     });
-    
+
     // Assert state
     const getFeeInfoForFundCall = await performanceFee.getFeeInfoForFund(mockComptrollerProxy);
     const payoutTimestamp = await transactionTimestamp(receipt);
@@ -310,7 +314,7 @@ describe('payout', () => {
       aggregateValueDue: 0, // updated
     });
 
-    // console.log("=====PaidOut update-1::", 
+    // console.log("=====PaidOut update-1::",
     // Number(BigNumber.from(feeInfoPrePayout.rate)),//100000000000000000
     // Number(BigNumber.from(feeInfoPrePayout.period)),//   31536000
     // Number(BigNumber.from(feeInfoPrePayout.activated)),//1628580950
@@ -331,7 +335,7 @@ describe('integration', () => {
     } = await provider.snapshot(snapshot);
 
     const denominationAsset = new WETH(config.weth, deployer);
-    
+
     const sharesActionTimelock = 0;
     const { comptrollerProxy, vaultProxy } = await createNewFund({
       signer: fundOwner,
@@ -344,13 +348,12 @@ describe('integration', () => {
         fees: [performanceFeeHWM],
         settings: [
           performanceFeeConfigArgs({
-            rate: utils.parseEther('.05'),//5%
+            rate: utils.parseEther('.05'), //5%
             period: BigNumber.from(60 * 60 * 24 * 365), // 365 days
           }),
         ],
       }),
     });
-    
 
     const initialInvestmentAmount = utils.parseUnits('100', await denominationAsset.decimals());
     await denominationAsset.transfer(investor, initialInvestmentAmount);
@@ -365,19 +368,21 @@ describe('integration', () => {
 
     // Performance fee state should be in expected initial configuration
     const initialFeeInfo = await performanceFeeHWM.getFeeInfoForFund(comptrollerProxy);
-    
+
     // expect(initialFeeInfo.lastSharePrice).toEqBigNumber(denominationAssetUnit);
     // expect(initialFeeInfo.aggregateValueDue).toEqBigNumber(0);
     const gavBeforeRedeem1 = (await comptrollerProxy.calcGav.args(true).call()).gav_;
-    
-    console.log("=====after BuyShares-initInvestAmount, vaultProxyAmount, vaultTotal, lastSharePrice, aggregateValueDue, highWaterMark, gav ::", 
-    Number(BigNumber.from(initialInvestmentAmount)),//100*10**6
-    Number(BigNumber.from(await vaultProxy.balanceOf(investor))),//99.8*10**18
-    Number(BigNumber.from(await vaultProxy.totalSupply())),//99.8*10**18
-    Number(BigNumber.from(initialFeeInfo.lastSharePrice)),//1002004
-    Number(BigNumber.from(initialFeeInfo.aggregateValueDue)),//0
-    Number(BigNumber.from(initialFeeInfo.highWaterMark)),//10**6
-    Number(BigNumber.from(gavBeforeRedeem1))); //99.8*10**6
+
+    console.log(
+      '=====after BuyShares-initInvestAmount, vaultProxyAmount, vaultTotal, lastSharePrice, aggregateValueDue, highWaterMark, gav ::',
+      Number(BigNumber.from(initialInvestmentAmount)), //100*10**6
+      Number(BigNumber.from(await vaultProxy.balanceOf(investor))), //99.8*10**18
+      Number(BigNumber.from(await vaultProxy.totalSupply())), //99.8*10**18
+      Number(BigNumber.from(initialFeeInfo.lastSharePrice)), //1002004
+      Number(BigNumber.from(initialFeeInfo.aggregateValueDue)), //0
+      Number(BigNumber.from(initialFeeInfo.highWaterMark)), //10**6
+      Number(BigNumber.from(gavBeforeRedeem1)),
+    ); //99.8*10**6
 
     //============================= Redeem1 small amount of shares
     const redeemAmount1 = (await vaultProxy.balanceOf(investor)).div(2);
@@ -386,7 +391,7 @@ describe('integration', () => {
       signer: investor,
       quantity: redeemAmount1,
     });
-     
+
     // The fees should not have emitted a failure event
     const failureEvents1 = extractEvent(redeemTx1 as any, 'PreRedeemSharesHookFailed');
     expect(failureEvents1.length).toBe(0);
@@ -401,22 +406,24 @@ describe('integration', () => {
     const sharesSupplyNetSharesOutstanding0 = (await vaultProxy.totalSupply()).sub(
       await vaultProxy.balanceOf(vaultProxy),
     );
-    console.log("=====after Redeem1-redeemAmount, vaultProxyAmount, vaultTotal, lastSharePrice, aggregateValueDue, highWaterMark, gav ::", 
-    Number(BigNumber.from(redeemAmount1)),//49.9*10**18
-    Number(BigNumber.from(await vaultProxy.balanceOf(investor))),//49.9*10**18
-    Number(BigNumber.from(await vaultProxy.totalSupply())),//49.9*10**18
-    Number(BigNumber.from(feeInfo1.lastSharePrice)),//1002004
-    Number(BigNumber.from(feeInfo1.aggregateValueDue)),//0
-    Number(BigNumber.from(feeInfo1.highWaterMark)),//10**6
-    Number(BigNumber.from(sharesSupplyNetSharesOutstanding0)),//49.9*10**18
-    Number(BigNumber.from(gavPostRedeem1))); //50.1495*10**6 => increased 0.5% withdraw Fee of 49.9*10**6
+    console.log(
+      '=====after Redeem1-redeemAmount, vaultProxyAmount, vaultTotal, lastSharePrice, aggregateValueDue, highWaterMark, gav ::',
+      Number(BigNumber.from(redeemAmount1)), //49.9*10**18
+      Number(BigNumber.from(await vaultProxy.balanceOf(investor))), //49.9*10**18
+      Number(BigNumber.from(await vaultProxy.totalSupply())), //49.9*10**18
+      Number(BigNumber.from(feeInfo1.lastSharePrice)), //1002004
+      Number(BigNumber.from(feeInfo1.aggregateValueDue)), //0
+      Number(BigNumber.from(feeInfo1.highWaterMark)), //10**6
+      Number(BigNumber.from(sharesSupplyNetSharesOutstanding0)), //49.9*10**18
+      Number(BigNumber.from(gavPostRedeem1)),
+    ); //50.1495*10**6 => increased 0.5% withdraw Fee of 49.9*10**6
 
     // // Bump performance by sending denomination asset to the vault
     // const gavIncreaseAmount = utils.parseUnits('5', await denominationAsset.decimals());
     // await denominationAsset.transfer(vaultProxy, gavIncreaseAmount);
     // const gavPostTransfer = (await comptrollerProxy.calcGav.args(true).call()).gav_;
 
-    // console.log("======after sending denomination asset to the vault-vaultProxyAmount, vaultProxytotal, gav::", 
+    // console.log("======after sending denomination asset to the vault-vaultProxyAmount, vaultProxytotal, gav::",
     // vaultProxy.address,//0xb2D1C2f13eC47741126AD3B281128D023129f0fe
     // Number(BigNumber.from(await vaultProxy.balanceOf(investor))),
     // Number(BigNumber.from(await vaultProxy.totalSupply())),
@@ -433,28 +440,32 @@ describe('integration', () => {
     // The fees should not have emitted a failure event
     const failureEvents2 = extractEvent(redeemTx2 as any, 'PreRedeemSharesHookFailed');
     expect(failureEvents2.length).toBe(0);
-    
+
     const sharesSupplyNetSharesOutstanding = (await vaultProxy.totalSupply()).sub(
       await vaultProxy.balanceOf(vaultProxy),
     );
 
-    console.log("======sharesSupplyNetSharesOutstanding after redeem2::", 
-    Number(BigNumber.from(sharesSupplyNetSharesOutstanding)),
-    Number(BigNumber.from(await vaultProxy.totalSupply())),
-    Number(BigNumber.from(await vaultProxy.balanceOf(vaultProxy))));//12416023886538940
+    console.log(
+      '======sharesSupplyNetSharesOutstanding after redeem2::',
+      Number(BigNumber.from(sharesSupplyNetSharesOutstanding)),
+      Number(BigNumber.from(await vaultProxy.totalSupply())),
+      Number(BigNumber.from(await vaultProxy.balanceOf(vaultProxy))),
+    ); //12416023886538940
 
     // Performance fee state should have updated correctly
     const gavPostRedeem2 = (await comptrollerProxy.calcGav.args(true).call()).gav_;
     const feeInfo3 = await performanceFeeHWM.getFeeInfoForFund(comptrollerProxy);
 
-    console.log("=====after Redeem2-redeemAmount, vaultProxyAmount, vaultTotal, lastSharePrice, aggregateValueDue, highWaterMark, gav ::", 
-    Number(BigNumber.from(redeemAmount2)),//24.95*10**18
-    Number(BigNumber.from(await vaultProxy.balanceOf(investor))),//24.95*10**18
-    Number(BigNumber.from(await vaultProxy.totalSupply())),//24.95*10**18 + 12416023886538940
-    Number(BigNumber.from(feeInfo3.lastSharePrice)),//1005250
-    Number(BigNumber.from(feeInfo3.aggregateValueDue)),//12475
-    Number(BigNumber.from(feeInfo3.highWaterMark)),    
-    Number(BigNumber.from(gavPostRedeem2)));
+    console.log(
+      '=====after Redeem2-redeemAmount, vaultProxyAmount, vaultTotal, lastSharePrice, aggregateValueDue, highWaterMark, gav ::',
+      Number(BigNumber.from(redeemAmount2)), //24.95*10**18
+      Number(BigNumber.from(await vaultProxy.balanceOf(investor))), //24.95*10**18
+      Number(BigNumber.from(await vaultProxy.totalSupply())), //24.95*10**18 + 12416023886538940
+      Number(BigNumber.from(feeInfo3.lastSharePrice)), //1005250
+      Number(BigNumber.from(feeInfo3.aggregateValueDue)), //12475
+      Number(BigNumber.from(feeInfo3.highWaterMark)),
+      Number(BigNumber.from(gavPostRedeem2)),
+    );
 
     // expect(feeInfo3.lastSharePrice).toEqBigNumber(
     //   gavPostRedeem2.mul(utils.parseEther('1')).div(sharesSupplyNetSharesOutstanding),
@@ -479,7 +490,7 @@ describe('integration', () => {
   //       fundDeployer,
   //     },
   //   } = await provider.snapshot(snapshot);
-    
+
   //   const denominationAsset = new StandardToken(usdc, deployer);
   //   const investmentAmount = utils.parseUnits('200', await denominationAsset.decimals());
   //   await denominationAsset.transfer(fundInvestor, investmentAmount.mul(2));

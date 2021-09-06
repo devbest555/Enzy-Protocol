@@ -20,7 +20,7 @@ import {
   generateRegisteredMockFees,
   assertNoEvent,
   deployProtocolFixture,
-} from '@enzymefinance/testutils';
+} from '@taodao/testutils';
 import { BigNumber, constants, utils } from 'ethers';
 
 async function snapshot() {
@@ -149,14 +149,15 @@ describe('__payoutSharesOutstandingForFees', () => {
     const preSharesOutstandingCall = await vaultProxy.balanceOf(vaultProxy);
 
     const gav_1 = (await comptrollerProxy.calcGav.args(true).call()).gav_;
-    console.log("=====after buyShares ::", 
-    Number(BigNumber.from(investmentAmount)),
-    Number(BigNumber.from(await vaultProxy.balanceOf(buyer))),
-    Number(BigNumber.from(await vaultProxy.totalSupply())),
-    Number(BigNumber.from(preFundOwnerSharesCall)),
-    Number(BigNumber.from(preSharesOutstandingCall)),
-    Number(BigNumber.from(gav_1))); 
-
+    console.log(
+      '=====after buyShares ::',
+      Number(BigNumber.from(investmentAmount)),
+      Number(BigNumber.from(await vaultProxy.balanceOf(buyer))),
+      Number(BigNumber.from(await vaultProxy.totalSupply())),
+      Number(BigNumber.from(preFundOwnerSharesCall)),
+      Number(BigNumber.from(preSharesOutstandingCall)),
+      Number(BigNumber.from(gav_1)),
+    );
 
     // Define both fees the same way, but with different fee amounts
     const feeAmount1 = utils.parseEther('5');
@@ -167,9 +168,7 @@ describe('__payoutSharesOutstandingForFees', () => {
     await mockContinuousFeeSettleOnly.settle.returns(settlementType, constants.AddressZero, feeAmount1);
     await mockContinuousFeeWithGavAndUpdates.settle.returns(settlementType, constants.AddressZero, feeAmount2);
 
-    console.log("=====values::",
-    Number(BigNumber.from(feeAmount2)),
-    Number(BigNumber.from(feeAmount22)));
+    console.log('=====values::', Number(BigNumber.from(feeAmount2)), Number(BigNumber.from(feeAmount22)));
     // Define param for all calls on extension
     const extension = feeManager;
     const fees = [mockContinuousFeeSettleOnly, mockContinuousFeeWithGavAndUpdates];
@@ -192,7 +191,7 @@ describe('__payoutSharesOutstandingForFees', () => {
       actionId,
       callArgs,
     });
-    
+
     expect(await vaultProxy.balanceOf(fundOwner)).toEqBigNumber(preFundOwnerSharesCall);
 
     // Set payout() to return true on both fees
@@ -231,15 +230,15 @@ describe('__payoutSharesOutstandingForFees', () => {
     // There should be no change in shares in the VaultProxy
     // expect(postSharesOutstandingCall).toEqBigNumber(feeAmount2.mul(8).div(100));
 
-
-
-    const gav = (await comptrollerProxy.calcGav.args(true).call()).gav_;    
-    console.log("=====gav ::", 
-    Number(BigNumber.from(await vaultProxy.balanceOf(buyer))),
-    Number(BigNumber.from(await vaultProxy.totalSupply())),
-    Number(BigNumber.from(postFundOwnerSharesCall)),
-    Number(BigNumber.from(postSharesOutstandingCall)),
-    Number(BigNumber.from(expectedSharesOutstandingPaid)),
-    Number(BigNumber.from(gav))); 
+    const gav = (await comptrollerProxy.calcGav.args(true).call()).gav_;
+    console.log(
+      '=====gav ::',
+      Number(BigNumber.from(await vaultProxy.balanceOf(buyer))),
+      Number(BigNumber.from(await vaultProxy.totalSupply())),
+      Number(BigNumber.from(postFundOwnerSharesCall)),
+      Number(BigNumber.from(postSharesOutstandingCall)),
+      Number(BigNumber.from(expectedSharesOutstandingPaid)),
+      Number(BigNumber.from(gav)),
+    );
   });
 });

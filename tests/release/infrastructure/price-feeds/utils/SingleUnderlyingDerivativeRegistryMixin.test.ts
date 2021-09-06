@@ -1,6 +1,6 @@
 import { extractEvent, randomAddress } from '@enzymefinance/ethers';
 import { TestSingleUnderlyingDerivativeRegistry } from '@taodao/protocol';
-import { deployProtocolFixture } from '@enzymefinance/testutils';
+import { deployProtocolFixture } from '@taodao/testutils';
 import { constants } from 'ethers';
 
 async function snapshot() {

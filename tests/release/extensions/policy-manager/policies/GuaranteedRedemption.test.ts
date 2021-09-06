@@ -7,7 +7,7 @@ import {
   PolicyHook,
   validateRulePreCoIArgs,
 } from '@taodao/protocol';
-import { assertEvent, deployProtocolFixture } from '@enzymefinance/testutils';
+import { assertEvent, deployProtocolFixture } from '@taodao/testutils';
 import { BigNumber, BigNumberish, constants, utils } from 'ethers';
 
 async function snapshot() {

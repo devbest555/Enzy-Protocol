@@ -19,7 +19,7 @@ import {
   generateRegisteredMockFees,
   assertNoEvent,
   deployProtocolFixture,
-} from '@enzymefinance/testutils';
+} from '@taodao/testutils';
 import { BigNumber, constants, utils } from 'ethers';
 
 async function snapshot() {
@@ -76,7 +76,7 @@ describe('constructor', () => {
         entranceRateDirectFee,
         managementFee,
         performanceFeeHWM,
-        performanceFeeHurdle
+        performanceFeeHurdle,
       },
       fees,
     } = await provider.snapshot(snapshot);

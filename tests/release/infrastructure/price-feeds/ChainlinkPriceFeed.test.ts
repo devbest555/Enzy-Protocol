@@ -1,6 +1,6 @@
 import { extractEvent, randomAddress, resolveAddress } from '@enzymefinance/ethers';
 import { ChainlinkRateAsset, MockChainlinkPriceSource, MockToken } from '@taodao/protocol';
-import { assertEvent, deployProtocolFixture } from '@enzymefinance/testutils';
+import { assertEvent, deployProtocolFixture } from '@taodao/testutils';
 import { constants, utils } from 'ethers';
 
 async function snapshot() {

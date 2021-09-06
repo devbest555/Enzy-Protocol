@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
 
-
-
 pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
 
@@ -10,7 +8,6 @@ import "../../../core/fund/vault/VaultLib.sol";
 import "../../../utils/MakerDaoMath.sol";
 import "../IFeeManager.sol";
 import "./ProtocolFee.sol";
-import "hardhat/console.sol";
 
 /// @title StreamingFee Contract
 /// @notice A Streaming fee with a configurable streaming fee rate
@@ -32,8 +29,8 @@ contract StreamingFee is MakerDaoMath {
         uint256 lastSettled;
     }
 
-    uint256 private constant RATE_SCALE_BASE = 10**27;    
-    address private immutable PROTOCOLFEE;  
+    uint256 private constant RATE_SCALE_BASE = 10**27;
+    address private immutable PROTOCOLFEE;
     address private immutable FEE_MANAGER;
     mapping(address => FeeInfo) private comptrollerProxyToFeeInfo;
 
@@ -42,10 +39,7 @@ contract StreamingFee is MakerDaoMath {
         _;
     }
 
-    constructor(
-        address _feeManager,
-        address _protocolFee
-    ) public {
+    constructor(address _feeManager, address _protocolFee) public {
         FEE_MANAGER = _feeManager;
         PROTOCOLFEE = _protocolFee;
     }
@@ -69,21 +63,11 @@ contract StreamingFee is MakerDaoMath {
 
     /// @notice Add the initial fee settings for a fund
     /// @param _comptrollerProxy The ComptrollerProxy of the fund
-    function addFundSettings(address _comptrollerProxy, bytes calldata)
-        external
-        onlyFeeManager
-    {   
+    function addFundSettings(address _comptrollerProxy, bytes calldata) external onlyFeeManager {
         uint256 feeRate = ProtocolFee(PROTOCOLFEE).getFeeStream();
-        console.log("====s-feeRate::", feeRate);
-        require(
-            feeRate > 0,
-            "addFundSettings: feeRate must be greater than 0"
-        );
+        require(feeRate > 0, "addFundSettings: feeRate must be greater than 0");
 
-        comptrollerProxyToFeeInfo[_comptrollerProxy] = FeeInfo({
-            feeRate: feeRate,
-            lastSettled: 0
-        });
+        comptrollerProxyToFeeInfo[_comptrollerProxy] = FeeInfo({feeRate: feeRate, lastSettled: 0});
 
         emit FundSettingsAdded(_comptrollerProxy, feeRate);
     }
@@ -155,21 +139,12 @@ contract StreamingFee is MakerDaoMath {
             // which is fine for this release. Even if they are not, they are still shares that
             // are only claimable by the fund owner.
             uint256 netSharesSupply = sharesSupply.sub(vaultProxyContract.balanceOf(_vaultProxy));
-            if (netSharesSupply > 0) {                
-                console.log("====settle-1::", sharesSupply);
-                console.log("====settle-2::", netSharesSupply);
-                console.log("====settle-3::", __rpow(
-                            feeInfo.feeRate,
-                            secondsSinceSettlement,
-                            RATE_SCALE_BASE
-                        ));
+            if (netSharesSupply > 0) {
                 sharesDue_ = netSharesSupply
                     .mul(
-                        __rpow(
-                            feeInfo.feeRate,
-                            secondsSinceSettlement,
+                        __rpow(feeInfo.feeRate, secondsSinceSettlement, RATE_SCALE_BASE).sub(
                             RATE_SCALE_BASE
-                        ).sub(RATE_SCALE_BASE)
+                        )
                     )
                     .div(RATE_SCALE_BASE);
             }

@@ -5,5 +5,5 @@
   "access": "public",
   "baseBranch": "current",
   "updateInternalDependencies": "patch",
-  "ignore": ["@enzymefinance/testutils"]
+  "ignore": []
 }

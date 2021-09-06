@@ -1,12 +1,6 @@
 import { randomAddress } from '@enzymefinance/ethers';
 import { IIdleTokenV4, StandardToken } from '@taodao/protocol';
-import {
-  buyShares,
-  createNewFund,
-  deployProtocolFixture,
-  idleLend,
-  ProtocolDeployment,
-} from '@enzymefinance/testutils';
+import { buyShares, createNewFund, deployProtocolFixture, idleLend, ProtocolDeployment } from '@taodao/testutils';
 import { BigNumber, utils } from 'ethers';
 
 const idleTokenUnit = utils.parseEther('1');
