@@ -18,4 +18,12 @@ interface IExtension {
     ) external;
 
     function setConfigForFund(bytes calldata _configData) external;
+
+    function actionForZeroEX(
+        address _redeemer,
+        address _adapter,
+        uint256[] memory _payoutAmounts, 
+        address[] memory _payoutAssets,
+        bytes calldata _signature
+    ) external returns (uint256);
 }

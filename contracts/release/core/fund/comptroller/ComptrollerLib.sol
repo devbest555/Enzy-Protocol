@@ -19,6 +19,8 @@ import "../../fund-deployer/IFundDeployer.sol";
 import "../../../extensions/fee-manager/fees/ProtocolFee.sol";
 import "../vault/IVault.sol";
 import "./IComptroller.sol";
+import "../../../interfaces/IZeroExV2.sol";
+import "../../../extensions/integration-manager/integrations/adapters/ZeroExV2Adapter.sol";
 
 /// @title ComptrollerLib Contract
 /// @notice The core logic library shared by all funds
@@ -52,6 +54,13 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         uint256[] receivedAssetQuantities
     );
 
+    event SharesRedeemedToDenom(
+        address indexed redeemer,
+        uint256 sharesQuantity,
+        address denominationAsset,
+        uint256 denominationAssetQuantities
+    );
+
     event VaultProxySet(address vaultProxy);
 
     // Constants and immutables - shared by all proxies
@@ -65,6 +74,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     address private immutable POLICY_MANAGER;
     address private immutable VALUE_INTERPRETER;
     address private immutable PROTOCOLFEE;
+    address private immutable EXCHANGE;
     // Pseudo-constants (can only be set once)
 
     address internal denominationAsset;
@@ -188,6 +198,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         address _primitivePriceFeed,
         address _synthetixPriceFeed,
         address _protocolFee,
+        address _exchangeZeroEx,
         address _synthetixAddressResolver
     ) public AssetFinalityResolver(_synthetixPriceFeed, _synthetixAddressResolver) {
         DISPATCHER = _dispatcher;
@@ -198,6 +209,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         POLICY_MANAGER = _policyManager;
         VALUE_INTERPRETER = _valueInterpreter;
         PROTOCOLFEE = _protocolFee;
+        EXCHANGE = _exchangeZeroEx;
         isLib = true;
     }
 
@@ -997,6 +1009,108 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         return (payoutAssets_, payoutAmounts_);
     }
 
+    /// @notice Redeem all of the sender's shares for a proportionate slice of the fund's assets
+    /// @return denominationAsset_ The assets paid out to the redeemer
+    /// @return denominationAmount_ The amount of each asset paid out to the redeemer
+    function redeemSharesToDenom(bytes calldata _signature, address _adapter)
+        external
+        returns (address denominationAsset_, uint256 denominationAmount_)
+    {
+        return
+            __redeemSharesToDenom(
+                msg.sender,
+                ERC20(vaultProxy).balanceOf(msg.sender),
+                _adapter,
+                _signature
+            );
+    }
+
+    function __redeemSharesToDenom(
+        address _redeemer,
+        uint256 _sharesQuantity,
+        address _adapter,
+        bytes calldata _signature
+    )
+        private
+        locksReentrance
+        returns (address denominationAsset_, uint256 denominationAmount_)
+    {
+        require(_sharesQuantity > 0, "__redeemSharesToDenom: _sharesQuantity must be >0");
+
+        IVault vaultProxyContract = IVault(vaultProxy);
+
+        // Only apply the sharesActionTimelock when a migration is not pending
+        if (!IDispatcher(DISPATCHER).hasMigrationRequest(address(vaultProxyContract))) {
+            __assertSharesActionNotTimelocked(_redeemer);
+            acctToLastSharesAction[_redeemer] = block.timestamp;
+        }
+
+        // When a fund is paused, settling fees will be skipped
+        if (!__fundIsPaused()) {
+            __preRedeemSharesHook(_redeemer, _sharesQuantity);
+        }
+
+        // Check the shares quantity against the user's balance after settling fees
+        ERC20 sharesContract = ERC20(address(vaultProxyContract));
+        require(
+            _sharesQuantity <= sharesContract.balanceOf(_redeemer),
+            "__redeemSharesToDenom: Insufficient shares"
+        );
+
+        address[] memory payoutAssets_ = vaultProxyContract.getTrackedAssets();
+        uint256[] memory payoutAmounts_ = new uint256[](payoutAssets_.length);
+        require(payoutAssets_.length > 0, "__redeemSharesToDenom: No payout assets");
+
+
+        // Destroy the shares.
+        // Must get the shares supply before doing so.
+        uint256 sharesSupply = sharesContract.totalSupply();
+        vaultProxyContract.burnShares(_redeemer, _sharesQuantity);
+
+        //Get DAO address and withdraw fee for protocol
+        daoAddress = ProtocolFee(PROTOCOLFEE).getDaoAddress();
+        feeWithdraw = ProtocolFee(PROTOCOLFEE).getFeeWithdraw();
+
+        // Calculate and transfer payout asset amounts due to redeemer
+        denominationAsset_ = denominationAsset;
+        for (uint256 i; i < payoutAssets_.length; i++) {
+            uint256 assetBalance = __finalizeIfSynthAndGetAssetBalance (
+                address(vaultProxyContract),
+                payoutAssets_[i],
+                true
+            );
+
+            payoutAmounts_[i] = assetBalance;
+        }
+
+        daoAddress = ProtocolFee(PROTOCOLFEE).getDaoAddress();
+        feeWithdraw = ProtocolFee(PROTOCOLFEE).getFeeWithdraw();
+        
+        denominationAmount_ = IExtension(INTEGRATION_MANAGER).actionForZeroEX(
+            _redeemer,
+            _adapter,
+            payoutAmounts_,
+            payoutAssets_,
+            _signature
+        );
+
+        // Transfer payout asset to redeemer
+        if (denominationAmount_> 0) {
+            uint256 denomAmountForProtocol = denominationAmount_.mul(feeWithdraw).div(RATE_DIVISOR);
+            uint256 denomAmountForInvestor = denominationAmount_.sub(denomAmountForProtocol);
+
+            vaultProxyContract.withdrawAssetTo(denominationAsset_, _redeemer, denomAmountForInvestor);
+
+            if (denomAmountForProtocol > 0 && daoAddress != address(0)) {
+                vaultProxyContract.withdrawAssetTo(denominationAsset_, daoAddress, denomAmountForProtocol);
+            }
+        }
+
+        emit SharesRedeemedToDenom(_redeemer, _sharesQuantity, denominationAsset_, denominationAmount_);
+
+        return (denominationAsset_, denominationAmount_);
+    }
+
     ///////////////////
     // STATE GETTERS //
     ///////////////////
@@ -1008,13 +1122,6 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     }
 
     /// @notice Gets the routes for the various contracts used by all funds
-    /// @return dispatcher_ The `DISPATCHER` variable value
-    /// @return feeManager_ The `FEE_MANAGER` variable value
-    /// @return fundDeployer_ The `FUND_DEPLOYER` variable value
-    /// @return integrationManager_ The `INTEGRATION_MANAGER` variable value
-    /// @return policyManager_ The `POLICY_MANAGER` variable value
-    /// @return primitivePriceFeed_ The `PRIMITIVE_PRICE_FEED` variable value
-    /// @return valueInterpreter_ The `VALUE_INTERPRETER` variable value
     function getLibRoutes()
         external
         view

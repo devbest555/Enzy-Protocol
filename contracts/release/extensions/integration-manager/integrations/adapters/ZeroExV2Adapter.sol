@@ -11,6 +11,7 @@ import "../../../../utils/MathHelpers.sol";
 import "../../../../utils/AddressArrayLib.sol";
 import "../../../utils/FundDeployerOwnerMixin.sol";
 import "../utils/AdapterBase.sol";
+import "hardhat/console.sol";
 
 /// @title ZeroExV2Adapter Contract
 /// @notice Adapter to 0xV2 Exchange Contract
@@ -105,7 +106,9 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
                 order.takerFee,
                 takerAssetFillAmount
             ); // fee calculated relative to taker fill amount
-
+            console.log("====sol-takerFeeAsset::", takerFeeAsset);
+            console.log("====sol-makerAsset::", makerAsset);
+            console.log("====sol-takerAsset::", takerAsset);
             if (takerFeeAsset == makerAsset) {
                 require(
                     order.takerFee < order.makerAssetAmount,
@@ -152,9 +155,43 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
     }
 
     /// @notice Take an order on 0x
-    /// @param _vaultProxy The VaultProxy of the calling fund
-    /// @param _encodedCallArgs Encoded order parameters
-    /// @param _encodedAssetTransferArgs Encoded args for expected assets to spend and receive
+    function fillOrderZeroEX(
+        IZeroExV2.Order memory _order,
+        bytes calldata _signature,
+        uint256 _takerAssetFillAmount
+    )
+        external
+        override
+        returns (uint256 amount_)
+    {
+        // Approve spend assets as needed
+        __approveMaxAsNeeded(
+            __getAssetAddress(_order.takerAssetData),
+            __getAssetProxy(_order.takerAssetData),
+            _takerAssetFillAmount
+        );
+
+        // Ignores whether makerAsset or takerAsset overlap with the takerFee asset for simplicity
+        if (_order.takerFee > 0) {
+            bytes memory zrxData = IZeroExV2(EXCHANGE).ZRX_ASSET_DATA();
+            __approveMaxAsNeeded(
+                __getAssetAddress(zrxData),
+                __getAssetProxy(zrxData),
+                __calcRelativeQuantity(
+                    _order.takerAssetAmount,
+                    _order.takerFee,
+                    _takerAssetFillAmount
+                ) // fee calculated relative to taker fill amount
+            );
+        }
+        
+        // Execute order
+        IZeroExV2.FillResults memory fillResult = IZeroExV2(EXCHANGE).fillOrder(_order, _takerAssetFillAmount, _signature);
+        amount_ = fillResult.takerAssetFilledAmount;
+
+        return amount_;
+    }
+
     function takeOrder(
         address _vaultProxy,
         bytes calldata _encodedCallArgs,

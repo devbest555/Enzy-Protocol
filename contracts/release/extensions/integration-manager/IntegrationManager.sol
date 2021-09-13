@@ -17,6 +17,8 @@ import "../utils/FundDeployerOwnerMixin.sol";
 import "../utils/PermissionedVaultActionMixin.sol";
 import "./integrations/IIntegrationAdapter.sol";
 import "./IIntegrationManager.sol";
+import "../../interfaces/IZeroExV2.sol";
+import "hardhat/console.sol";
 
 /// @title IntegrationManager
 /// @notice Extension to handle DeFi integration actions for funds
@@ -54,6 +56,9 @@ contract IntegrationManager is
     address private immutable DERIVATIVE_PRICE_FEED;
     address private immutable POLICY_MANAGER;
     address private immutable PRIMITIVE_PRICE_FEED;
+    
+    uint256 private constant ONE_DAY = 24 * 60 * 60;
+    bytes4 public constant TAKE_SELECTOR = bytes4(keccak256("ERC20Token(address)"));
 
     EnumerableSet.AddressSet private registeredAdapters;
 
@@ -186,6 +191,49 @@ contract IntegrationManager is
         }
     }
 
+    function actionForZeroEX(
+        address _redeemer,
+        address _adapter,
+        uint256[] memory _payoutAmounts, 
+        address[] memory _payoutAssets,
+        bytes calldata _signature
+    ) external override returns (uint256 amount_) {
+
+        address denominationAsset = IComptroller(msg.sender).getDenominationAsset();
+
+        require(adapterIsRegistered(_adapter), "actionForZeroEX: Adapter is not registered");
+
+        IZeroExV2.Order memory order;
+
+        for(uint256 i; i < _payoutAssets.length; i++) {
+            require(
+                __isSupportedAsset(_payoutAssets[i]),
+                "actionForZeroEX: Unsupported asset"
+            );
+
+            order = IZeroExV2.Order({
+                makerAddress: _redeemer,
+                takerAddress: address(0),
+                feeRecipientAddress: address(0),
+                senderAddress: address(0),
+                makerAssetAmount: _payoutAmounts[i],
+                takerAssetAmount: _payoutAmounts[i],
+                makerFee: 0,
+                takerFee: 0,
+                expirationTimeSeconds: block.timestamp.add(ONE_DAY),
+                salt: block.timestamp,//__randomNum(),
+                makerAssetData: abi.encodeWithSelector(TAKE_SELECTOR, _payoutAssets[i]),
+                takerAssetData: abi.encodeWithSelector(TAKE_SELECTOR, denominationAsset)
+            });
+            
+            uint256 _takerAssetFillAmount = _payoutAmounts[i];
+            uint256 denomAmount = IIntegrationAdapter(_adapter).fillOrderZeroEX(order, _signature, _takerAssetFillAmount);
+            amount_ = amount_.add(denomAmount);
+        }
+
+        return amount_;
+    }
+
     /// @dev Adds assets with a zero balance as tracked assets of the fund
     function __addZeroBalanceTrackedAssets(address _vaultProxy, bytes memory _callArgs) private {
         address[] memory assets = abi.decode(_callArgs, (address[]));
@@ -300,6 +348,15 @@ contract IntegrationManager is
             uint256[] memory preCallSpendAssetBalances
         ) = __preProcessCoI(vaultProxy, _callArgs);
 
+        for(uint256 i; i < spendAssets.length; i++) {
+            console.log("===sol-IM1-0::", expectedIncomingAssets[i]);
+            console.log("===sol-IM1-1::", preCallIncomingAssetBalances[i]);
+            console.log("===sol-IM1-2::", minIncomingAssetAmounts[i]);
+            console.log("===sol-IM1-3::", spendAssets[i]);
+            console.log("===sol-IM1-4::", maxSpendAssetAmounts[i]);
+            console.log("===sol-IM1-5::", preCallSpendAssetBalances[i]);
+        }
+
         __executeCoI(
             vaultProxy,
             _callArgs,
@@ -391,6 +448,8 @@ contract IntegrationManager is
                 _encodedAssetTransferArgs
             )
         );
+        console.log("===sol-IM-1::", success);
+        console.log("===sol-IM-2::", adapter);
         require(success, string(returnData));
     }
 
@@ -609,6 +668,9 @@ contract IntegrationManager is
         for (uint256 i = 0; i < _expectedIncomingAssets.length; i++) {
             uint256 balanceDiff = __getVaultAssetBalance(_vaultProxy, _expectedIncomingAssets[i])
                 .sub(_preCallIncomingAssetBalances[i]);
+            console.log("====sol-balance-0::", _expectedIncomingAssets[i]);
+            console.log("====sol-balance-1::", balanceDiff);
+            console.log("====sol-balance-2::", _minIncomingAssetAmounts[i]);
             require(
                 balanceDiff >= _minIncomingAssetAmounts[i],
                 "__reconcileCoIAssets: Received incoming asset less than expected"
