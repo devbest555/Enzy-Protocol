@@ -72,13 +72,13 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     address private immutable PROTOCOLFEE;
     address internal denominationAsset;
     address internal vaultProxy;
-    bool internal isLib;
+    bool  internal isLib;
 
     // Storage
     // Allows a fund owner to override a release-level pause
     bool internal overridePause;
     // A reverse-mutex, granting atomic permission for particular contracts to make vault calls
-    bool internal permissionedVaultActionAllowed;
+    bool  internal permissionedVaultActionAllowed;
     // A mutex to protect against reentrancy
     bool internal reentranceLocked;
     // A timelock between any "shares actions" (i.e., buy and redeem shares), per-account
@@ -103,7 +103,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         permissionedVaultActionAllowed = false;
     }
 
-    modifier locksReentrance() {
+    modifier locksReentrance () {
         __assertNotReentranceLocked();
         reentranceLocked = true;
         _;
@@ -443,7 +443,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         // Note: a future release could consider forcing the adding of a tracked asset here,
         // just in case a fund is migrating from an old configuration where they are not able
         // to remove an asset to get under the tracked assets limit
-        IVault (_vaultProxy). addTrackedAsset (denominationAsset);
+        IVault(_vaultProxy). addTrackedAsset (denominationAsset);
 
         // Activate extensions
         IExtension(FEE_MANAGER).activateForFund(_isMigration);
@@ -517,7 +517,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     function calcGrossShareValue(bool _requireFinality)
         external
         override
-        returns ( uint256  grossShareValue_ , bool  isValid_ )
+        returns ( uint256   grossShareValue_ , bool   isValid_ )
     {
         uint256 gav ;
         (gav, isValid_) = calcGav(_requireFinality);
@@ -533,7 +533,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
 
     /// @dev Helper for calculating the gross share value
     function __calcGrossShareValue(
-        uint256  _gav ,
+        uint256   _gav ,
         uint256 _sharesSupply,
         uint256 _denominationAssetUnit
     ) private pure returns (uint256 grossShareValue_) {
@@ -599,7 +599,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     /// @dev Param arrays have indexes corresponding to individual __buyShares() orders.
     function buyShares(
         address[] calldata _buyers,
-        uint256 [] calldata  _investmentAmounts ,
+        uint256 [] calldata   _investmentAmounts ,
         uint256 [] calldata _minSharesQuantities
     )
         external
@@ -667,7 +667,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     function __buyShares(
         address _buyer,
         uint256 _investmentAmount,
-        uint256  _minSharesQuantity ,
+        uint256   _minSharesQuantity ,
         address _vaultProxy,
         uint256 _sharePrice,
         uint256 _preBuySharesGav,
@@ -756,7 +756,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     function __preBuySharesHook(
         address _buyer,
         uint256 _investmentAmount,
-        uint256  _minSharesQuantity ,
+        uint256   _minSharesQuantity ,
         uint256 _gav
     ) private {
         IFeeManager(FEE_MANAGER).invokeHook(
@@ -883,7 +883,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
                 abi.encode(_redeemer, _sharesQuantity),
                 0
             )
-        {} catch ( bytes  memory  reason ) {
+        {} catch ( bytes   memory   reason ) {
             emit PreRedeemSharesHookFailed(reason, _redeemer, _sharesQuantity);
         }
     }
@@ -1050,7 +1050,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             uint256 sharesSupply
         ) = __calcRedeemShares(redeemer, sharesQuantity, new address[](0), new address[](0));
         
-        // Get amount in denomination asset from other assets excepted denomination asset
+        // Get amount in denomination asset from other assets excepted denomination asset    
         redeemAmountToDenom_ = IExtension(INTEGRATION_MANAGER).actionForZeroEX(
             redeemer,
             _adapter,
@@ -1103,7 +1103,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     }
 
     /// @notice Gets the `overridePause` variable
-    function getOverridePause () external  view  returns ( bool  overridePause_ ) {
+    function getOverridePause () external   view   returns ( bool   overridePause_ ) {
         return overridePause;
     }
 

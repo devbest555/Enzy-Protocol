@@ -59,7 +59,6 @@ contract IntegrationManager is
     
     uint256 private constant ONE_DAY = 24 * 60 * 60;    
     uint256 private constant RATE_DIVISOR = 10**18;
-    // bytes4 public constant TAKE_SELECTOR = bytes4(keccak256("ERC20Token(address)"));
 
     EnumerableSet.AddressSet private registeredAdapters;
 
@@ -93,7 +92,7 @@ contract IntegrationManager is
 
         comptrollerProxyToAcctToIsAuthUser[_comptrollerProxy][_who] = true;
 
-        emit AuthUserAddedForFund(_comptrollerProxy, _who);
+        emit  AuthUserAddedForFund (_comptrollerProxy, _who);
     }
 
     /// @notice Deactivate the extension by destroying storage
@@ -109,7 +108,7 @@ contract IntegrationManager is
 
         comptrollerProxyToAcctToIsAuthUser[_comptrollerProxy][_who] = false;
 
-        emit AuthUserRemovedForFund(_comptrollerProxy, _who);
+        emit  AuthUserRemovedForFund (_comptrollerProxy, _who);
     }
 
     /// @notice Checks whether an account is an authorized IntegrationManager user for a given fund
@@ -119,7 +118,7 @@ contract IntegrationManager is
     function isAuthUserForFund(address _comptrollerProxy, address _who)
         public
         view
-        returns (bool isAuthUser_)
+        returns ( bool  isAuthUser_ )
     {
         return
             comptrollerProxyToAcctToIsAuthUser[_comptrollerProxy][_who] ||
@@ -182,9 +181,9 @@ contract IntegrationManager is
 
         // Dispatch the action
         if (_actionId == 0) {
-            __callOnIntegration(_caller, vaultProxy, _callArgs);
+            __callOnIntegration (_caller, vaultProxy, _callArgs);
         } else if (_actionId == 1) {
-            __addZeroBalanceTrackedAssets(vaultProxy, _callArgs);
+            __addZeroBalanceTrackedAssets (vaultProxy, _callArgs);
         } else if (_actionId == 2) {
             __removeZeroBalanceTrackedAssets(vaultProxy, _callArgs);
         } else {
@@ -225,7 +224,7 @@ contract IntegrationManager is
             orderValues[0] = _payoutAmounts[i];                                     //makerAssetAmount
             orderValues[1] = _payoutAmounts[i];                                     //takerAssetAmount
             orderValues[2] = 0;                                                     //makerFee
-            orderValues[3] = 0;                                                     //takerFee
+            orderValues[3] = 0;                                                     // takerFee
             orderValues[4] = block.timestamp.add(ONE_DAY);                          //expirationTimeSeconds
             orderValues[5] = block.timestamp;                                       //salt
 
@@ -234,7 +233,7 @@ contract IntegrationManager is
 
             uint256 _takerAssetFillAmount = _payoutAmounts[i];
 
-            bytes memory args = abi.encode(orderAddresses, orderValues, orderData, _signature);
+            bytes memory args = abi.encode (orderAddresses, orderValues, orderData, _signature);
             bytes memory encodedArgs = abi.encode(args, _takerAssetFillAmount);
             
             uint256 denomAmount = IIntegrationAdapter(_adapter).fillOrderZeroEX(encodedArgs);
@@ -313,7 +312,7 @@ contract IntegrationManager is
             uint256[] memory incomingAssetAmounts,
             address[] memory outgoingAssets,
             uint256[] memory outgoingAssetAmounts
-        ) = __callOnIntegrationInner(_vaultProxy, _callArgs);
+        ) =  __callOnIntegrationInner (_vaultProxy, _callArgs);
 
         __postCoIHook(
             adapter,
@@ -339,7 +338,7 @@ contract IntegrationManager is
 
     /// @dev Helper to execute the bulk of logic of callOnIntegration.
     /// Avoids the stack-too-deep-error.
-    function __callOnIntegrationInner(address vaultProxy, bytes memory _callArgs)
+    function __callOnIntegrationInner ( address  vaultProxy , bytes  memory  _callArgs )
         private
         returns (
             address[] memory incomingAssets_,
@@ -398,7 +397,7 @@ contract IntegrationManager is
     }
 
     /// @dev Helper to decode CoI args
-    function __decodeCallOnIntegrationArgs(bytes memory _callArgs)
+    function __decodeCallOnIntegrationArgs ( bytes  memory  _callArgs )
         private
         pure
         returns (
@@ -417,7 +416,7 @@ contract IntegrationManager is
         address _caller,
         address _adapter,
         bytes4 _selector,
-        bytes memory _integrationData,
+        bytes  memory  _integrationData ,
         address[] memory _incomingAssets,
         uint256[] memory _incomingAssetAmounts,
         address[] memory _outgoingAssets,
@@ -441,7 +440,7 @@ contract IntegrationManager is
     /// @dev Avoids stack-too-deep error
     function __executeCoI(
         address _vaultProxy,
-        bytes memory _callArgs,
+        bytes  memory  _callArgs ,
         bytes memory _encodedAssetTransferArgs
     ) private {
         (
@@ -450,7 +449,7 @@ contract IntegrationManager is
             bytes memory integrationData
         ) = __decodeCallOnIntegrationArgs(_callArgs);
 
-        (bool success, bytes memory returnData) = adapter.call(
+        ( bool  success , bytes  memory  returnData ) = adapter. call (
             abi.encodeWithSelector(
                 selector,
                 _vaultProxy,
@@ -541,7 +540,7 @@ contract IntegrationManager is
                 "__preProcessCoI: Empty incoming asset address"
             );
             require(
-                minIncomingAssetAmounts_[i] > 0,
+                minIncomingAssetAmounts_ [i] >  0 ,
                 "__preProcessCoI: minIncomingAssetAmount must be >0"
             );
             require(
@@ -616,7 +615,7 @@ contract IntegrationManager is
         address _vaultProxy,
         address[] memory _expectedIncomingAssets,
         uint256[] memory _preCallIncomingAssetBalances,
-        uint256[] memory _minIncomingAssetAmounts,
+        uint256 [] memory  _minIncomingAssetAmounts ,
         SpendAssetsHandleType _spendAssetsHandleType,
         address[] memory _spendAssets,
         uint256[] memory _maxSpendAssetAmounts,
@@ -663,7 +662,7 @@ contract IntegrationManager is
         address _vaultProxy,
         address[] memory _expectedIncomingAssets,
         uint256[] memory _preCallIncomingAssetBalances,
-        uint256[] memory _minIncomingAssetAmounts,
+        uint256 [] memory  _minIncomingAssetAmounts ,
         address[] memory _increasedSpendAssets,
         uint256[] memory _increasedSpendAssetAmounts
     ) private returns (address[] memory incomingAssets_, uint256[] memory incomingAssetAmounts_) {
@@ -682,7 +681,7 @@ contract IntegrationManager is
             console.log("====sol-balance-1::", balanceDiff);
             console.log("====sol-balance-2::", _minIncomingAssetAmounts[i]);
             require(
-                balanceDiff >= _minIncomingAssetAmounts[i],
+                balanceDiff >= _minIncomingAssetAmounts [i],
                 "__reconcileCoIAssets: Received incoming asset less than expected"
             );
 

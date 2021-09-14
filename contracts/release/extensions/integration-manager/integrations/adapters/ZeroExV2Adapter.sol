@@ -166,6 +166,7 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
         ) = __decodeTakeOrderCallArgs(_encodedCallArgs);
 
         IZeroExV2.Order memory order = __getOrderStruct(encodedZeroExOrderArgs);
+
         // Approve spend assets as needed
         __approveMaxAsNeeded(
             __getAssetAddress(order.takerAssetData),
@@ -274,24 +275,24 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
         returns (IZeroExV2.Order memory order_)
     {
         (
-            address[4] memory orderAddresses,
-            uint256[6] memory orderValues,
+            address[1] memory orderAddresses,
+            uint256[4] memory orderValues,
             address[2] memory orderData,
 
-        ) = abi.decode(_encodedOrderArgs, (address[4], uint256[6], address[2], bytes));
+        ) = abi.decode(_encodedOrderArgs, (address[1], uint256[4], address[2], bytes));
 
         return
             IZeroExV2.Order({
                 makerAddress: orderAddresses[0],
-                takerAddress: orderAddresses[1],
-                feeRecipientAddress: orderAddresses[2],
-                senderAddress: orderAddresses[3],
+                takerAddress: address(0),
+                feeRecipientAddress: address(0),
+                senderAddress: address(0),
                 makerAssetAmount: orderValues[0],
                 takerAssetAmount: orderValues[1],
-                makerFee: orderValues[2],
-                takerFee: orderValues[3],
-                expirationTimeSeconds: orderValues[4],
-                salt: orderValues[5],
+                makerFee: 0,
+                takerFee: 0,
+                expirationTimeSeconds: orderValues[2],
+                salt: orderValues[3],
                 makerAssetData: abi.encode(TAKE_ORDER_SELECTOR, orderData[0]),
                 takerAssetData: abi.encode(TAKE_ORDER_SELECTOR, orderData[1])
             });
