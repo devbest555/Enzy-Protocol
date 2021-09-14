@@ -57,8 +57,9 @@ contract IntegrationManager is
     address private immutable POLICY_MANAGER;
     address private immutable PRIMITIVE_PRICE_FEED;
     
-    uint256 private constant ONE_DAY = 24 * 60 * 60;
-    bytes4 public constant TAKE_SELECTOR = bytes4(keccak256("ERC20Token(address)"));
+    uint256 private constant ONE_DAY = 24 * 60 * 60;    
+    uint256 private constant RATE_DIVISOR = 10**18;
+    // bytes4 public constant TAKE_SELECTOR = bytes4(keccak256("ERC20Token(address)"));
 
     EnumerableSet.AddressSet private registeredAdapters;
 
@@ -203,31 +204,40 @@ contract IntegrationManager is
 
         require(adapterIsRegistered(_adapter), "actionForZeroEX: Adapter is not registered");
 
-        IZeroExV2.Order memory order;
+        address[] memory orderAddresses = new address[](4);
+        uint256[] memory orderValues = new uint256[](6);
+        address[] memory orderData = new address[](2);
 
         for(uint256 i; i < _payoutAssets.length; i++) {
             require(
                 __isSupportedAsset(_payoutAssets[i]),
                 "actionForZeroEX: Unsupported asset"
             );
-
-            order = IZeroExV2.Order({
-                makerAddress: _redeemer,
-                takerAddress: address(0),
-                feeRecipientAddress: address(0),
-                senderAddress: address(0),
-                makerAssetAmount: _payoutAmounts[i],
-                takerAssetAmount: _payoutAmounts[i],
-                makerFee: 0,
-                takerFee: 0,
-                expirationTimeSeconds: block.timestamp.add(ONE_DAY),
-                salt: block.timestamp,//__randomNum(),
-                makerAssetData: abi.encodeWithSelector(TAKE_SELECTOR, _payoutAssets[i]),
-                takerAssetData: abi.encodeWithSelector(TAKE_SELECTOR, denominationAsset)
-            });
             
+            // Skip if denomination asset because calc in forward
+            if (_payoutAssets[i] == denominationAsset) continue;
+
+            orderAddresses[0] = _redeemer;                                          //makerAddress
+            orderAddresses[1] = address(0);                                         //takerAddress
+            orderAddresses[2] = address(0);                                         //feeRecipientAddress
+            orderAddresses[3] = address(0);                                         //senderAddress
+
+            orderValues[0] = _payoutAmounts[i];                                     //makerAssetAmount
+            orderValues[1] = _payoutAmounts[i];                                     //takerAssetAmount
+            orderValues[2] = 0;                                                     //makerFee
+            orderValues[3] = 0;                                                     //takerFee
+            orderValues[4] = block.timestamp.add(ONE_DAY);                          //expirationTimeSeconds
+            orderValues[5] = block.timestamp;                                       //salt
+
+            orderData[0] = _payoutAssets[i];//abi.encodeWithSelector(TAKE_SELECTOR, _payoutAssets[i]); //makerAssetData
+            orderData[1] = denominationAsset;//abi.encodeWithSelector(TAKE_SELECTOR, denominationAsset);//takerAssetData
+
             uint256 _takerAssetFillAmount = _payoutAmounts[i];
-            uint256 denomAmount = IIntegrationAdapter(_adapter).fillOrderZeroEX(order, _signature, _takerAssetFillAmount);
+
+            bytes memory args = abi.encode(orderAddresses, orderValues, orderData, _signature);
+            bytes memory encodedArgs = abi.encode(args, _takerAssetFillAmount);
+            
+            uint256 denomAmount = IIntegrationAdapter(_adapter).fillOrderZeroEX(encodedArgs);
             amount_ = amount_.add(denomAmount);
         }
 

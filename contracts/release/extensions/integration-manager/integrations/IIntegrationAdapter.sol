@@ -3,10 +3,8 @@
 
 
 pragma solidity 0.6.12;
-pragma experimental ABIEncoderV2;
 
 import "../IIntegrationManager.sol";
-import "../../../interfaces/IZeroExV2.sol";
 
 /// @title Integration Adapter interface
 /// @notice Interface for all integration adapters
@@ -24,11 +22,7 @@ interface IIntegrationAdapter {
             uint256[] memory minIncomingAssetAmounts_
         );
 
-    function fillOrderZeroEX(
-        IZeroExV2.Order memory _order,
-        bytes calldata _signature,
-        uint256 _takerAssetFillAmount
-    )
+    function fillOrderZeroEX(bytes calldata _encodedCallArgs)
         external
         returns (uint256 amount_);
 }

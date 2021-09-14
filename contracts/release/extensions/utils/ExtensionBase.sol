@@ -42,6 +42,16 @@ abstract contract ExtensionBase is IExtension {
         return;
     }
 
+    function actionForZeroEX(
+        address,
+        address,
+        uint256[] memory, 
+        address[] memory,
+        bytes calldata
+    ) external virtual override returns (uint256 amount) {
+        return amount;    
+    }
+
     /// @dev Helper to validate a ComptrollerProxy-VaultProxy relation, which we store for both
     /// gas savings and to guarantee a spoofed ComptrollerProxy does not change getVaultProxy().
     /// Will revert without reason if the expected interfaces do not exist.

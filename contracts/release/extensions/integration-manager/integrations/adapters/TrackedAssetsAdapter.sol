@@ -68,6 +68,14 @@ contract TrackedAssetsAdapter is AdapterBase {
         );
     }
 
+    function fillOrderZeroEX(bytes calldata)
+        external
+        override
+        returns (uint256 amount_) 
+    {
+        return amount_;
+    }
+
     // PRIVATE FUNCTIONS
 
     /// @dev Helper to decode the encoded call arguments

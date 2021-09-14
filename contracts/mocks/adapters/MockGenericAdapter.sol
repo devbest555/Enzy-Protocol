@@ -72,6 +72,13 @@ contract MockGenericAdapter is AdapterBase {
         );
     }
 
+    function fillOrderZeroEX(bytes calldata _encodedCallArgs)
+        external
+        override
+        returns (uint256 amount_) 
+    {
+
+    }
     /// @dev Assumes SpendAssetsHandleType.Transfer unless otherwise specified
     function __getSpendAssetsHandleTypeForSelector(bytes4 _selector)
         private

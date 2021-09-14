@@ -135,6 +135,14 @@ contract UniswapV2Adapter is AdapterBase {
         );
     }
 
+    function fillOrderZeroEX(bytes calldata)
+        external
+        override
+        returns (uint256 amount_) 
+    {
+        return amount_;
+    }
+
     /// @notice Lends assets for pool tokens on Uniswap
     /// @param _vaultProxy The VaultProxy of the calling fund
     /// @param _encodedCallArgs Encoded order parameters

@@ -104,6 +104,14 @@ contract UniswapV3Adapter is AdapterBase2, UniswapV3ActionsMixin {
         );
     }
 
+    function fillOrderZeroEX(bytes calldata)
+        external
+        override
+        returns (uint256 amount_) 
+    {
+        return amount_;
+    }
+
     /// @dev Helper to decode the encoded callOnIntegration call arguments
     function __decodeCallArgs(bytes memory _encodedCallArgs)
         private

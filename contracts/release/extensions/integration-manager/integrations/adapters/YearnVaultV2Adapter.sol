@@ -124,6 +124,14 @@ contract YearnVaultV2Adapter is AdapterBase2, YearnVaultV2ActionsMixin {
         revert("parseAssetsForMethod: _selector invalid");
     }
 
+    function fillOrderZeroEX(bytes calldata)
+        external
+        override
+        returns (uint256 amount_) 
+    {
+        return amount_;
+    }
+
     /// @dev Helper function to parse spend and incoming assets from encoded call args
     /// during lend() calls
     function __parseAssetsForLend(bytes calldata _encodedCallArgs)

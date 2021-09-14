@@ -100,6 +100,14 @@ contract CompoundAdapter is AdapterBase {
         );
     }
 
+    function fillOrderZeroEX(bytes calldata)
+        external
+        override
+        returns (uint256 amount_) 
+    {
+        return amount_;
+    }
+
     /// @notice Lends an amount of a token to Compound
     /// @param _vaultProxy The VaultProxy of the calling fund
     /// @param _encodedAssetTransferArgs Encoded args for expected assets to spend and receive
