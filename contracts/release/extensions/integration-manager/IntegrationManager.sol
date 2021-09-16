@@ -31,6 +31,7 @@ contract IntegrationManager is
     using AddressArrayLib for address[];
     using EnumerableSet for EnumerableSet.AddressSet;
     using SafeMath for uint256;
+    using SafeMath for uint128;
 
     event AdapterDeregistered(address indexed adapter, string indexed identifier);
 
@@ -191,21 +192,25 @@ contract IntegrationManager is
         }
     }
 
-    function actionForZeroEX(
-        address _redeemer,
+    function actionForZeroEX(        
+        address _orderMaker,
         address _adapter,
         uint256[] memory _payoutAmounts, 
         address[] memory _payoutAssets,
         bytes calldata _signature
-    ) external override returns (uint256 amount_) {
+    ) external override returns (uint128 amount_) {
 
         address denominationAsset = IComptroller(msg.sender).getDenominationAsset();
 
         require(adapterIsRegistered(_adapter), "actionForZeroEX: Adapter is not registered");
 
-        address[] memory orderAddresses = new address[](4);
-        uint256[] memory orderValues = new uint256[](6);
-        address[] memory orderData = new address[](2);
+        address[] memory orderAddresses = new address[](6);
+        uint128[] memory orderAmounts = new uint128[](3);
+        bytes32 pool;
+        uint64 expiry;
+        uint256 salt;
+        uint128 takerFillAssetAmount;
+        uint128 denomAmount;
 
         for(uint256 i; i < _payoutAssets.length; i++) {
             require(
@@ -216,28 +221,26 @@ contract IntegrationManager is
             // Skip if denomination asset because calc in forward
             if (_payoutAssets[i] == denominationAsset) continue;
 
-            orderAddresses[0] = _redeemer;                                          //makerAddress
-            orderAddresses[1] = address(0);                                         //takerAddress
-            orderAddresses[2] = address(0);                                         //feeRecipientAddress
-            orderAddresses[3] = address(0);                                         //senderAddress
+            orderAddresses[0] = _payoutAssets[i];                                   //makerToken - DAI
+            orderAddresses[1] = denominationAsset;                                  //takerToken - WETH
+            orderAddresses[2] = _orderMaker;                                        //marker
+            orderAddresses[3] = address(0);                                         //taker
+            orderAddresses[4] = address(0);                                         //sender
+            orderAddresses[5] = address(0);                                         //feeRecipient
 
-            orderValues[0] = _payoutAmounts[i];                                     //makerAssetAmount
-            orderValues[1] = _payoutAmounts[i];                                     //takerAssetAmount
-            orderValues[2] = 0;                                                     //makerFee
-            orderValues[3] = 0;                                                     // takerFee
-            orderValues[4] = block.timestamp.add(ONE_DAY);                          //expirationTimeSeconds
-            orderValues[5] = block.timestamp;                                       //salt
-
-            orderData[0] = _payoutAssets[i];//abi.encodeWithSelector(TAKE_SELECTOR, _payoutAssets[i]); //makerAssetData
-            orderData[1] = denominationAsset;//abi.encodeWithSelector(TAKE_SELECTOR, denominationAsset);//takerAssetData
-
-            uint256 _takerAssetFillAmount = _payoutAmounts[i];
-
-            bytes memory args = abi.encode (orderAddresses, orderValues, orderData, _signature);
-            bytes memory encodedArgs = abi.encode(args, _takerAssetFillAmount);
+            orderAmounts[0] = uint128(_payoutAmounts[i]);                           //makerAssetAmount
+            orderAmounts[1] = uint128(_payoutAmounts[i]);                           //takerAssetAmount
+            orderAmounts[3] = 0;                                                    //takerTokenFeeAmount
+            pool            = 0;                                                    //pool
+            expiry          = uint64(block.timestamp.add(ONE_DAY));                 //expirationTimeSeconds
+            salt            = block.timestamp;                                      //salt
             
-            uint256 denomAmount = IIntegrationAdapter(_adapter).fillOrderZeroEX(encodedArgs);
-            amount_ = amount_.add(denomAmount);
+            bytes memory orderArgs = abi.encode(orderAddresses, orderAmounts, pool, expiry, salt);
+            takerFillAssetAmount = uint128(_payoutAmounts[i]);
+            
+            denomAmount = IIntegrationAdapter(_adapter).fillOrderZeroEX(orderArgs, _signature, takerFillAssetAmount);
+
+            amount_ = uint128(amount_.add(denomAmount));
         }
 
         return amount_;

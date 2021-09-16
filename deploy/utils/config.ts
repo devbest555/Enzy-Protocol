@@ -83,6 +83,10 @@ export interface DeploymentConfig {
     exchange: string;
     allowedMakers: string[];
   };
+  zeroexV4: {
+    exchange: string;
+    allowedMakers: string[];
+  };
   policies: {
     guaranteedRedemption: {
       redemptionWindowBuffer: number;

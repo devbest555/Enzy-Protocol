@@ -154,45 +154,11 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
         );
     }
 
-    /// @notice Take an order on 0x
-    function fillOrderZeroEX(bytes calldata _encodedCallArgs)
+    function fillOrderZeroEX(bytes calldata, bytes calldata, uint128)
         external
         override
-        returns (uint256 amount_)
+        returns (uint128 amount_) 
     {
-        (
-            bytes memory encodedZeroExOrderArgs,
-            uint256 takerAssetFillAmount
-        ) = __decodeTakeOrderCallArgs(_encodedCallArgs);
-
-        IZeroExV2.Order memory order = __getOrderStruct(encodedZeroExOrderArgs);
-
-        // Approve spend assets as needed
-        __approveMaxAsNeeded(
-            __getAssetAddress(order.takerAssetData),
-            __getAssetProxy(order.takerAssetData),
-            takerAssetFillAmount
-        );
-
-        // Ignores whether makerAsset or takerAsset overlap with the takerFee asset for simplicity
-        if (order.takerFee > 0) {
-            bytes memory zrxData = IZeroExV2(EXCHANGE).ZRX_ASSET_DATA();
-            __approveMaxAsNeeded(
-                __getAssetAddress(zrxData),
-                __getAssetProxy(zrxData),
-                __calcRelativeQuantity(
-                    order.takerAssetAmount,
-                    order.takerFee,
-                    takerAssetFillAmount
-                ) // fee calculated relative to taker fill amount
-            );
-        }
-        
-        // Execute order        
-        (, , , bytes memory signature) = __decodeZeroExOrderArgs(encodedZeroExOrderArgs);
-        IZeroExV2.FillResults memory fillResult = IZeroExV2(EXCHANGE).fillOrder(order, takerAssetFillAmount, signature);
-        amount_ = fillResult.takerAssetFilledAmount;
-
         return amount_;
     }
 
@@ -265,36 +231,6 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
                 salt: orderValues[5],
                 makerAssetData: orderData[0],
                 takerAssetData: orderData[1]
-            });
-    }
-
-    /// @dev Parses user inputs into a ZeroExV2.Order format
-    function __getOrderStruct(bytes memory _encodedOrderArgs)
-        private
-        pure
-        returns (IZeroExV2.Order memory order_)
-    {
-        (
-            address[1] memory orderAddresses,
-            uint256[4] memory orderValues,
-            address[2] memory orderData,
-
-        ) = abi.decode(_encodedOrderArgs, (address[1], uint256[4], address[2], bytes));
-
-        return
-            IZeroExV2.Order({
-                makerAddress: orderAddresses[0],
-                takerAddress: address(0),
-                feeRecipientAddress: address(0),
-                senderAddress: address(0),
-                makerAssetAmount: orderValues[0],
-                takerAssetAmount: orderValues[1],
-                makerFee: 0,
-                takerFee: 0,
-                expirationTimeSeconds: orderValues[2],
-                salt: orderValues[3],
-                makerAssetData: abi.encode(TAKE_ORDER_SELECTOR, orderData[0]),
-                takerAssetData: abi.encode(TAKE_ORDER_SELECTOR, orderData[1])
             });
     }
 

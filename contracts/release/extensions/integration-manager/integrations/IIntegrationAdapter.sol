@@ -22,7 +22,7 @@ interface IIntegrationAdapter {
             uint256[] memory minIncomingAssetAmounts_
         );
 
-    function fillOrderZeroEX(bytes calldata _encodedCallArgs)
+    function fillOrderZeroEX(bytes calldata, bytes calldata, uint128)
         external
-        returns (uint256 amount_);
+        returns (uint128 amount_);
 }

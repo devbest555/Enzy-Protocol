@@ -365,6 +365,10 @@ const mainnetConfig: DeploymentConfig = {
     ],
     exchange: '0x080bf510fcbf18b91105470639e9561022937712',
   },
+  zeroexV4: {
+    allowedMakers: [],
+    exchange: '0xDef1C0ded9bec7F1a1670819833240f027b25EfF',
+  },
   vaultCalls: [
     [
       synthetixDelegateApprovals,

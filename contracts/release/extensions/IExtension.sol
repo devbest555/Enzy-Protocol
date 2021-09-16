@@ -20,10 +20,10 @@ interface IExtension {
     function setConfigForFund(bytes calldata _configData) external;
 
     function actionForZeroEX(
-        address _redeemer,
+        address _orderMaker,
         address _adapter,
         uint256[] memory _payoutAmounts, 
         address[] memory _payoutAssets,
         bytes calldata _signature
-    ) external returns (uint256);
+    ) external returns (uint128);
 }

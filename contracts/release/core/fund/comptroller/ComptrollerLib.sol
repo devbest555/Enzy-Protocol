@@ -23,6 +23,7 @@ import "./IComptroller.sol";
 contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     using AddressArrayLib for address[];
     using SafeMath for uint256;
+    using SafeMath for uint128;
     using SafeERC20 for ERC20;
 
     event MigratedSharesDuePaid(uint256 sharesDue);
@@ -54,7 +55,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         address indexed redeemer,
         uint256 sharesQuantity,
         address denominationAsset,
-        uint256 amountToDenom
+        uint128 amountToDenom
     );
 
     event VaultProxySet(address vaultProxy);
@@ -997,9 +998,9 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         uint256[] memory _payoutAmounts, 
         uint256[] memory _assetAmountToFees,
         uint256 _sharesSupply,
-        uint256 _redeemAmountToDenom,
+        uint128 _redeemAmountToDenom,
         bool _calcType
-    ) private returns (uint256 redeemAmount_) {
+    ) private returns (uint128 redeemAmount_) {
         // Burn the shares.
         IVault vaultProxyContract = IVault(vaultProxy);      
         vaultProxyContract.burnShares(_redeemer, _sharesQuantity);
@@ -1021,7 +1022,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             } else {// SharesRedeemedToDenom                
                 if (_payoutAssets[i] == denominationAsset) {// Transfer denominationAsset amount to redeemer
                     vaultProxyContract.withdrawAssetTo(denominationAsset, _redeemer, _payoutAmounts[i]);
-                    redeemAmount_ = _redeemAmountToDenom.add(_payoutAmounts[i]);
+                    redeemAmount_ = uint128(_redeemAmountToDenom.add(_payoutAmounts[i]));
                 }
             }            
 
@@ -1031,6 +1032,11 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             }
         }    
 
+        // Transfer denomination Asset amount to redeemer from 0x V4 SharesRedeemedToDenom                
+        if (_redeemAmountToDenom > 0 && !_calcType) {
+            vaultProxyContract.withdrawAssetTo(denominationAsset, _redeemer, _redeemAmountToDenom);
+        }
+
         return redeemAmount_;
     }
 
@@ -1038,9 +1044,10 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     function redeemSharesToDenom(bytes calldata _signature, address _adapter) 
         external 
         locksReentrance 
-        returns (uint256 redeemAmountToDenom_)
+        returns (uint128 redeemAmountToDenom_)
     {
         address redeemer = msg.sender;
+        address orderMaker = vaultProxy;
         uint256 sharesQuantity = ERC20(vaultProxy).balanceOf(msg.sender);
         
         (
@@ -1052,7 +1059,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         
         // Get amount in denomination asset from other assets excepted denomination asset    
         redeemAmountToDenom_ = IExtension(INTEGRATION_MANAGER).actionForZeroEX(
-            redeemer,
+            orderMaker,
             _adapter,
             payoutAmounts,
             payoutAssets,

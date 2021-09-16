@@ -91,10 +91,10 @@ contract KyberAdapter is AdapterBase, MathHelpers {
         );
     }
 
-    function fillOrderZeroEX(bytes calldata)
+    function fillOrderZeroEX(bytes calldata, bytes calldata, uint128)
         external
         override
-        returns (uint256 amount_) 
+        returns (uint128 amount_) 
     {
         return amount_;
     }

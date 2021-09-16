@@ -48,7 +48,7 @@ abstract contract ExtensionBase is IExtension {
         uint256[] memory, 
         address[] memory,
         bytes calldata
-    ) external virtual override returns (uint256 amount) {
+    ) external virtual override returns (uint128 amount) {
         return amount;    
     }
 
