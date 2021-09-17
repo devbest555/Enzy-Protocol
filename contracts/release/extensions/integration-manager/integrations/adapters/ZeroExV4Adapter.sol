@@ -124,7 +124,7 @@ contract ZeroExV4Adapter is AdapterBase, FundDeployerOwnerMixin {
         // Approve spend assets as needed
         __approveMaxAsNeeded(
             order.takerToken,
-            __getAssetProxy(order.takerAssetData),
+            EXCHANGE,
             _takerAssetFillAmount
         );
         
@@ -140,17 +140,12 @@ contract ZeroExV4Adapter is AdapterBase, FundDeployerOwnerMixin {
             "fillOrderZeroEX: Taker asset fill amount greater than available"
         );
 
-        require(
-            order.txOrigin != address(0),
-            "fillOrderZeroEX: Invalid Order status"
-        );
-
         // Execute order        
         IZeroExV4.Signature memory signature = __getSignatureStruct(_signatureArgs);
         (
             uint128 takerTokenFillAmount, 
             uint128 makerTokenFillAmount
-        ) = IZeroExV4(EXCHANGE).fillRfqOrder(order, signature, _takerAssetFillAmount);
+        ) = IZeroExV4(EXCHANGE).fillLimitOrder(order, signature, _takerAssetFillAmount);
 
         return takerTokenFillAmount;
     }
@@ -224,28 +219,28 @@ contract ZeroExV4Adapter is AdapterBase, FundDeployerOwnerMixin {
         private
         pure
         returns (
-            address[5] memory orderAddresses_,
-            uint128[2] memory orderAmounts_,
+            address[6] memory orderAddresses_,
+            uint128[3] memory orderAmounts_,
             bytes32 pool_,
             uint64 expiry_,
             uint256 salt_
         )
     {
-        return abi.decode(_encodedZeroExOrderArgs, (address[5], uint128[2], bytes32, uint64, uint256));
+        return abi.decode(_encodedZeroExOrderArgs, (address[6], uint128[3], bytes32, uint64, uint256));
     }    
 
     /// @dev Gets the 0x assetProxy address for an ERC20 token
-    function __getAssetProxy(bytes memory _assetData) private view returns (address assetProxy_) {
-        bytes4 assetProxyId;
+    // function __getAssetProxy(bytes memory _assetData) private view returns (address assetProxy_) {
+    //     bytes4 assetProxyId;
 
-        assembly {
-            assetProxyId := and(
-                mload(add(_assetData, 32)),
-                0xFFFFFFFF00000000000000000000000000000000000000000000000000000000
-            )
-        }
-        assetProxy_ = IZeroExV4(EXCHANGE).getAssetProxy(assetProxyId);
-    }
+    //     assembly {
+    //         assetProxyId := and(
+    //             mload(add(_assetData, 32)),
+    //             0xFFFFFFFF00000000000000000000000000000000000000000000000000000000
+    //         )
+    //     }
+    //     assetProxy_ = IZeroExV4(EXCHANGE).getAssetProxy(assetProxyId);
+    // }
 
     /////////////////////////////
     // ALLOWED MAKERS REGISTRY //
