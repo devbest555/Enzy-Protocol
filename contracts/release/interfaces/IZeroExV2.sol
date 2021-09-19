@@ -64,4 +64,14 @@ interface IZeroExV2 {
         uint256,
         bytes calldata
     ) external returns (FillResults memory);
+
+    /// @dev Fills the input order. Reverts if exact takerAssetFillAmount not filled.
+    /// @param order Order struct containing order specifications.
+    /// @param takerAssetFillAmount Desired amount of takerAsset to sell.
+    /// @param signature Proof that order has been created by maker.
+    function fillOrKillOrder(
+        Order memory order,
+        uint256 takerAssetFillAmount,
+        bytes memory signature
+    ) external returns (FillResults memory fillResults);
 }

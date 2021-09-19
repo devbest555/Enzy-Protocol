@@ -154,11 +154,22 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
         );
     }
 
-    function fillOrderZeroEX(bytes calldata, bytes calldata, uint128)
+    function fillOrderZeroEX(bytes calldata _orderArgs, bytes calldata _signature)
         external
         override
-        returns (uint128 amount_) 
+        returns (uint256 amount_) 
     {
+        IZeroExV2.Order memory order = __getOrderStruct(_orderArgs);
+
+        // Approve spend assets as needed
+        __approveMaxAsNeeded(
+            __getAssetAddress (order.takerAssetData),
+            __getAssetProxy (order.takerAssetData),
+            order.takerAssetAmount
+        );
+
+        IZeroExV2.FillResults memory fillResult = IZeroExV2(EXCHANGE).fillOrder(order, order.takerAssetAmount, _signature);
+        amount_ = fillResult.takerAssetFilledAmount;
         return amount_;
     }
 
@@ -231,6 +242,34 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
                 salt: orderValues[5],
                 makerAssetData: orderData[0],
                 takerAssetData: orderData[1]
+            });
+    }
+
+    /// @dev Parses A Order into a ZeroExV2.Order format
+    function __getOrderStruct(bytes memory _encodedOrderArgs)
+        private
+        pure
+        returns (IZeroExV2.Order memory order_)
+    {
+        (
+            address[6] memory orderAddresses,
+            uint256[6] memory orderValues
+        ) = abi.decode(_encodedOrderArgs, (address[6], uint256[6]));
+
+        return
+            IZeroExV2.Order({                
+                makerAddress: orderAddresses[0],
+                takerAddress: orderAddresses[1],
+                feeRecipientAddress: orderAddresses[2],
+                senderAddress: orderAddresses[3],
+                makerAssetAmount: orderValues[0],
+                takerAssetAmount: orderValues[1],
+                makerFee: orderValues[2],
+                takerFee: orderValues[3],
+                expirationTimeSeconds: orderValues[4],
+                salt: orderValues[5],
+                makerAssetData: abi.encode(TAKE_ORDER_SELECTOR, orderAddresses[4]),
+                takerAssetData: abi.encode(TAKE_ORDER_SELECTOR, orderAddresses[5])
             });
     }
 

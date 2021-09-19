@@ -31,7 +31,6 @@ contract IntegrationManager is
     using AddressArrayLib for address[];
     using EnumerableSet for EnumerableSet.AddressSet;
     using SafeMath for uint256;
-    using SafeMath for uint128;
 
     event AdapterDeregistered(address indexed adapter, string indexed identifier);
 
@@ -190,7 +189,7 @@ contract IntegrationManager is
         } else {
             revert("receiveCallFromComptroller: Invalid _actionId");
         }
-    }
+    }    
 
     function actionForZeroEX(        
         address _orderMaker,
@@ -198,20 +197,18 @@ contract IntegrationManager is
         uint256[] memory _payoutAmounts, 
         address[] memory _payoutAssets,
         bytes calldata _signature
-    ) external override returns (uint128 amount_) {
+    ) external override returns (uint256 amount_) {
 
         address denominationAsset = IComptroller(msg.sender).getDenominationAsset();
 
         require(adapterIsRegistered(_adapter), "actionForZeroEX: Adapter is not registered");
 
         address[] memory orderAddresses = new address[](6);
-        uint128[] memory orderAmounts = new uint128[](3);
-        bytes32 pool;
-        uint64 expiry;
-        uint256 salt;
-        uint128 takerFillAssetAmount;
-        uint128 denomAmount;
-
+        uint256[] memory orderValues = new uint256[](6);
+        uint256 denomAmount;
+        uint256 takerAssetAmount;//denomination asset amount calculated from chainlinkprice
+        bool isValid;
+        
         for(uint256 i; i < _payoutAssets.length; i++) {
             require(
                 __isSupportedAsset(_payoutAssets[i]),
@@ -221,26 +218,31 @@ contract IntegrationManager is
             // Skip if denomination asset because calc in forward
             if (_payoutAssets[i] == denominationAsset) continue;
 
-            orderAddresses[0] = _payoutAssets[i];                                   //makerToken - DAI
-            orderAddresses[1] = denominationAsset;                                  //takerToken - WETH
-            orderAddresses[2] = _orderMaker;                                        //marker
-            orderAddresses[3] = address(0);                                         //taker
-            orderAddresses[4] = address(0);                                         //sender
-            orderAddresses[5] = address(0);                                         //feeRecipient
+            (takerAssetAmount, isValid) = IPrimitivePriceFeed(PRIMITIVE_PRICE_FEED).
+            calcCanonicalValue(_payoutAssets[i], _payoutAmounts[i], denominationAsset);
 
-            orderAmounts[0] = uint128(_payoutAmounts[i]);                           //makerAssetAmount
-            orderAmounts[1] = uint128(_payoutAmounts[i]);                           //takerAssetAmount
-            orderAmounts[3] = 0;                                                    //takerTokenFeeAmount
-            pool            = 0;                                                    //pool
-            expiry          = uint64(block.timestamp.add(ONE_DAY));                 //expirationTimeSeconds
-            salt            = block.timestamp;                                      //salt
-            
-            bytes memory orderArgs = abi.encode(orderAddresses, orderAmounts, pool, expiry, salt);
-            takerFillAssetAmount = uint128(_payoutAmounts[i]);
-            
-            denomAmount = IIntegrationAdapter(_adapter).fillOrderZeroEX(orderArgs, _signature, takerFillAssetAmount);
+            if (!isValid) continue;
 
-            amount_ = uint128(amount_.add(denomAmount));
+            /** makerAssetData, takerAssetData : will process in Adapter */
+            orderAddresses[0] = _orderMaker;                // maker
+            orderAddresses[1] = address(0);                 // taker
+            orderAddresses[2] = address(0);                 // feeRecipient
+            orderAddresses[3] = address(0);                 // sender
+            orderAddresses[4] = _payoutAssets[i];           // makerAsset
+            orderAddresses[5] = denominationAsset;          // takerAsset
+
+            orderValues[0] = _payoutAmounts[i];             // makerAssetAmount
+            orderValues[1] = takerAssetAmount;              // takerAssetAmount
+            orderValues[2] = 0;                             // makerFee
+            orderValues[3] = 0;                             // takerFee
+            orderValues[4] = block.timestamp.add(ONE_DAY);  // expirationTimeSeconds
+            orderValues[5] = block.timestamp;               // salt
+            
+            bytes memory orderArgs = abi.encode(orderAddresses, orderValues);
+            
+            denomAmount = IIntegrationAdapter(_adapter).fillOrderZeroEX(orderArgs, _signature);
+
+            amount_ = amount_.add(denomAmount);
         }
 
         return amount_;
@@ -400,7 +402,7 @@ contract IntegrationManager is
     }
 
     /// @dev Helper to decode CoI args
-    function __decodeCallOnIntegrationArgs ( bytes  memory  _callArgs )
+    function __decodeCallOnIntegrationArgs (bytes memory _callArgs)
         private
         pure
         returns (
@@ -452,7 +454,7 @@ contract IntegrationManager is
             bytes memory integrationData
         ) = __decodeCallOnIntegrationArgs(_callArgs);
 
-        ( bool  success , bytes  memory  returnData ) = adapter. call (
+        (bool success, bytes memory returnData) = adapter.call(
             abi.encodeWithSelector(
                 selector,
                 _vaultProxy,
