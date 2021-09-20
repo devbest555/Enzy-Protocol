@@ -161,10 +161,14 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
     {
         IZeroExV2.Order memory order = __getOrderStruct(_orderArgs);
 
-        // Approve spend assets as needed
+        // Approve spend assets as needed        
+        address takerAsset = __getAssetAddress(order.takerAssetData);
+        console.log("====sol-takerAsset::", takerAsset);
+        console.log("====sol-getAssetProxy::", __getAssetProxy(order.takerAssetData));
+        console.log("====sol-takerAssetAmount::", order.takerAssetAmount);
         __approveMaxAsNeeded(
-            __getAssetAddress (order.takerAssetData),
-            __getAssetProxy (order.takerAssetData),
+            takerAsset,
+            __getAssetProxy(order.takerAssetData),
             order.takerAssetAmount
         );
 
@@ -225,9 +229,7 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
             address[4] memory orderAddresses,
             uint256[6] memory orderValues,
             bytes[2] memory orderData,
-
         ) = __decodeZeroExOrderArgs(_encodedOrderArgs);
-
         return
             IZeroExV2.Order({
                 makerAddress: orderAddresses[0],
@@ -256,6 +258,7 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
             uint256[6] memory orderValues
         ) = abi.decode(_encodedOrderArgs, (address[6], uint256[6]));
 
+        bytes4 ERC20_SELECTOR = bytes4(keccak256("ERC20Token(address)"));
         return
             IZeroExV2.Order({                
                 makerAddress: orderAddresses[0],
@@ -268,8 +271,8 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
                 takerFee: orderValues[3],
                 expirationTimeSeconds: orderValues[4],
                 salt: orderValues[5],
-                makerAssetData: abi.encode(TAKE_ORDER_SELECTOR, orderAddresses[4]),
-                takerAssetData: abi.encode(TAKE_ORDER_SELECTOR, orderAddresses[5])
+                makerAssetData: abi.encodeWithSelector(ERC20_SELECTOR, orderAddresses[4]),
+                takerAssetData: abi.encodeWithSelector(ERC20_SELECTOR, orderAddresses[5])
             });
     }
 
@@ -336,7 +339,9 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
                 mload(add(_assetData, 32)),
                 0xFFFFFFFF00000000000000000000000000000000000000000000000000000000
             )
-        }
+        }//= 0xf47261b0
+        console.log("====sol-EXCHANGE::", EXCHANGE);
+        console.log("====sol-assetProxy::", IZeroExV2(EXCHANGE).getAssetProxy(assetProxyId));
         assetProxy_ = IZeroExV2(EXCHANGE).getAssetProxy(assetProxyId);
     }
 

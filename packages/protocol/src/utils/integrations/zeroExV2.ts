@@ -88,6 +88,8 @@ export async function createUnsignedZeroExV2Order({
   };
 }
 
+
+
 export async function signZeroExV2Order(order: UnsignedZeroExV2Order, signer: Signer): Promise<SignedZeroExV2Order> {
   const orderTypedData = createZeroExV2OrderTypedData(order);
   const orderHashHex = encodeTypedDataDigest(orderTypedData);
@@ -156,4 +158,40 @@ export function zeroExV2TakeOrderArgs({
   takerAssetFillAmount: BigNumberish;
 }) {
   return encodeArgs(['bytes', 'uint256'], [encodeZeroExV2Order(signedOrder), takerAssetFillAmount]);
+}
+
+//=============================================================================
+export function redeemEncodeZeroExV2Order(order: UnsignedZeroExV2Order) {
+  return encodeArgs(
+    ['address[6]', 'uint256[6]'],
+    [
+      [
+        order.makerAddress, 
+        order.takerAddress, 
+        order.feeRecipientAddress, 
+        order.senderAddress,
+        order.makerAsset,
+        order.takerAsset
+      ],
+      [
+        order.makerAssetAmount,
+        order.takerAssetAmount,
+        order.makerFee,
+        order.takerFee,
+        order.expirationTimeSeconds,
+        order.salt,
+      ],
+    ],
+  );
+}
+
+export async function signatureOrder(order: UnsignedZeroExV2Order, signer: Signer) {
+  const orderTypedData = createZeroExV2OrderTypedData(order);
+  const orderHashHex = encodeTypedDataDigest(orderTypedData);
+  const signature = await signer.signMessage(orderHashHex);
+  const split = utils.splitSignature(signature);
+  const type = utils.hexlify(3); // ETHSign
+  const joined = utils.hexlify(utils.concat([utils.hexlify(split.v), split.r, split.s, type]));
+
+  return utils.arrayify(joined);
 }

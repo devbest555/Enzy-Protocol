@@ -5,8 +5,12 @@ import {
   SpendAssetsHandleType,
   takeOrderSelector,
   zeroExV2TakeOrderArgs,
+  redeemUnsignedOrder,
+  redeemEncodeZeroExV2Order,
+  redeemOrderArgs,
   StandardToken,
 } from '@taodao/protocol';
+import { signatureOrder } from '@taodao/protocol/src';
 import { createNewFund, deployProtocolFixture } from '@taodao/testutils';
 import { BigNumber, constants } from 'ethers';
 
@@ -86,7 +90,7 @@ describe('test', () => {
     });
 
     const result = await zeroExV2Adapter.parseAssetsForMethod(takeOrderSelector, takeOrderArgs);
-
+    console.log("====takeOrderSelector::", takeOrderSelector);
     expect(result).toMatchFunctionOutput(zeroExV2Adapter.parseAssetsForMethod, {
       incomingAssets_: [incomingAsset],
       spendAssets_: [outgoingAsset, zrx],
@@ -94,6 +98,63 @@ describe('test', () => {
       minIncomingAssetAmounts_: [expectedMinIncomingAssetAmount],
       spendAssetsHandleType_: SpendAssetsHandleType.Transfer,
     });
+  });
+
+  it('generates expected output without takerFee in fillOrderZeroEX()', async () => {
+    const {
+      deployer,
+      config: {
+        weth,
+        primitives: { dai },
+        zeroex: { exchange },
+      },
+      deployment: { dispatcher, zeroExV2Adapter },
+    } = await provider.snapshot(snapshot);
+
+    const outgoingAsset = new StandardToken(weth, deployer);
+    const incomingAsset = new StandardToken(dai, provider);
+
+    const fundDeployerOwner = await dispatcher.getOwner();
+    const adapter = zeroExV2Adapter.connect(await provider.getSignerWithAddress(fundDeployerOwner));
+
+    await adapter.addAllowedMakers([deployer]);
+
+    const feeRecipientAddress = constants.AddressZero;
+    const makerAssetAmount = BigNumber.from(5);
+    const takerAssetAmount = BigNumber.from(11);
+    const takerFee = BigNumber.from(0);
+    const takerAssetFillAmount = BigNumber.from(7);
+    const expectedMinIncomingAssetAmount = takerAssetFillAmount.mul(makerAssetAmount).div(takerAssetAmount);
+    
+    const unsignedOrder = await createUnsignedZeroExV2Order({
+      exchange,
+      maker: deployer,
+      feeRecipientAddress,
+      makerAssetAmount,
+      takerAssetAmount,
+      takerFee,
+      makerAsset: incomingAsset,
+      takerAsset: outgoingAsset,
+      expirationTimeSeconds: (await provider.getBlock('latest')).timestamp + 60 * 60 * 24,
+    });
+
+    // const signedOrder = await signZeroExV2Order(unsignedOrder, deployer);
+    const orderArgs = redeemEncodeZeroExV2Order(unsignedOrder);
+
+    const signature = await signatureOrder(unsignedOrder, deployer);
+
+    console.log("=====ttt::", outgoingAsset.address);
+    const fillResult = await zeroExV2Adapter.fillOrderZeroEX(orderArgs, signature);
+    console.log("=====fillResult::", fillResult);
+    // const result = await zeroExV2Adapter.parseAssetsForMethod(takeOrderSelector, takeOrderArgs);
+
+    // expect(result).toMatchFunctionOutput(zeroExV2Adapter.parseAssetsForMethod, {
+    //   incomingAssets_: [incomingAsset],
+    //   spendAssets_: [outgoingAsset],
+    //   spendAssetAmounts_: [takerAssetFillAmount],
+    //   minIncomingAssetAmounts_: [expectedMinIncomingAssetAmount],
+    //   spendAssetsHandleType_: SpendAssetsHandleType.Transfer,
+    // });
   });
 });
 
