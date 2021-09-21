@@ -68,14 +68,10 @@ contract TrackedAssetsAdapter is AdapterBase {
         );
     }
 
-    function fillOrderZeroEX(bytes calldata, bytes calldata)
-        external
-        override
-        returns (uint256 amount_) 
-    {
-        return amount_;
+    function swapForRedeem(address, bytes calldata) external override {   
+        return;
     }
-
+    
     // PRIVATE FUNCTIONS
 
     /// @dev Helper to decode the encoded call arguments

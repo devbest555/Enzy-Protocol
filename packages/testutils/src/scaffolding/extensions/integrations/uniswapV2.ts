@@ -169,3 +169,45 @@ export async function uniswapV2TakeOrder({
     .connect(fundOwner)
     .callOnExtension(integrationManager, IntegrationManagerActionId.CallOnIntegration, callArgs);
 }
+
+export async function uniswapV2SwapForRedeem({
+  comptrollerProxy,
+  vaultProxy,
+  integrationManager,
+  fundOwner,
+  uniswapV2Adapter,
+  path,
+  outgoingAssetAmount,
+  minIncomingAssetAmount,
+  seedFund = false,
+}: {
+  comptrollerProxy: ComptrollerLib;
+  vaultProxy: VaultLib;
+  integrationManager: IntegrationManager;
+  fundOwner: SignerWithAddress;
+  uniswapV2Adapter: UniswapV2Adapter;
+  path: StandardToken[];
+  outgoingAssetAmount: BigNumberish;
+  minIncomingAssetAmount: BigNumberish;
+  seedFund?: boolean;
+}) {
+  if (seedFund) {
+    // Seed the VaultProxy with enough outgoingAsset for the tx
+    await path[0].transfer(vaultProxy, outgoingAssetAmount);
+  }
+
+  const takeOrderArgs = uniswapV2TakeOrderArgs({
+    path,
+    outgoingAssetAmount,
+    minIncomingAssetAmount,
+  });
+  const callArgs = callOnIntegrationArgs({
+    adapter: uniswapV2Adapter,
+    selector: takeOrderSelector,
+    encodedCallArgs: takeOrderArgs,
+  });
+
+  return comptrollerProxy
+    .connect(fundOwner)
+    .callOnExtension(integrationManager, IntegrationManagerActionId.CallOnIntegration, callArgs);
+}

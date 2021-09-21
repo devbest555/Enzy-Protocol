@@ -42,14 +42,13 @@ abstract contract ExtensionBase is IExtension {
         return;
     }
 
-    function actionForZeroEX(
+    function actionForRedeem(
         address,
         address,
         uint256[] memory, 
-        address[] memory,
-        bytes calldata
-    ) external virtual override returns (uint256 amount) {
-        return amount;    
+        address[] memory
+    ) external virtual override {
+        return;    
     }
 
     /// @dev Helper to validate a ComptrollerProxy-VaultProxy relation, which we store for both

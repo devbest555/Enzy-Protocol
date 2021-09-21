@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "../../../../interfaces/IUniswapV2Factory.sol";
 import "../../../../interfaces/IUniswapV2Router2.sol";
 import "../utils/AdapterBase.sol";
+import "hardhat/console.sol";
 
 /// @title UniswapV2Adapter Contract
 /// @notice Adapter for interacting with Uniswap v2
@@ -133,16 +134,8 @@ contract UniswapV2Adapter is AdapterBase {
             incomingAssets_,
             minIncomingAssetAmounts_
         );
-    }
-
-    function fillOrderZeroEX(bytes calldata, bytes calldata)
-        external
-        override
-        returns (uint256 amount_) 
-    {
-        return amount_;
-    }
-
+    }    
+    
     /// @notice Lends assets for pool tokens on Uniswap
     /// @param _vaultProxy The VaultProxy of the calling fund
     /// @param _encodedCallArgs Encoded order parameters
@@ -230,6 +223,32 @@ contract UniswapV2Adapter is AdapterBase {
 
         __takeOrder(_vaultProxy, outgoingAssetAmount, minIncomingAssetAmount, path);
     }
+        
+    /// @notice Swap assets to denominationAsset on Uniswap
+    /// @param _swapArgs Encoded order parameters //onlyIntegrationManager
+    function swapForRedeem(
+        address _vaultProxy,
+        bytes calldata _swapArgs
+    )
+        external
+        override
+        onlyIntegrationManager
+    {   
+        (
+            uint256 payoutAmount, 
+            address payoutAsset, 
+            address denomAsset
+        ) = __decodeSwapRedeemCallArgs(_swapArgs);
+        
+        address[] memory path = new address[](2);
+        path[0] = payoutAsset;
+        path[1] = denomAsset;
+
+        // Get expected output amount on Uniswap
+        uint256 expectedDenomAmount = IUniswapV2Router2(ROUTER).getAmountsOut(payoutAmount, path)[1];
+
+        __takeOrder(_vaultProxy, payoutAmount, expectedDenomAmount, path);
+    }
 
     // PRIVATE FUNCTIONS
 
@@ -271,6 +290,19 @@ contract UniswapV2Adapter is AdapterBase {
         )
     {
         return abi.decode(_encodedCallArgs, (address[], uint256, uint256));
+    }
+
+    /// @dev Helper to decode the take swap for redeem encoded call arguments
+    function __decodeSwapRedeemCallArgs(bytes memory _encodedCallArgs)
+        private
+        pure
+        returns (
+            uint256 payoutAmount_, 
+            address payoutAsset_, 
+            address denomAsset_
+        )
+    {
+        return abi.decode(_encodedCallArgs, (uint256, address, address));
     }
 
     /// @dev Helper to execute lend. Avoids stack-too-deep error.

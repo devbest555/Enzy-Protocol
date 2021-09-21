@@ -19,11 +19,10 @@ interface IExtension {
 
     function setConfigForFund(bytes calldata _configData) external;
 
-    function actionForZeroEX(
+    function actionForRedeem(
         address,
         address,
         uint256[] memory, 
-        address[] memory,
-        bytes calldata
-    ) external returns (uint256);
+        address[] memory
+    ) external;
 }

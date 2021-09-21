@@ -6,6 +6,7 @@ pragma solidity 0.6.12;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/EnumerableSet.sol";
 import "../../core/fund/vault/IVault.sol";
 import "../../infrastructure/price-feeds/derivatives/IDerivativePriceFeed.sol";
@@ -31,6 +32,7 @@ contract IntegrationManager is
     using AddressArrayLib for address[];
     using EnumerableSet for EnumerableSet.AddressSet;
     using SafeMath for uint256;
+    using SafeERC20 for ERC20;
 
     event AdapterDeregistered(address indexed adapter, string indexed identifier);
 
@@ -179,73 +181,61 @@ contract IntegrationManager is
             "receiveCallFromComptroller: Not an authorized user"
         );
 
+        console.log("====sol-receiveCallFromComptroller.sender", _caller);
         // Dispatch the action
         if (_actionId == 0) {
-            __callOnIntegration (_caller, vaultProxy, _callArgs);
+            __callOnIntegration(_caller, vaultProxy, _callArgs);
         } else if (_actionId == 1) {
-            __addZeroBalanceTrackedAssets (vaultProxy, _callArgs);
+            __addZeroBalanceTrackedAssets(vaultProxy, _callArgs);
         } else if (_actionId == 2) {
             __removeZeroBalanceTrackedAssets(vaultProxy, _callArgs);
         } else {
             revert("receiveCallFromComptroller: Invalid _actionId");
         }
-    }    
+    }        
 
-    function actionForZeroEX(        
-        address _orderMaker,
+    function actionForRedeem(   
+        address _caller,     
         address _adapter,
         uint256[] memory _payoutAmounts, 
-        address[] memory _payoutAssets,
-        bytes calldata _signature
-    ) external override returns (uint256 amount_) {
+        address[] memory _payoutAssets
+    ) external override {
 
         address denominationAsset = IComptroller(msg.sender).getDenominationAsset();
+        address vaultProxy = comptrollerProxyToVaultProxy[msg.sender];
+        string memory identifier = IIntegrationAdapter(_adapter).identifier();
 
-        require(adapterIsRegistered(_adapter), "actionForZeroEX: Adapter is not registered");
-
-        address[] memory orderAddresses = new address[](6);
-        uint256[] memory orderValues = new uint256[](6);
-        uint256 denomAmount;
-        uint256 takerAssetAmount;//denomination asset amount calculated from chainlinkprice
-        bool isValid;
+        require(vaultProxy != address(0x00), "actionForRedeem: Fund is not active");
+        require(adapterIsRegistered(_adapter), "actionForRedeem: Adapter is not registered");
+        require(compareStringsbyBytes(identifier, "UNISWAP_V2"), "actionForRedeem: Adapter must be uniswap v2");
         
         for(uint256 i; i < _payoutAssets.length; i++) {
-            require(
-                __isSupportedAsset(_payoutAssets[i]),
-                "actionForZeroEX: Unsupported asset"
+            // require(!__isSupportedAsset(_payoutAssets[i]), "actionForRedeem: Asset is not supported");
+            
+        console.log("====sol-caller", _caller);
+            __approveAssetSpender(
+                _caller,
+                _payoutAssets[i],
+                _adapter,
+                _payoutAmounts[i]
             );
+        console.log("====sol-okok", "ok");
+            ERC20(_payoutAssets[i]).safeTransferFrom(vaultProxy, _adapter, _payoutAmounts[i]);
+
+        console.log("====sol-_payoutAmounts", _payoutAmounts[i]);
+            bytes memory swapArgs = abi.encode(
+                _payoutAmounts[i], 
+                _payoutAssets[i], 
+                denominationAsset
+            );            
             
-            // Skip if denomination asset because calc in forward
-            if (_payoutAssets[i] == denominationAsset) continue;
-
-            (takerAssetAmount, isValid) = IPrimitivePriceFeed(PRIMITIVE_PRICE_FEED).
-            calcCanonicalValue(_payoutAssets[i], _payoutAmounts[i], denominationAsset);
-
-            if (!isValid) continue;
-
-            /** makerAssetData, takerAssetData : will process in Adapter */
-            orderAddresses[0] = _orderMaker;                // maker
-            orderAddresses[1] = address(0);                 // taker
-            orderAddresses[2] = address(0);                 // feeRecipient
-            orderAddresses[3] = address(0);                 // sender
-            orderAddresses[4] = _payoutAssets[i];           // makerAsset
-            orderAddresses[5] = denominationAsset;          // takerAsset
-
-            orderValues[0] = _payoutAmounts[i];             // makerAssetAmount
-            orderValues[1] = takerAssetAmount;              // takerAssetAmount
-            orderValues[2] = 0;                             // makerFee
-            orderValues[3] = 0;                             // takerFee
-            orderValues[4] = block.timestamp.add(ONE_DAY);  // expirationTimeSeconds
-            orderValues[5] = block.timestamp;               // salt
-            
-            bytes memory orderArgs = abi.encode(orderAddresses, orderValues);
-            
-            denomAmount = IIntegrationAdapter(_adapter).fillOrderZeroEX(orderArgs, _signature);
-
-            amount_ = amount_.add(denomAmount);
+            IIntegrationAdapter(_adapter).swapForRedeem(vaultProxy, swapArgs);
         }
+    }
 
-        return amount_;
+    /// @dev Helper to compare two strings
+    function compareStringsbyBytes(string memory s1, string memory s2) internal pure returns(bool) {
+        return keccak256(abi.encodePacked(s1)) == keccak256(abi.encodePacked(s2));
     }
 
     /// @dev Adds assets with a zero balance as tracked assets of the fund
@@ -317,7 +307,7 @@ contract IntegrationManager is
             uint256[] memory incomingAssetAmounts,
             address[] memory outgoingAssets,
             uint256[] memory outgoingAssetAmounts
-        ) =  __callOnIntegrationInner (_vaultProxy, _callArgs);
+        ) =  __callOnIntegrationInner(_vaultProxy, _callArgs);
 
         __postCoIHook(
             adapter,
@@ -343,7 +333,7 @@ contract IntegrationManager is
 
     /// @dev Helper to execute the bulk of logic of callOnIntegration.
     /// Avoids the stack-too-deep-error.
-    function __callOnIntegrationInner ( address  vaultProxy , bytes  memory  _callArgs )
+    function __callOnIntegrationInner(address vaultProxy, bytes memory _callArgs)
         private
         returns (
             address[] memory incomingAssets_,

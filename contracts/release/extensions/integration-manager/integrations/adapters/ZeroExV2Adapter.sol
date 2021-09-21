@@ -152,31 +152,34 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
         );
     }
 
-    function fillOrderZeroEX(bytes calldata _orderArgs, bytes calldata _signature)
-        external
-        override
-        returns (uint256 amount_) 
-    {
-        IZeroExV2.Order memory order = __getOrderStruct(_orderArgs);
+    // function fillOrderZeroEX(bytes calldata _orderArgs, bytes calldata _signature)
+    //     external
+    //     returns (uint256 amount_) 
+    // {
+    //     IZeroExV2.Order memory order = __getOrderStruct(_orderArgs);
 
-        // Approve spend assets as needed        
-        __approveMaxAsNeeded(
-            __getAssetAddress(order.makerAssetData),
-            __getAssetProxy(order.makerAssetData),
-            order.makerAssetAmount
-        );
+    //     // Approve spend assets as needed        
+    //     __approveMaxAsNeeded(
+    //         __getAssetAddress(order.makerAssetData),
+    //         __getAssetProxy(order.makerAssetData),
+    //         order.makerAssetAmount
+    //     );
 
-        __approveMaxAsNeeded(
-            __getAssetAddress(order.takerAssetData),
-            __getAssetProxy(order.takerAssetData),
-            order.takerAssetAmount
-        );
+    //     __approveMaxAsNeeded(
+    //         __getAssetAddress(order.takerAssetData),
+    //         __getAssetProxy(order.takerAssetData),
+    //         order.takerAssetAmount
+    //     );
 
-        IZeroExV2.FillResults memory fillResult = IZeroExV2(EXCHANGE).fillOrKillOrder(order, order.takerAssetAmount, _signature);
-        amount_ = fillResult.takerAssetFilledAmount;
-        return amount_;
+    //     IZeroExV2.FillResults memory fillResult = IZeroExV2(EXCHANGE).fillOrKillOrder(order, order.takerAssetAmount, _signature);
+    //     amount_ = fillResult.takerAssetFilledAmount;
+    //     return amount_;
+    // }
+
+    function swapForRedeem(address, bytes calldata) external override {   
+        return;
     }
-
+    
     function takeOrder(
         address _vaultProxy,
         bytes calldata _encodedCallArgs,

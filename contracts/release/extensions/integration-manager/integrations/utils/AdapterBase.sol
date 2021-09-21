@@ -9,6 +9,8 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "../IIntegrationAdapter.sol";
 import "./IntegrationSelectors.sol";
 
+import "hardhat/console.sol";
+
 /// @title AdapterBase Contract
 /// @notice A base contract for integration adapters
 abstract contract AdapterBase is IIntegrationAdapter, IntegrationSelectors {
@@ -72,7 +74,14 @@ abstract contract AdapterBase is IIntegrationAdapter, IntegrationSelectors {
         address _target,
         uint256 _neededAmount
     ) internal {
+        
+        console.log("====sol-approve1::", _asset);
+        console.log("====sol-approve2::", address(this));
+        console.log("====sol-approve3::", _target);
+        console.log("====sol-approve4::", _neededAmount);
         if (ERC20(_asset).allowance(address(this), _target) < _neededAmount) {
+            
+        console.log("====sol-approve5::", "jjj");
             ERC20(_asset).safeApprove(_target, type(uint256).max);
         }
     }

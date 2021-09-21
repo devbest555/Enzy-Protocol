@@ -221,7 +221,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             _extension == FEE_MANAGER || _extension == INTEGRATION_MANAGER,
             "callOnExtension: _extension invalid"
         );
-
+        console.log("====sol-callOnExtension-sender:", msg.sender);
         IExtension(_extension).receiveCallFromComptroller(msg.sender, _actionId, _callArgs);
     }
 
@@ -568,10 +568,6 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     /// @return balance_ The denomination balance
     function calcEachBalance(address _asset) external override returns (uint256 balance_) {
         address vaultProxyAddress = vaultProxy;
-        
-        // if (!IVault(vaultProxyAddress).isTrackedAsset(_asset)) {
-        //     return 0;
-        // }
 
         balance_ = __finalizeIfSynthAndGetAssetBalance(
             vaultProxyAddress,
@@ -599,7 +595,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     /// @dev Param arrays have indexes corresponding to individual __buyShares() orders.
     function buyShares(
         address[] calldata _buyers,
-        uint256 [] calldata   _investmentAmounts ,
+        uint256 [] calldata _investmentAmounts ,
         uint256 [] calldata _minSharesQuantities
     )
         external
@@ -915,9 +911,6 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
 
         // When a fund is paused, settling fees will be skipped
         if (!__fundIsPaused()) {
-            // Note that if a fee with `SettlementType.Direct` is charged here (i.e., not `Mint`),
-            // then those fee shares will be transferred from the user's balance rather
-            // than reallocated from the sharesQuantity being redeemed.
             __preRedeemSharesHook(_redeemer, _sharesQuantity);
         }
 
@@ -1007,8 +1000,8 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         uint256[] memory _assetAmountToFees,
         uint256 _sharesSupply,
         uint256 _redeemAmountToDenom,
-        bool _calcType
-    ) private returns (uint256 redeemAmount_) {
+        bool _redeemType
+    ) private {
         // Burn the shares.
         IVault vaultProxyContract = IVault(vaultProxy);      
         vaultProxyContract.burnShares(_redeemer, _sharesQuantity);
@@ -1023,41 +1016,31 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
                 }
             }
 
-            if (_calcType) {// SharesRedeemed                
+            // Transfer payout assets individually to a redeemer on SharesRedeemed()
+            if (_redeemType) {
                 if (_payoutAmounts[i] > 0) {
-                    // Transfer payout assets individually to a redeemer
                     vaultProxyContract.withdrawAssetTo(_payoutAssets[i], _redeemer, _payoutAmounts[i]);
                 }
-            } else {// SharesRedeemedToDenom                
-                if (_payoutAssets[i] == denominationAsset) {
-                    // Add redeem amount in denominationAsset if current traded asset is denominationAsset
-                    redeemAmount_ = _redeemAmountToDenom.add(_payoutAmounts[i]);
-                }
-                
+            } 
+            // Transfer denomination Asset amount to redeemer on SharesRedeemedToDenom()
+            else {
+                if (_redeemAmountToDenom > 0) {
+                    vaultProxyContract.withdrawAssetTo(denominationAsset, _redeemer, _redeemAmountToDenom);
+                }                            
             }            
 
             // Transfer fee asset amount to protocol(DAO wallet address)
             if (_assetAmountToFees[i] > 0 && daoAddress != address(0)) {
                 vaultProxyContract.withdrawAssetTo(_payoutAssets[i], daoAddress, _assetAmountToFees[i]);
             }
-        }    
-
-        // Transfer denomination Asset amount to redeemer                
-        if (redeemAmount_ > 0 && !_calcType) {
-            vaultProxyContract.withdrawAssetTo(denominationAsset, _redeemer, redeemAmount_);
-        }
-
-        return redeemAmount_;
+        }   
     }
 
     /// @notice Redeem all of the sender's shares in the denominationAsset
-    function redeemSharesToDenom(bytes calldata _callArgs) 
+    function redeemSharesToDenom(address adapter) 
         external 
-        locksReentrance 
         returns (uint256 redeemAmountToDenom_)
-    {   
-        (address adapter, bytes memory signature) = __decodeRedeemArgs(_callArgs);
-        
+    {           
         uint256 sharesQuantity = ERC20(vaultProxy).balanceOf(msg.sender);
         
         (
@@ -1067,18 +1050,19 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             uint256 sharesSupply
         ) = __calcRedeemShares(msg.sender, sharesQuantity, new address[](0), new address[](0));
         
-        // Get amount(in Vault) in denomination asset from other assets excepted denomination asset    
-        redeemAmountToDenom_ = IExtension(INTEGRATION_MANAGER).actionForZeroEX(
-            vaultProxy, // VaultContract as OrderMaker
+        console.log("====address(this)::", address(this));
+        // Get amount(in Vault) in denomination asset from other assets excepted denomination asset            
+        IExtension(INTEGRATION_MANAGER).actionForRedeem(
+            address(this),
             adapter,
             payoutAmounts,
-            payoutAssets,
-            signature
+            payoutAssets
         );
 
-        require(redeemAmountToDenom_ > 0, "redeemSharesToDenom: Failed 0x exchange");
-        
-        redeemAmountToDenom_ = burnAndTransfer(
+        // denominationAsset Amount after swap on Uniswap V2
+        redeemAmountToDenom_ = ERC20(denominationAsset).balanceOf(vaultProxy);
+
+        burnAndTransfer(
             msg.sender, 
             sharesQuantity, 
             payoutAssets, 
@@ -1092,11 +1076,6 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         emit SharesRedeemedToDenom(msg.sender, sharesQuantity, denominationAsset, redeemAmountToDenom_); 
 
         return redeemAmountToDenom_;
-    }
-
-    /// @dev Helper to decode CoI args
-    function __decodeRedeemArgs(bytes memory _callArgs) private pure returns(address adapter_, bytes memory signature_) {
-        return abi.decode(_callArgs, (address, bytes));
     }
 
     ///////////////////

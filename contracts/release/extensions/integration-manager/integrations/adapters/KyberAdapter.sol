@@ -91,14 +91,10 @@ contract KyberAdapter is AdapterBase, MathHelpers {
         );
     }
 
-    function fillOrderZeroEX(bytes calldata, bytes calldata)
-        external
-        override
-        returns (uint256 amount_) 
-    {
-        return amount_;
+    function swapForRedeem(address, bytes calldata) external override {   
+        return;
     }
-
+    
     /// @notice Trades assets on Kyber
     /// @param _vaultProxy The VaultProxy of the calling fund
     /// @param _encodedCallArgs Encoded order parameters
