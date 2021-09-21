@@ -362,15 +362,6 @@ contract IntegrationManager is
             uint256[] memory preCallSpendAssetBalances
         ) = __preProcessCoI(vaultProxy, _callArgs);
 
-        for(uint256 i; i < spendAssets.length; i++) {
-            console.log("===sol-IM1-0::", expectedIncomingAssets[i]);
-            console.log("===sol-IM1-1::", preCallIncomingAssetBalances[i]);
-            console.log("===sol-IM1-2::", minIncomingAssetAmounts[i]);
-            console.log("===sol-IM1-3::", spendAssets[i]);
-            console.log("===sol-IM1-4::", maxSpendAssetAmounts[i]);
-            console.log("===sol-IM1-5::", preCallSpendAssetBalances[i]);
-        }
-
         __executeCoI(
             vaultProxy,
             _callArgs,
@@ -682,9 +673,7 @@ contract IntegrationManager is
         for (uint256 i = 0; i < _expectedIncomingAssets.length; i++) {
             uint256 balanceDiff = __getVaultAssetBalance(_vaultProxy, _expectedIncomingAssets[i])
                 .sub(_preCallIncomingAssetBalances[i]);
-            console.log("====sol-balance-0::", _expectedIncomingAssets[i]);
-            console.log("====sol-balance-1::", balanceDiff);
-            console.log("====sol-balance-2::", _minIncomingAssetAmounts[i]);
+                
             require(
                 balanceDiff >= _minIncomingAssetAmounts [i],
                 "__reconcileCoIAssets: Received incoming asset less than expected"

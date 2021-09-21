@@ -20,7 +20,7 @@ function accounts(networkName: string) {
     .filter(Boolean);
 }
 
-const mnemonic = process.env.MNEMONIC; //'test test test test test test test test test test test junk';//
+const mnemonic = process.env.MNEMONIC//'test test test test test test test test test test test junk';//
 
 const config: HardhatUserConfig = {
   codeCoverage: {
@@ -85,15 +85,17 @@ const config: HardhatUserConfig = {
     hardhat: {
       hardfork: 'istanbul',
       accounts: {
-        // accountsBalance: utils.parseUnits('1', 36).toString(),
-        // count: 5,
         mnemonic,
       },
-      chainId: 42, //42
       forking: {
-        // blockNumber: 11095000,
-        url: node('kovan'),
+        blockNumber: 12540501,
+        url: node('mainnet'),// May 31, 2021
       },
+      // chainId: 42, //42
+      // forking: {
+      //   blockNumber: 27277405,
+      //   url: node('kovan'),
+      // },
       gas: 9500000,
       gasPrice: 0, // TODO: Consider removing this again.
       ...(process.env.COVERAGE && {

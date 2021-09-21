@@ -106,9 +106,7 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
                 order.takerFee,
                 takerAssetFillAmount
             ); // fee calculated relative to taker fill amount
-            console.log("====sol-takerFeeAsset::", takerFeeAsset);
-            console.log("====sol-makerAsset::", makerAsset);
-            console.log("====sol-takerAsset::", takerAsset);
+            
             if (takerFeeAsset == makerAsset) {
                 require(
                     order.takerFee < order.makerAssetAmount,
@@ -162,17 +160,19 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
         IZeroExV2.Order memory order = __getOrderStruct(_orderArgs);
 
         // Approve spend assets as needed        
-        address takerAsset = __getAssetAddress(order.takerAssetData);
-        console.log("====sol-takerAsset::", takerAsset);
-        console.log("====sol-getAssetProxy::", __getAssetProxy(order.takerAssetData));
-        console.log("====sol-takerAssetAmount::", order.takerAssetAmount);
         __approveMaxAsNeeded(
-            takerAsset,
+            __getAssetAddress(order.makerAssetData),
+            __getAssetProxy(order.makerAssetData),
+            order.makerAssetAmount
+        );
+
+        __approveMaxAsNeeded(
+            __getAssetAddress(order.takerAssetData),
             __getAssetProxy(order.takerAssetData),
             order.takerAssetAmount
         );
 
-        IZeroExV2.FillResults memory fillResult = IZeroExV2(EXCHANGE).fillOrder(order, order.takerAssetAmount, _signature);
+        IZeroExV2.FillResults memory fillResult = IZeroExV2(EXCHANGE).fillOrKillOrder(order, order.takerAssetAmount, _signature);
         amount_ = fillResult.takerAssetFilledAmount;
         return amount_;
     }
@@ -191,7 +191,7 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
             uint256 takerAssetFillAmount
         ) = __decodeTakeOrderCallArgs(_encodedCallArgs);
         IZeroExV2.Order memory order = __constructOrderStruct(encodedZeroExOrderArgs);
-
+        
         // Approve spend assets as needed
         __approveMaxAsNeeded(
             __getAssetAddress(order.takerAssetData),
@@ -340,9 +340,9 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
                 0xFFFFFFFF00000000000000000000000000000000000000000000000000000000
             )
         }//= 0xf47261b0
-        console.log("====sol-EXCHANGE::", EXCHANGE);
-        console.log("====sol-assetProxy::", IZeroExV2(EXCHANGE).getAssetProxy(assetProxyId));
         assetProxy_ = IZeroExV2(EXCHANGE).getAssetProxy(assetProxyId);
+        
+        return assetProxy_;
     }
 
     /////////////////////////////

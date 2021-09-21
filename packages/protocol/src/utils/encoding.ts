@@ -12,6 +12,5 @@ export function encodeArgs(types: (string | utils.ParamType)[], args: any[]) {
 export function encodeFunctionData(fragment: utils.FunctionFragment, args: any[] = []) {
   const encodedArgs = encodeArgs(fragment.inputs, args);
   
-  console.log("===param-002::", args, sighash(fragment));
   return utils.hexlify(utils.concat([sighash(fragment), encodedArgs]));
 }
