@@ -210,7 +210,7 @@ contract IntegrationManager is
 
         for(uint256 i; i < _payoutAssets.length; i++) {
 
-            require(!__isSupportedAsset(_payoutAssets[i]), "actionForRedeem: Asset is not supported");
+            if(!__isSupportedAsset(_payoutAssets[i])) continue;
 
             if(_payoutAssets[i] == denominationAsset) continue;
 
@@ -221,12 +221,6 @@ contract IntegrationManager is
                 _payoutAmounts[i]
             );
             
-            uint256 balance = ERC20(_payoutAssets[i]).balanceOf(vaultProxy);
-
-            if(balance < _payoutAmounts[i]) _payoutAmounts[i] = balance;
-
-            ERC20(_payoutAssets[i]).safeTransferFrom(vaultProxy, _adapter, _payoutAmounts[i]);
-
             bytes memory swapArgs = abi.encode(
                 _payoutAmounts[i], 
                 _payoutAssets[i], 
