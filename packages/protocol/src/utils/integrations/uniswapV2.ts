@@ -56,19 +56,17 @@ export function uniswapV2RedeemArgs({
   );
 }
 
-export function uniswapV2SwapRedeemArgs({
-  vaultProxy, 
+export function uniswapV2SwapArgs({
   outgoingAssetAmount, 
   outgoingAsset, 
   incomingAsset
 }: {
-  vaultProxy: AddressLike;
   outgoingAssetAmount: BigNumberish;
   outgoingAsset: AddressLike;
   incomingAsset: AddressLike;
 }) {
   return encodeArgs(
-    ['address', 'uint256', 'address', 'address'],
-    [vaultProxy, outgoingAssetAmount, outgoingAsset, incomingAsset],
+    ['uint256', 'address', 'address'],
+    [outgoingAssetAmount, outgoingAsset, incomingAsset],
   );
 }

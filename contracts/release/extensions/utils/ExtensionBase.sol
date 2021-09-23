@@ -44,7 +44,6 @@ abstract contract ExtensionBase is IExtension {
 
     function actionForRedeem(
         address,
-        address,
         uint256[] memory, 
         address[] memory
     ) external virtual override {

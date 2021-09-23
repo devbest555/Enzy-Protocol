@@ -228,12 +228,15 @@ contract UniswapV2Adapter is AdapterBase {
     /// @param _swapArgs Encoded order parameters //onlyIntegrationManager
     function swapForRedeem(
         address _vaultProxy,
-        bytes calldata _swapArgs
-    )
-        external
-        override
+        bytes calldata _swapArgs,
+        bytes calldata _encodedAssetTransferArgs
+    ) 
+        external 
+        override 
         onlyIntegrationManager
+        swapTransferHandler(_vaultProxy, _encodedAssetTransferArgs)
     {   
+        console.log("====sol-swapAdapter::", msg.sender);
         (
             uint256 payoutAmount, 
             address payoutAsset, 
@@ -363,7 +366,7 @@ contract UniswapV2Adapter is AdapterBase {
         address[] memory _path
     ) private {
         __approveMaxAsNeeded(_path[0], ROUTER, _outgoingAssetAmount);
-
+        console.log("===sol:takeOrder::", _outgoingAssetAmount);
         // Execute fill
         IUniswapV2Router2(ROUTER).swapExactTokensForTokens(
             _outgoingAssetAmount,
@@ -372,6 +375,7 @@ contract UniswapV2Adapter is AdapterBase {
             _vaultProxy,
             block.timestamp.add(1)
         );
+        console.log("===sol:end::", "end");
     }
 
     ///////////////////

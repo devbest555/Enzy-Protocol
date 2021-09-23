@@ -1,155 +1,206 @@
-import { MockContract, extractEvent } from '@enzymefinance/ethers';
+import { extractEvent } from '@enzymefinance/ethers';
 import {
+  addZeroBalanceTrackedAssetsArgs,
   ComptrollerLib,
-  FeeHook,
-  FeeManager,
-  FeeManagerActionId,
-  feeManagerConfigArgs,
-  FeeSettlementType,
-  MockChainlinkPriceSource,
-  hurdleConfigArgs,
+  IntegrationManagerActionId,
   StandardToken,
   VaultLib,
   WETH,
-  PerformanceFeeHurdle,
-  hurdleSharesDue,
-  IntegrationManager,
+  IMigrationHookHandler,
+  uniswapV2SwapArgs,
+  UniswapV2Router
 } from '@taodao/protocol';
-import {
-  addTrackedAssets,
-  assertEvent,
-  //   assertNoEvent,
-  buyShares,
-  callOnExtension,
-  //   createFundDeployer,
-  //   createMigratedFundConfig,
-  createNewFund,
-  deployProtocolFixture,
-  redeemShares,
-  transactionTimestamp,
-  // updateChainlinkAggregator,
-} from '@taodao/testutils';
-import { BigNumber, BigNumberish, BytesLike, constants, utils } from 'ethers';
-import { config } from 'dotenv';
+import { 
+   createNewFund,
+   buyShares, 
+   ProtocolDeployment,
+   getAssetBalances,
+   deployProtocolFixture, } from '@taodao/testutils';
+import { utils, BigNumber } from 'ethers';
 
 async function snapshot() {
-  const { accounts, deployment, config, deployer } = await deployProtocolFixture();
+  const {
+    accounts: [fundOwner, ...remainingAccounts],
+    deployment,
+    config,
+    deployer,
+  } = await deployProtocolFixture();
 
-  // Mock a FeeManager
-  const mockFeeManager = await FeeManager.mock(deployer);
-  await mockFeeManager.getFeeSharesOutstandingForFund.returns(0);
-
-  // Create standalone PerformanceFee
-  const standalonePerformanceFee = await PerformanceFeeHurdle.deploy(deployer, mockFeeManager);
-
-  // Mock a denomination asset
-  const mockDenominationAssetDecimals = 18;
-  const mockDenominationAsset = new WETH(config.weth, deployer);
-
-  // Mock a VaultProxy
-  const mockVaultProxy = await VaultLib.mock(deployer);
-  await mockVaultProxy.totalSupply.returns(0);
-  await mockVaultProxy.balanceOf.returns(0);
-
-  // Mock a ComptrollerProxy
-  const mockComptrollerProxy = await ComptrollerLib.mock(deployer);
-  await mockComptrollerProxy.calcGav.returns(0, false);
-  await mockComptrollerProxy.calcGrossShareValue.returns(mockDenominationAssetDecimals, true);
-  await mockComptrollerProxy.getDenominationAsset.returns(mockDenominationAsset);
-  await mockComptrollerProxy.getVaultProxy.returns(mockVaultProxy);
-
-  // Add fee settings for ComptrollerProxy
-  const performanceFeeRate = utils.parseEther('.1'); // 10%
-  const performanceFeePeriod = BigNumber.from(60 * 60 * 24 * 365); // 365 days
-  const hurdleRate = utils.parseEther('.05'); // 5%
-  // console.log("=====01::", Number(BigNumber.from(performanceFeePeriod)), //31536000
-  // Number(BigNumber.from(performanceFeeRate)));//100000000000000000
-  const performanceFeeConfig = hurdleConfigArgs({
-    rate: performanceFeeRate,
-    period: performanceFeePeriod,
-    hurdleRate: hurdleRate,
+  const denominationAsset = new StandardToken(config.weth, whales.weth);
+  const { comptrollerProxy, vaultProxy } = await createNewFund({
+    signer: deployer,
+    fundOwner,
+    fundDeployer: deployment.fundDeployer,
+    denominationAsset,
   });
 
-  // console.log("=====02::", performanceFeeConfig);//0x000000000000000000000000000000000000000000000000016345785d8a00000000000000000000000000000000000000000000000000000000000001e13380
-
-  await mockFeeManager.forward(standalonePerformanceFee.addFundSettings, mockComptrollerProxy, performanceFeeConfig);
+  // Deploy connected mocks for ComptrollerProxy and VaultProxy
+  const mockComptrollerProxy = await ComptrollerLib.mock(deployer);
+  const mockVaultProxy = await VaultLib.mock(deployer);
+  await mockVaultProxy.getAccessor.returns(mockComptrollerProxy);
+  await mockComptrollerProxy.getVaultProxy.returns(mockVaultProxy);
 
   return {
-    deployer,
-    accounts,
-    config,
+    accounts: remainingAccounts,
     deployment,
-    performanceFeeRate,
-    performanceFeePeriod,
+    config,
+    fund: {
+      comptrollerProxy,
+      denominationAsset,
+      fundOwner,
+      vaultProxy,
+    },
     mockComptrollerProxy,
-    mockDenominationAsset,
-    mockFeeManager,
     mockVaultProxy,
-    standalonePerformanceFee,
+    denominationAsset,
+    deployer
   };
 }
 
-describe('integration', () => {
-  it('works correctly upon shares redemption for a non 18-decimal asset', async () => {
-    const {
-      deployer,
-      accounts: [fundOwner, investor],
-      config,
-      deployment: { performanceFeeHurdle, fundDeployer, uniswapV2Adapter, integrationManager },
-    } = await provider.snapshot(snapshot);
+describe('callOnExtension actions', () => {
+  // describe('test', () => {
+  //   it('successfully adds each asset to tracked assets', async () => {
+  //     const {
+  //       deployment: { integrationManager, uniswapV2Adapter, dispatcher, vaultLib },
+  //       config: {
+  //         primitives: { mln, dai },
+  //       },
+  //       fund: { comptrollerProxy, fundOwner, vaultProxy },
+  //       accounts: [investor],
+  //       denominationAsset,
+  //       mockComptrollerProxy,
+  //       deployer
+  //     } = await provider.snapshot(snapshot);
 
-    const denominationAsset = new WETH(config.weth, whales.weth);
+      
+  //     const assetToAdd1 = new StandardToken(mln, whales.mln);
+  //     const assetToAdd2 = new StandardToken(dai, whales.dai);
 
-    const sharesActionTimelock = 0;
+  //     // Neither asset to add should be tracked
+  //     expect(await vaultProxy.isTrackedAsset(assetToAdd1)).toBe(false);
+  //     expect(await vaultProxy.isTrackedAsset(assetToAdd2)).toBe(false);
+
+  //     // Add the assets
+  //     await comptrollerProxy
+  //       .connect(fundOwner)
+  //       .callOnExtension(
+  //         integrationManager,
+  //         IntegrationManagerActionId.AddZeroBalanceTrackedAssets,
+  //         addZeroBalanceTrackedAssetsArgs({ assets: [assetToAdd1, assetToAdd2] }),
+  //       );
+
+  //     // Both assets should now be tracked
+  //     expect(await vaultProxy.isTrackedAsset(assetToAdd1)).toBe(true);
+  //     expect(await vaultProxy.isTrackedAsset(assetToAdd2)).toBe(true);
+
+      
+  //     const investmentAmount = utils.parseEther('2');
+  //     const feeAmount = utils.parseEther('0.1');
+
+  //     await comptrollerProxy.connect(investor).redeemSharesToDenom(
+  //       uniswapV2Adapter,
+  //       // investmentAmount,
+  //       // [assetToAdd1.address],
+  //       // [investmentAmount],
+  //       // [feeAmount],
+  //       // investmentAmount
+  //     );
+  //   });
+  // });
+
+});
+
+describe('takeOrder', () => {
+  it('can swap assets directly', async () => {
+    const weth = new StandardToken(fork.config.weth, whales.weth);
+    const outgoingAsset = new StandardToken(fork.config.primitives.mln, whales.mln);
+    const incomingAsset = weth;
+    const uniswapRouter = new UniswapV2Router(fork.config.uniswap.router, provider);
+    const [fundOwner] = fork.accounts;
+
     const { comptrollerProxy, vaultProxy } = await createNewFund({
       signer: fundOwner,
-      fundDeployer,
-      denominationAsset,
-      sharesActionTimelock,
-      fundOwner: fundOwner,
-      fundName: 'TestFund',
-      feeManagerConfig: feeManagerConfigArgs({
-        fees: [performanceFeeHurdle],
-        settings: [
-          hurdleConfigArgs({
-            rate: utils.parseEther('.1'), //10%
-            period: BigNumber.from(60 * 60 * 24 * 365), // 365 days
-            hurdleRate: utils.parseEther('.05'), //5%
-          }),
-        ],
-      }),
+      fundOwner,
+      fundDeployer: fork.deployment.fundDeployer,
+      denominationAsset: weth,
     });
 
-    const initialInvestmentAmount = utils.parseEther('1');
-    await denominationAsset.transfer(fundOwner, initialInvestmentAmount);
+    const path = [outgoingAsset, incomingAsset];
+    const outgoingAssetAmount = utils.parseEther('0.1');
+    const amountsOut = await uniswapRouter.getAmountsOut(outgoingAssetAmount, path);
 
-    await buyShares({
-      comptrollerProxy,
-      signer: fundOwner,
-      buyers: [fundOwner],
-      denominationAsset,
-      investmentAmounts: [initialInvestmentAmount],
+    const [preTxIncomingAssetBalance] = await getAssetBalances({
+      account: vaultProxy,
+      assets: [incomingAsset],
     });
 
-    const extension = integrationManager;
+    // Seed fund and take order
+    await outgoingAsset.transfer(vaultProxy, outgoingAssetAmount);
 
-    console.log("===========investor::", investor.address, comptrollerProxy.address, fundOwner.address, fundDeployer.address);
-    // Settle once via callOnExtension to mint shares outstanding with no payout
-    await comptrollerProxy.callOnExtension(extension, 0, "0x");
-    // await callOnExtension({
-    //   comptrollerProxy,
-    //   extension,
-    //   actionId: FeeManagerActionId.InvokeContinuousHook,
-    // });
+    
+    const swapArgs = uniswapV2SwapArgs({
+        outgoingAssetAmount,
+        outgoingAsset,
+        incomingAsset
+    });
 
+    // Swap directly
+    await fork.deployment.integrationManager.connect(fundOwner).actionForRedeem(
+      fork.deployment.uniswapV2Adapter,
+      [outgoingAssetAmount],
+      [outgoingAsset]
+    )
+    await fork.deployment.uniswapV2Adapter.swapForRedeem(vaultProxy, swapArgs);
 
-    //============================= Redeem1 small amount of shares
-    // await comptrollerProxy.connect(fundOwner).redeemSharesToDenom(uniswapV2Adapter);
-    console.log("===========ok");
-    // const redeemTx1 = await redeemShares({
-    //   comptrollerProxy,
-    //   signer: investor,
-    //   quantity: redeemAmount1,
-    // });
+    const [postTxIncomingAssetBalance, postTxOutgoingAssetBalance] = await getAssetBalances({
+      account: vaultProxy,
+      assets: [incomingAsset, outgoingAsset],
+    });
+
+    const incomingAssetAmount = postTxIncomingAssetBalance.sub(preTxIncomingAssetBalance);
+
+    console.log("======incomingAssetAmount", 
+    Number(BigNumber.from(incomingAssetAmount)),    
+    Number(BigNumber.from(amountsOut[1])),
+    Number(BigNumber.from(postTxOutgoingAssetBalance)));
+    expect(incomingAssetAmount).toEqBigNumber(amountsOut[1]);
+    expect(postTxOutgoingAssetBalance).toEqBigNumber(BigNumber.from(0));
   });
+
+  // it('can swap assets via an intermediary', async () => {
+  //   const weth = new StandardToken(fork.config.weth, whales.weth);
+  //   const outgoingAsset = new StandardToken(fork.config.primitives.mln, whales.mln);
+  //   const incomingAsset = new StandardToken(fork.config.primitives.knc, provider);
+  //   const uniswapRouter = new UniswapV2Router(fork.config.uniswap.router, provider);
+  //   const [fundOwner] = fork.accounts;
+
+  //   const { comptrollerProxy, vaultProxy } = await createNewFund({
+  //     signer: fundOwner,
+  //     fundOwner,
+  //     fundDeployer: fork.deployment.fundDeployer,
+  //     denominationAsset: weth,
+  //   });
+
+  //   const path = [outgoingAsset, weth, incomingAsset];
+  //   const outgoingAssetAmount = utils.parseEther('0.1');
+
+  //   await outgoingAsset.transfer(vaultProxy, outgoingAssetAmount);
+
+  //   const amountsOut = await uniswapRouter.getAmountsOut(outgoingAssetAmount, path);
+
+  //   const [preTxIncomingAssetBalance] = await getAssetBalances({
+  //     account: vaultProxy,
+  //     assets: [incomingAsset, outgoingAsset],
+  //   });
+
+  //   const [postTxIncomingAssetBalance, postTxOutgoingAssetBalance] = await getAssetBalances({
+  //     account: vaultProxy,
+  //     assets: [incomingAsset, outgoingAsset],
+  //   });
+
+  //   const incomingAssetAmount = postTxIncomingAssetBalance.sub(preTxIncomingAssetBalance);
+  //   expect(incomingAssetAmount).toEqBigNumber(amountsOut[2]);
+  //   expect(postTxOutgoingAssetBalance).toEqBigNumber(BigNumber.from(0));
+  // });
 });
+

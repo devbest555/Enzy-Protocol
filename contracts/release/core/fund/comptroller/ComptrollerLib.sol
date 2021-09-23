@@ -221,7 +221,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             _extension == FEE_MANAGER || _extension == INTEGRATION_MANAGER,
             "callOnExtension: _extension invalid"
         );
-        console.log("====sol-callOnExtension-sender:", msg.sender);
+
         IExtension(_extension).receiveCallFromComptroller(msg.sender, _actionId, _callArgs);
     }
 
@@ -443,7 +443,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         // Note: a future release could consider forcing the adding of a tracked asset here,
         // just in case a fund is migrating from an old configuration where they are not able
         // to remove an asset to get under the tracked assets limit
-        IVault(_vaultProxy). addTrackedAsset (denominationAsset);
+        IVault(_vaultProxy).addTrackedAsset(denominationAsset);
 
         // Activate extensions
         IExtension(FEE_MANAGER).activateForFund(_isMigration);
@@ -542,26 +542,6 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         }
 
         return _gav.mul(SHARES_UNIT).div(_sharesSupply);
-    }
-
-    /// @notice Calculates the balance of the fund
-    /// @return assets_ The fund asset
-    /// @return balances_ The fund balance
-    function calcFundBalance() public returns (address[] memory assets_, uint256[] memory balances_) {
-        address vaultProxyAddress = vaultProxy;
-        assets_ = IVault(vaultProxyAddress).getTrackedAssets();
-        require(assets_.length > 0, "calcFundBalance: Empty trackedAsset");
-
-        balances_ = new uint256[](assets_.length);
-        for (uint256 i; i < assets_.length; i++) {
-            balances_[i] = __finalizeIfSynthAndGetAssetBalance(
-                vaultProxyAddress,
-                assets_[i],
-                true
-            );
-        }
-
-        return (assets_, balances_);
     }
 
     /// @notice Calculates the denomination balance of the fund
@@ -932,17 +912,18 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         feeWithdraw = ProtocolFee(PROTOCOLFEE).getFeeWithdraw();
         payoutAmounts_ = new uint256[](payoutAssets_.length);
         assetAmountToFees_ = new uint256[](payoutAssets_.length);
-
         sharesSupply_ = sharesContract.totalSupply();
+        
         uint256 redeemFeeAmount = _sharesQuantity.mul(feeWithdraw).div(RATE_DIVISOR);        
         uint256 sharesQuantityWithoutFee = _sharesQuantity.sub(redeemFeeAmount);
 
         for (uint256 i; i < payoutAssets_.length; i++) {
-            uint256 assetBalance = __finalizeIfSynthAndGetAssetBalance (
+            uint256 assetBalance = __finalizeIfSynthAndGetAssetBalance(
                 address(vaultProxyContract),
                 payoutAssets_[i],
                 true
             );
+            require(assetBalance > 0, "__calcRedeemShares: Payout amount must be greater 0");
             
             payoutAmounts_[i] = assetBalance.mul(sharesQuantityWithoutFee).div(sharesSupply_);
             assetAmountToFees_[i] = assetBalance.mul(redeemFeeAmount).div(sharesSupply_);
@@ -1024,9 +1005,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             } 
             // Transfer denomination Asset amount to redeemer on SharesRedeemedToDenom()
             else {
-                if (_redeemAmountToDenom > 0) {
-                    vaultProxyContract.withdrawAssetTo(denominationAsset, _redeemer, _redeemAmountToDenom);
-                }                            
+                vaultProxyContract.withdrawAssetTo(denominationAsset, _redeemer, _redeemAmountToDenom);
             }            
 
             // Transfer fee asset amount to protocol(DAO wallet address)
@@ -1039,8 +1018,10 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     /// @notice Redeem all of the sender's shares in the denominationAsset
     function redeemSharesToDenom(address adapter) 
         external 
+        allowsPermissionedVaultAction
         returns (uint256 redeemAmountToDenom_)
     {           
+        console.log("===sol-INTEGRATION_MANAGER", INTEGRATION_MANAGER);
         uint256 sharesQuantity = ERC20(vaultProxy).balanceOf(msg.sender);
         
         (
@@ -1049,29 +1030,44 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             uint256[] memory assetAmountToFees,
             uint256 sharesSupply
         ) = __calcRedeemShares(msg.sender, sharesQuantity, new address[](0), new address[](0));
-        
-        console.log("====address(this)::", address(this));
+
+        // initial total denominationAsset Amount of Vault
+        uint256 totalDenomAmountBeforeSwap = ERC20(denominationAsset).balanceOf(vaultProxy);        
+        uint256 denomAmountBeforeSwap;
+        for(uint256 i; i < payoutAssets.length; i++) {
+            if(payoutAssets[i] == denominationAsset) {
+                denomAmountBeforeSwap = payoutAmounts[i];
+            }
+        }
         // Get amount(in Vault) in denomination asset from other assets excepted denomination asset            
         IExtension(INTEGRATION_MANAGER).actionForRedeem(
-            address(this),
             adapter,
             payoutAmounts,
             payoutAssets
         );
 
         // denominationAsset Amount after swap on Uniswap V2
-        redeemAmountToDenom_ = ERC20(denominationAsset).balanceOf(vaultProxy);
+        uint256 totalDenomAmountAfterSwap = ERC20(denominationAsset).balanceOf(vaultProxy);
 
-        burnAndTransfer(
-            msg.sender, 
-            sharesQuantity, 
-            payoutAssets, 
-            payoutAmounts, 
-            assetAmountToFees, 
-            sharesSupply, 
-            redeemAmountToDenom_, 
-            false
-        );   
+        // Get denomination asset amount for transfer to redeemer
+        if(totalDenomAmountAfterSwap > totalDenomAmountBeforeSwap) {
+            redeemAmountToDenom_ = totalDenomAmountAfterSwap.sub(totalDenomAmountBeforeSwap).add(denomAmountBeforeSwap);
+        } else {
+            redeemAmountToDenom_ = denomAmountBeforeSwap;
+        }        
+
+        if (redeemAmountToDenom_ > 0) {
+            burnAndTransfer(
+                msg.sender, 
+                sharesQuantity, 
+                payoutAssets, 
+                payoutAmounts, 
+                assetAmountToFees, 
+                sharesSupply, 
+                redeemAmountToDenom_, 
+                false
+            );   
+        }
 
         emit SharesRedeemedToDenom(msg.sender, sharesQuantity, denominationAsset, redeemAmountToDenom_); 
 

@@ -286,7 +286,7 @@ contract IdleAdapter is AdapterBase2, IdleV4ActionsMixin, UniswapV2ActionsMixin 
         revert("parseAssetsForMethod: _selector invalid");
     }
 
-    function swapForRedeem(address, bytes calldata) external override {   
+    function swapForRedeem(address, bytes calldata, bytes calldata) external override {   
         return;
     }
     

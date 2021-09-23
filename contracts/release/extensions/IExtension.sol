@@ -21,7 +21,6 @@ interface IExtension {
 
     function actionForRedeem(
         address,
-        address,
         uint256[] memory, 
         address[] memory
     ) external;

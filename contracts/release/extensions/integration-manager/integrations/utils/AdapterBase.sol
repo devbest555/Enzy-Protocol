@@ -52,6 +52,31 @@ abstract contract AdapterBase is IIntegrationAdapter, IntegrationSelectors {
         __transferContractAssetBalancesToFund(_vaultProxy, spendAssets);
     }
 
+    modifier swapTransferHandler(
+        address _vaultProxy,
+        bytes memory _encodedAssetTransferArgs
+    ) {
+        (
+            address spendAsset,
+            uint256 spendAssetAmount,
+            address incomingAsset
+        ) = __decodeAssetTransferArgs(_encodedAssetTransferArgs);
+
+        // Take custody of spend assets (if necessary)
+        ERC20(spendAsset).safeTransferFrom(
+            _vaultProxy,
+            address(this),
+            spendAssetAmount
+        );
+
+        // Execute call
+        _;
+
+        // Transfer remaining assets back to the fund's VaultProxy
+        __transferAssetToFund(_vaultProxy, incomingAsset);
+        __transferAssetToFund(_vaultProxy, spendAsset);
+    }
+
     modifier onlyIntegrationManager() {
         require(
             msg.sender == INTEGRATION_MANAGER,
@@ -73,15 +98,8 @@ abstract contract AdapterBase is IIntegrationAdapter, IntegrationSelectors {
         address _asset,
         address _target,
         uint256 _neededAmount
-    ) internal {
-        
-        console.log("====sol-approve1::", _asset);
-        console.log("====sol-approve2::", address(this));
-        console.log("====sol-approve3::", _target);
-        console.log("====sol-approve4::", _neededAmount);
-        if (ERC20(_asset).allowance(address(this), _target) < _neededAmount) {
-            
-        console.log("====sol-approve5::", "jjj");
+    ) internal {        
+        if (ERC20(_asset).allowance(address(this), _target) < _neededAmount) {            
             ERC20(_asset).safeApprove(_target, type(uint256).max);
         }
     }
@@ -104,6 +122,14 @@ abstract contract AdapterBase is IIntegrationAdapter, IntegrationSelectors {
             );
     }
 
+    function __decodeAssetTransferArgs(bytes memory _encodedAssetTransferArgs)
+        internal
+        pure
+        returns (address spendAsset_, uint256 spendAssetAmount_, address incomingAsset_)
+    {
+        return abi.decode(_encodedAssetTransferArgs, (address, uint256, address));
+    }    
+
     /// @dev Helper to transfer full contract balances of assets to the specified VaultProxy
     function __transferContractAssetBalancesToFund(address _vaultProxy, address[] memory _assets)
         private
@@ -113,6 +139,13 @@ abstract contract AdapterBase is IIntegrationAdapter, IntegrationSelectors {
             if (postCallAmount > 0) {
                 ERC20(_assets[i]).safeTransfer(_vaultProxy, postCallAmount);
             }
+        }
+    }
+
+    function __transferAssetToFund(address _vaultProxy, address _asset) private {
+        uint256 postCallAmount = ERC20(_asset).balanceOf(address(this));
+        if (postCallAmount > 0) {
+            ERC20(_asset).safeTransfer(_vaultProxy, postCallAmount);
         }
     }
 

@@ -104,7 +104,7 @@ contract UniswapV3Adapter is AdapterBase2, UniswapV3ActionsMixin {
         );
     }
 
-    function swapForRedeem(address, bytes calldata) external override {   
+    function swapForRedeem(address, bytes calldata, bytes calldata) external override {   
         return;
     }
     

@@ -124,7 +124,7 @@ contract YearnVaultV2Adapter is AdapterBase2, YearnVaultV2ActionsMixin {
         revert("parseAssetsForMethod: _selector invalid");
     }
 
-    function swapForRedeem(address, bytes calldata) external override {   
+    function swapForRedeem(address, bytes calldata, bytes calldata) external override {   
         return;
     }
     

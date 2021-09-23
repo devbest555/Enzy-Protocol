@@ -91,7 +91,7 @@ contract KyberAdapter is AdapterBase, MathHelpers {
         );
     }
 
-    function swapForRedeem(address, bytes calldata) external override {   
+    function swapForRedeem(address, bytes calldata, bytes calldata) external override {   
         return;
     }
     

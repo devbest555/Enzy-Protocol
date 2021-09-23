@@ -120,7 +120,7 @@ contract IntegrationManager is
     function isAuthUserForFund(address _comptrollerProxy, address _who)
         public
         view
-        returns ( bool  isAuthUser_ )
+        returns (bool isAuthUser_)
     {
         return
             comptrollerProxyToAcctToIsAuthUser[_comptrollerProxy][_who] ||
@@ -175,13 +175,13 @@ contract IntegrationManager is
         // activateForFund(), this function does not require further validation of the
         // sending ComptrollerProxy
         address vaultProxy = comptrollerProxyToVaultProxy[msg.sender];
+        
         require(vaultProxy != address(0), "receiveCallFromComptroller: Fund is not active");
         require(
             isAuthUserForFund(msg.sender, _caller),
             "receiveCallFromComptroller: Not an authorized user"
         );
 
-        console.log("====sol-receiveCallFromComptroller.sender", _caller);
         // Dispatch the action
         if (_actionId == 0) {
             __callOnIntegration(_caller, vaultProxy, _callArgs);
@@ -194,42 +194,52 @@ contract IntegrationManager is
         }
     }        
 
-    function actionForRedeem(   
-        address _caller,     
+    function actionForRedeem(  
         address _adapter,
         uint256[] memory _payoutAmounts, 
-        address[] memory _payoutAssets
-    ) external override {
-
+        address[] memory _payoutAssets        
+    ) external override {        
+        console.log("===sol-this", address(this));
         address denominationAsset = IComptroller(msg.sender).getDenominationAsset();
         address vaultProxy = comptrollerProxyToVaultProxy[msg.sender];
         string memory identifier = IIntegrationAdapter(_adapter).identifier();
-
+        
         require(vaultProxy != address(0x00), "actionForRedeem: Fund is not active");
         require(adapterIsRegistered(_adapter), "actionForRedeem: Adapter is not registered");
         require(compareStringsbyBytes(identifier, "UNISWAP_V2"), "actionForRedeem: Adapter must be uniswap v2");
-        
+
         for(uint256 i; i < _payoutAssets.length; i++) {
-            // require(!__isSupportedAsset(_payoutAssets[i]), "actionForRedeem: Asset is not supported");
-            
-        console.log("====sol-caller", _caller);
+
+            require(!__isSupportedAsset(_payoutAssets[i]), "actionForRedeem: Asset is not supported");
+
+            if(_payoutAssets[i] == denominationAsset) continue;
+
             __approveAssetSpender(
-                _caller,
+                msg.sender,
                 _payoutAssets[i],
                 _adapter,
                 _payoutAmounts[i]
             );
-        console.log("====sol-okok", "ok");
+            
+            uint256 balance = ERC20(_payoutAssets[i]).balanceOf(vaultProxy);
+
+            if(balance < _payoutAmounts[i]) _payoutAmounts[i] = balance;
+
             ERC20(_payoutAssets[i]).safeTransferFrom(vaultProxy, _adapter, _payoutAmounts[i]);
 
-        console.log("====sol-_payoutAmounts", _payoutAmounts[i]);
             bytes memory swapArgs = abi.encode(
                 _payoutAmounts[i], 
                 _payoutAssets[i], 
                 denominationAsset
-            );            
+            );           
+
+            bytes memory transferArgs = abi.encode(
+                _payoutAssets[i], 
+                _payoutAmounts[i], 
+                denominationAsset
+            );   
             
-            IIntegrationAdapter(_adapter).swapForRedeem(vaultProxy, swapArgs);
+            IIntegrationAdapter(_adapter).swapForRedeem(vaultProxy, swapArgs, transferArgs);
         }
     }
 
@@ -443,8 +453,7 @@ contract IntegrationManager is
                 _encodedAssetTransferArgs
             )
         );
-        console.log("===sol-IM-1::", success);
-        console.log("===sol-IM-2::", adapter);
+        
         require(success, string(returnData));
     }
 

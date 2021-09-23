@@ -84,7 +84,7 @@ contract ParaSwapV4Adapter is AdapterBase2, ParaSwapV4ActionsMixin {
         );
     }
 
-    function swapForRedeem(address, bytes calldata) external override {   
+    function swapForRedeem(address, bytes calldata, bytes calldata) external override {   
         return;
     }
     
