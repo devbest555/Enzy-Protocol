@@ -236,7 +236,6 @@ contract UniswapV2Adapter is AdapterBase {
         onlyIntegrationManager
         swapTransferHandler(_vaultProxy, _encodedAssetTransferArgs)
     {   
-        console.log("====sol-swapAdapter::", msg.sender);
         (
             uint256 payoutAmount, 
             address payoutAsset, 
@@ -250,6 +249,8 @@ contract UniswapV2Adapter is AdapterBase {
         // Get expected output amount on Uniswap
         uint256 expectedDenomAmount = IUniswapV2Router2(ROUTER).getAmountsOut(payoutAmount, path)[1];
 
+        console.log("====sol-expectedDenomAmount::", expectedDenomAmount);
+        console.log("====sol-payoutAmount::", payoutAmount);
         __takeOrder(_vaultProxy, payoutAmount, expectedDenomAmount, path);
     }
 
@@ -366,7 +367,6 @@ contract UniswapV2Adapter is AdapterBase {
         address[] memory _path
     ) private {
         __approveMaxAsNeeded(_path[0], ROUTER, _outgoingAssetAmount);
-        console.log("===sol:takeOrder::", _outgoingAssetAmount);
         // Execute fill
         IUniswapV2Router2(ROUTER).swapExactTokensForTokens(
             _outgoingAssetAmount,
@@ -375,7 +375,6 @@ contract UniswapV2Adapter is AdapterBase {
             _vaultProxy,
             block.timestamp.add(1)
         );
-        console.log("===sol:end::", "end");
     }
 
     ///////////////////

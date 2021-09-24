@@ -199,7 +199,6 @@ contract IntegrationManager is
         uint256[] memory _payoutAmounts, 
         address[] memory _payoutAssets        
     ) external override {        
-        console.log("===sol-this", address(this));
         address denominationAsset = IComptroller(msg.sender).getDenominationAsset();
         address vaultProxy = comptrollerProxyToVaultProxy[msg.sender];
         string memory identifier = IIntegrationAdapter(_adapter).identifier();

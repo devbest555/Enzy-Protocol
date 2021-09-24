@@ -626,7 +626,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
                 denominationAssetCopy
             );
 
-            gav = gav. add (_investmentAmounts [i]);
+            gav = gav.add(_investmentAmounts [i]);
         }
         
         __buySharesCompletedHook(msg.sender, sharesReceivedAmounts_, gav);
@@ -910,6 +910,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
 
         // Calculate payout asset amounts due to redeemer
         feeWithdraw = ProtocolFee(PROTOCOLFEE).getFeeWithdraw();
+        console.log("====sol:feeWithdraw::", feeWithdraw);
         payoutAmounts_ = new uint256[](payoutAssets_.length);
         assetAmountToFees_ = new uint256[](payoutAssets_.length);
         sharesSupply_ = sharesContract.totalSupply();
@@ -1005,7 +1006,9 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             } 
             // Transfer denomination Asset amount to redeemer on SharesRedeemedToDenom()
             else {
-                vaultProxyContract.withdrawAssetTo(denominationAsset, _redeemer, _redeemAmountToDenom);
+                if(_redeemAmountToDenom > 0) {
+                    vaultProxyContract.withdrawAssetTo(denominationAsset, _redeemer, _redeemAmountToDenom);
+                }
             }            
 
             // Transfer fee asset amount to protocol(DAO wallet address)
@@ -1015,51 +1018,49 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         }   
     }
 
-    /// @notice Redeem all of the sender's shares in the denominationAsset
-    function redeemSharesToDenom(address adapter) 
-        external 
-        allowsPermissionedVaultAction
-        returns (uint256 redeemAmountToDenom_)
-    {           
-        console.log("===sol-INTEGRATION_MANAGER", INTEGRATION_MANAGER);
-        uint256 sharesQuantity = ERC20(vaultProxy).balanceOf(msg.sender);
-        
+    function redeemSharesToDenomDetailed(
+        address _adapter,
+        uint256 _sharesQuantity,
+        address[] calldata _additionalAssets
+    ) external returns (uint256 redeemAmountToDenom_) {
         (
             address[] memory payoutAssets, 
             uint256[] memory payoutAmounts, 
             uint256[] memory assetAmountToFees,
             uint256 sharesSupply
-        ) = __calcRedeemShares(msg.sender, sharesQuantity, new address[](0), new address[](0));
+        ) = __calcRedeemShares(msg.sender, _sharesQuantity, _additionalAssets, new address[](0));
 
         // initial total denominationAsset Amount of Vault
-        uint256 totalDenomAmountBeforeSwap = ERC20(denominationAsset).balanceOf(vaultProxy);        
+        uint256 totalDenomAmountBeforeSwap = ERC20(denominationAsset).balanceOf(vaultProxy);   
+        console.log("===sol-BeforeSwap", totalDenomAmountBeforeSwap);       
+        
         uint256 denomAmountBeforeSwap;
         for(uint256 i; i < payoutAssets.length; i++) {
+            console.log("===sol-payoutAmounts", payoutAmounts[i]);
             if(payoutAssets[i] == denominationAsset) {
-                denomAmountBeforeSwap = payoutAmounts[i];
+                denomAmountBeforeSwap = payoutAmounts[i];        
             }
         }
+        permissionedVaultActionAllowed = true;
         // Get amount(in Vault) in denomination asset from other assets excepted denomination asset            
         IExtension(INTEGRATION_MANAGER).actionForRedeem(
-            adapter,
+            _adapter,
             payoutAmounts,
             payoutAssets
         );
 
         // denominationAsset Amount after swap on Uniswap V2
         uint256 totalDenomAmountAfterSwap = ERC20(denominationAsset).balanceOf(vaultProxy);
-
+ 
+        console.log("===sol-AfterSwap", totalDenomAmountAfterSwap);     
         // Get denomination asset amount for transfer to redeemer
-        if(totalDenomAmountAfterSwap > totalDenomAmountBeforeSwap) {
-            redeemAmountToDenom_ = totalDenomAmountAfterSwap.sub(totalDenomAmountBeforeSwap).add(denomAmountBeforeSwap);
-        } else {
-            redeemAmountToDenom_ = denomAmountBeforeSwap;
-        }        
+        redeemAmountToDenom_ = totalDenomAmountAfterSwap.sub(totalDenomAmountBeforeSwap).add(denomAmountBeforeSwap);
 
+        console.log("===sol-redeemAmount", redeemAmountToDenom_); 
         if (redeemAmountToDenom_ > 0) {
             burnAndTransfer(
                 msg.sender, 
-                sharesQuantity, 
+                _sharesQuantity, 
                 payoutAssets, 
                 payoutAmounts, 
                 assetAmountToFees, 
@@ -1069,10 +1070,69 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             );   
         }
 
-        emit SharesRedeemedToDenom(msg.sender, sharesQuantity, denominationAsset, redeemAmountToDenom_); 
+        emit SharesRedeemedToDenom(msg.sender, _sharesQuantity, denominationAsset, redeemAmountToDenom_); 
 
         return redeemAmountToDenom_;
     }
+
+    /// @notice Redeem all of the sender's shares in the denominationAsset
+    // function redeemSharesToDenom(address adapter) 
+    //     external 
+    //     allowsPermissionedVaultAction
+    //     returns (uint256 redeemAmountToDenom_)
+    // {           
+    //     uint256 sharesQuantity = ERC20(vaultProxy).balanceOf(msg.sender);
+        
+    //     console.log("===sol-sharesQuantity", sharesQuantity);
+    //     (
+    //         address[] memory payoutAssets, 
+    //         uint256[] memory payoutAmounts, 
+    //         uint256[] memory assetAmountToFees,
+    //         uint256 sharesSupply
+    //     ) = __calcRedeemShares(msg.sender, sharesQuantity, new address[](0), new address[](0));
+
+    //     // initial total denominationAsset Amount of Vault
+    //     uint256 totalDenomAmountBeforeSwap = ERC20(denominationAsset).balanceOf(vaultProxy);        
+    //     uint256 denomAmountBeforeSwap;
+    //     for(uint256 i; i < payoutAssets.length; i++) {
+    //         if(payoutAssets[i] == denominationAsset) {
+    //             denomAmountBeforeSwap = payoutAmounts[i];
+    //         }
+    //     }
+    //     // Get amount(in Vault) in denomination asset from other assets excepted denomination asset            
+    //     IExtension(INTEGRATION_MANAGER).actionForRedeem(
+    //         adapter,
+    //         payoutAmounts,
+    //         payoutAssets
+    //     );
+
+    //     // denominationAsset Amount after swap on Uniswap V2
+    //     uint256 totalDenomAmountAfterSwap = ERC20(denominationAsset).balanceOf(vaultProxy);
+
+    //     // Get denomination asset amount for transfer to redeemer
+    //     if(totalDenomAmountAfterSwap > totalDenomAmountBeforeSwap) {
+    //         redeemAmountToDenom_ = totalDenomAmountAfterSwap.sub(totalDenomAmountBeforeSwap).add(denomAmountBeforeSwap);
+    //     } else {
+    //         redeemAmountToDenom_ = denomAmountBeforeSwap;
+    //     }        
+
+    //     if (redeemAmountToDenom_ > 0) {
+    //         burnAndTransfer(
+    //             msg.sender, 
+    //             sharesQuantity, 
+    //             payoutAssets, 
+    //             payoutAmounts, 
+    //             assetAmountToFees, 
+    //             sharesSupply, 
+    //             redeemAmountToDenom_, 
+    //             false
+    //         );   
+    //     }
+
+    //     emit SharesRedeemedToDenom(msg.sender, sharesQuantity, denominationAsset, redeemAmountToDenom_); 
+
+    //     return redeemAmountToDenom_;
+    // }
 
     ///////////////////
     // STATE GETTERS //
