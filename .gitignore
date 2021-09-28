@@ -18,7 +18,5 @@
 codegen/
 dist/
 cache/
-artifacts/
-deployments/
 coverage/
 node_modules/

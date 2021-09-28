@@ -1,0 +1,419 @@
+{
+  "address": "0x472B1844AB2c9B30088d68E9fd55f3b6bc4ba0AF",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_fundDeployer",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_weth",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_ceth",
+          "type": "address"
+        },
+        {
+          "internalType": "address[]",
+          "name": "cERC20Tokens",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "cToken",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        }
+      ],
+      "name": "CTokenAdded",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "_cTokens",
+          "type": "address[]"
+        }
+      ],
+      "name": "addCTokens",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_derivative",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_derivativeAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "calcUnderlyingValues",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "underlyings_",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "underlyingAmounts_",
+          "type": "uint256[]"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getFundDeployer",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "fundDeployer_",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getOwner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "owner_",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_cToken",
+          "type": "address"
+        }
+      ],
+      "name": "getTokenFromCToken",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "token_",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_asset",
+          "type": "address"
+        }
+      ],
+      "name": "isSupportedAsset",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "isSupported_",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x5f59cca8086854d6ca0fe17181dc2dd828e52630e3311b6441359ab634359627",
+  "receipt": {
+    "to": null,
+    "from": "0xb10bcC8B508174c761CFB1E7143bFE37c4fBC3a1",
+    "contractAddress": "0x472B1844AB2c9B30088d68E9fd55f3b6bc4ba0AF",
+    "transactionIndex": 4,
+    "gasUsed": "816571",
+    "logsBloom": "0x000000000000000008100080000001000000000000010000000000880080100004000000000000200080100000000080800000000000000000040008000000000000000000000000010808010102000000000010000000000040000000000008080000000000000000000000000000000100000000800000000000000008000002000000000000000000000020000204000020040000000000000000000800000000000008000000000000000000000000080000240000004000000000000000000010000000001000100004004010000010000000000000080000040400000000000000000100000000000200100000000802a0040000000000000000000000",
+    "blockHash": "0x046d1f5f5389431456471c40903d7e837a464366ffbd08779a583c97a5e4c366",
+    "transactionHash": "0x5f59cca8086854d6ca0fe17181dc2dd828e52630e3311b6441359ab634359627",
+    "logs": [
+      {
+        "transactionIndex": 4,
+        "blockNumber": 27382168,
+        "transactionHash": "0x5f59cca8086854d6ca0fe17181dc2dd828e52630e3311b6441359ab634359627",
+        "address": "0x472B1844AB2c9B30088d68E9fd55f3b6bc4ba0AF",
+        "topics": [
+          "0x7acf7482a03de3fea14ab9eb8fa6f7524bb1a61a24898d2337379a5cf7421d7e",
+          "0x000000000000000000000000651c7d880878c1febf485b3279d5883f41e24896",
+          "0x000000000000000000000000d0a1e359811322d97991e03f863a0c30c2cf029c"
+        ],
+        "data": "0x",
+        "logIndex": 6,
+        "blockHash": "0x046d1f5f5389431456471c40903d7e837a464366ffbd08779a583c97a5e4c366"
+      },
+      {
+        "transactionIndex": 4,
+        "blockNumber": 27382168,
+        "transactionHash": "0x5f59cca8086854d6ca0fe17181dc2dd828e52630e3311b6441359ab634359627",
+        "address": "0x472B1844AB2c9B30088d68E9fd55f3b6bc4ba0AF",
+        "topics": [
+          "0x7acf7482a03de3fea14ab9eb8fa6f7524bb1a61a24898d2337379a5cf7421d7e",
+          "0x000000000000000000000000dbacce684dcd33af1a4da089b3173a5dedba7469",
+          "0x0000000000000000000000002e62eaaf0f490219be8ed376326e0516228bae89"
+        ],
+        "data": "0x",
+        "logIndex": 7,
+        "blockHash": "0x046d1f5f5389431456471c40903d7e837a464366ffbd08779a583c97a5e4c366"
+      },
+      {
+        "transactionIndex": 4,
+        "blockNumber": 27382168,
+        "transactionHash": "0x5f59cca8086854d6ca0fe17181dc2dd828e52630e3311b6441359ab634359627",
+        "address": "0x472B1844AB2c9B30088d68E9fd55f3b6bc4ba0AF",
+        "topics": [
+          "0x7acf7482a03de3fea14ab9eb8fa6f7524bb1a61a24898d2337379a5cf7421d7e",
+          "0x0000000000000000000000009b19b1590b9289e5abbc7ee9511076be8d75ac42",
+          "0x0000000000000000000000000707de6ea02d4558fea1e0a96cad9003f8c1d384"
+        ],
+        "data": "0x",
+        "logIndex": 8,
+        "blockHash": "0x046d1f5f5389431456471c40903d7e837a464366ffbd08779a583c97a5e4c366"
+      },
+      {
+        "transactionIndex": 4,
+        "blockNumber": 27382168,
+        "transactionHash": "0x5f59cca8086854d6ca0fe17181dc2dd828e52630e3311b6441359ab634359627",
+        "address": "0x472B1844AB2c9B30088d68E9fd55f3b6bc4ba0AF",
+        "topics": [
+          "0x7acf7482a03de3fea14ab9eb8fa6f7524bb1a61a24898d2337379a5cf7421d7e",
+          "0x0000000000000000000000009be41d202e8a1d7327b2fd860749e41baa89cb6a",
+          "0x00000000000000000000000056a7c6766b5e7a9e6bc704f7becc001f2755a713"
+        ],
+        "data": "0x",
+        "logIndex": 9,
+        "blockHash": "0x046d1f5f5389431456471c40903d7e837a464366ffbd08779a583c97a5e4c366"
+      },
+      {
+        "transactionIndex": 4,
+        "blockNumber": 27382168,
+        "transactionHash": "0x5f59cca8086854d6ca0fe17181dc2dd828e52630e3311b6441359ab634359627",
+        "address": "0x472B1844AB2c9B30088d68E9fd55f3b6bc4ba0AF",
+        "topics": [
+          "0x7acf7482a03de3fea14ab9eb8fa6f7524bb1a61a24898d2337379a5cf7421d7e",
+          "0x0000000000000000000000003e9867f6e41df327eae9d0832530d1007d1fbb4f",
+          "0x00000000000000000000000086684577af5598b229a27c5774b658d303e2e044"
+        ],
+        "data": "0x",
+        "logIndex": 10,
+        "blockHash": "0x046d1f5f5389431456471c40903d7e837a464366ffbd08779a583c97a5e4c366"
+      },
+      {
+        "transactionIndex": 4,
+        "blockNumber": 27382168,
+        "transactionHash": "0x5f59cca8086854d6ca0fe17181dc2dd828e52630e3311b6441359ab634359627",
+        "address": "0x472B1844AB2c9B30088d68E9fd55f3b6bc4ba0AF",
+        "topics": [
+          "0x7acf7482a03de3fea14ab9eb8fa6f7524bb1a61a24898d2337379a5cf7421d7e",
+          "0x0000000000000000000000001ad7ecfb656ec99538db3bc46d66e7d79e9acc9e",
+          "0x000000000000000000000000fac5cbefa43a877c675e8007a685e0d72ee1f109"
+        ],
+        "data": "0x",
+        "logIndex": 11,
+        "blockHash": "0x046d1f5f5389431456471c40903d7e837a464366ffbd08779a583c97a5e4c366"
+      },
+      {
+        "transactionIndex": 4,
+        "blockNumber": 27382168,
+        "transactionHash": "0x5f59cca8086854d6ca0fe17181dc2dd828e52630e3311b6441359ab634359627",
+        "address": "0x472B1844AB2c9B30088d68E9fd55f3b6bc4ba0AF",
+        "topics": [
+          "0x7acf7482a03de3fea14ab9eb8fa6f7524bb1a61a24898d2337379a5cf7421d7e",
+          "0x000000000000000000000000ab8b04c6f87a47aeef37b7bc82d39656549a3a29",
+          "0x00000000000000000000000050e7615a526f715556c478749303c75571f1e6b5"
+        ],
+        "data": "0x",
+        "logIndex": 12,
+        "blockHash": "0x046d1f5f5389431456471c40903d7e837a464366ffbd08779a583c97a5e4c366"
+      },
+      {
+        "transactionIndex": 4,
+        "blockNumber": 27382168,
+        "transactionHash": "0x5f59cca8086854d6ca0fe17181dc2dd828e52630e3311b6441359ab634359627",
+        "address": "0x472B1844AB2c9B30088d68E9fd55f3b6bc4ba0AF",
+        "topics": [
+          "0x7acf7482a03de3fea14ab9eb8fa6f7524bb1a61a24898d2337379a5cf7421d7e",
+          "0x0000000000000000000000004f4a33bdc3e4b4b4cc25d8f1f29bc185b176e525",
+          "0x00000000000000000000000008adedfb5f473a7dffd05da2c0f33651553668a9"
+        ],
+        "data": "0x",
+        "logIndex": 13,
+        "blockHash": "0x046d1f5f5389431456471c40903d7e837a464366ffbd08779a583c97a5e4c366"
+      },
+      {
+        "transactionIndex": 4,
+        "blockNumber": 27382168,
+        "transactionHash": "0x5f59cca8086854d6ca0fe17181dc2dd828e52630e3311b6441359ab634359627",
+        "address": "0x472B1844AB2c9B30088d68E9fd55f3b6bc4ba0AF",
+        "topics": [
+          "0x7acf7482a03de3fea14ab9eb8fa6f7524bb1a61a24898d2337379a5cf7421d7e",
+          "0x000000000000000000000000cb37f0ce3ce7fa5545de084a41f2b18f76815a85",
+          "0x0000000000000000000000008955cd6b7826a86e820f0774278d89b76db25c46"
+        ],
+        "data": "0x",
+        "logIndex": 14,
+        "blockHash": "0x046d1f5f5389431456471c40903d7e837a464366ffbd08779a583c97a5e4c366"
+      }
+    ],
+    "blockNumber": 27382168,
+    "cumulativeGasUsed": "1053252",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x5cBbA5484594598a660636eFb0A1AD953aFa4e32",
+    "0xd0a1e359811322d97991e03f863a0c30c2cf029c",
+    "0x651c7d880878c1febf485b3279d5883f41e24896",
+    [
+      "0xdbacce684dcd33af1a4da089b3173a5dedba7469",
+      "0x9b19b1590b9289e5abbc7ee9511076be8d75ac42",
+      "0x9be41d202e8a1d7327b2fd860749e41baa89cb6a",
+      "0x3e9867f6e41df327eae9d0832530d1007d1fbb4f",
+      "0x1ad7ecfb656ec99538db3bc46d66e7d79e9acc9e",
+      "0xab8b04c6f87a47aeef37b7bc82d39656549a3a29",
+      "0x4f4a33bdc3e4b4b4cc25d8f1f29bc185b176e525",
+      "0xcb37f0ce3ce7fa5545de084a41f2b18f76815a85"
+    ]
+  ],
+  "solcInputHash": "616bcd197648f809b4b4e612fb09cc9a",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_fundDeployer\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_weth\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_ceth\",\"type\":\"address\"},{\"internalType\":\"address[]\",\"name\":\"cERC20Tokens\",\"type\":\"address[]\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"cToken\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"CTokenAdded\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_cTokens\",\"type\":\"address[]\"}],\"name\":\"addCTokens\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_derivative\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_derivativeAmount\",\"type\":\"uint256\"}],\"name\":\"calcUnderlyingValues\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"underlyings_\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"underlyingAmounts_\",\"type\":\"uint256[]\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getFundDeployer\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"fundDeployer_\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getOwner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"owner_\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_cToken\",\"type\":\"address\"}],\"name\":\"getTokenFromCToken\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"token_\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_asset\",\"type\":\"address\"}],\"name\":\"isSupportedAsset\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isSupported_\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"addCTokens(address[])\":{\"details\":\"Only allows CERC20 tokens. CEther is set in the constructor.\",\"params\":{\"_cTokens\":\"cTokens to add\"}},\"calcUnderlyingValues(address,uint256)\":{\"params\":{\"_derivative\":\"The derivative to convert\",\"_derivativeAmount\":\"The amount of the derivative to convert\"},\"returns\":{\"underlyingAmounts_\":\"The amount of each underlying asset for the equivalent derivative amount\",\"underlyings_\":\"The underlying assets for the _derivative\"}},\"getFundDeployer()\":{\"returns\":{\"fundDeployer_\":\"The `FUND_DEPLOYER` variable value\"}},\"getOwner()\":{\"details\":\"Ownership is deferred to the owner of the FundDeployer contract\",\"returns\":{\"owner_\":\"The owner\"}},\"getTokenFromCToken(address)\":{\"params\":{\"_cToken\":\"The cToken for which to get the underlying asset\"},\"returns\":{\"token_\":\"The underlying token\"}},\"isSupportedAsset(address)\":{\"params\":{\"_asset\":\"The asset to check\"},\"returns\":{\"isSupported_\":\"True if the asset is supported\"}}},\"title\":\"CompoundPriceFeed Contract\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"addCTokens(address[])\":{\"notice\":\"Adds cTokens to the price feed\"},\"calcUnderlyingValues(address,uint256)\":{\"notice\":\"Converts a given amount of a derivative to its underlying asset values\"},\"getFundDeployer()\":{\"notice\":\"Gets the `FUND_DEPLOYER` variable\"},\"getOwner()\":{\"notice\":\"Gets the owner of this contract\"},\"getTokenFromCToken(address)\":{\"notice\":\"Returns the underlying asset of a given cToken\"},\"isSupportedAsset(address)\":{\"notice\":\"Checks if an asset is supported by the price feed\"}},\"notice\":\"Price source oracle for Compound Tokens (cTokens)\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/release/infrastructure/price-feeds/derivatives/feeds/CompoundPriceFeed.sol\":\"CompoundPriceFeed\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"details\":{\"constantOptimizer\":true,\"cse\":true,\"deduplicate\":true,\"jumpdestRemover\":true,\"orderLiterals\":true,\"peephole\":true,\"yul\":false},\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/math/SafeMath.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity >=0.6.0 <0.8.0;\\n\\n/**\\n * @dev Wrappers over Solidity's arithmetic operations with added overflow\\n * checks.\\n *\\n * Arithmetic operations in Solidity wrap on overflow. This can easily result\\n * in bugs, because programmers usually assume that an overflow raises an\\n * error, which is the standard behavior in high level programming languages.\\n * `SafeMath` restores this intuition by reverting the transaction when an\\n * operation overflows.\\n *\\n * Using this library instead of the unchecked operations eliminates an entire\\n * class of bugs, so it's recommended to use it always.\\n */\\nlibrary SafeMath {\\n    /**\\n     * @dev Returns the addition of two unsigned integers, with an overflow flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryAdd(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        uint256 c = a + b;\\n        if (c < a) return (false, 0);\\n        return (true, c);\\n    }\\n\\n    /**\\n     * @dev Returns the substraction of two unsigned integers, with an overflow flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function trySub(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        if (b > a) return (false, 0);\\n        return (true, a - b);\\n    }\\n\\n    /**\\n     * @dev Returns the multiplication of two unsigned integers, with an overflow flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryMul(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        // Gas optimization: this is cheaper than requiring 'a' not being zero, but the\\n        // benefit is lost if 'b' is also tested.\\n        // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522\\n        if (a == 0) return (true, 0);\\n        uint256 c = a * b;\\n        if (c / a != b) return (false, 0);\\n        return (true, c);\\n    }\\n\\n    /**\\n     * @dev Returns the division of two unsigned integers, with a division by zero flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryDiv(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        if (b == 0) return (false, 0);\\n        return (true, a / b);\\n    }\\n\\n    /**\\n     * @dev Returns the remainder of dividing two unsigned integers, with a division by zero flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryMod(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        if (b == 0) return (false, 0);\\n        return (true, a % b);\\n    }\\n\\n    /**\\n     * @dev Returns the addition of two unsigned integers, reverting on\\n     * overflow.\\n     *\\n     * Counterpart to Solidity's `+` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Addition cannot overflow.\\n     */\\n    function add(uint256 a, uint256 b) internal pure returns (uint256) {\\n        uint256 c = a + b;\\n        require(c >= a, \\\"SafeMath: addition overflow\\\");\\n        return c;\\n    }\\n\\n    /**\\n     * @dev Returns the subtraction of two unsigned integers, reverting on\\n     * overflow (when the result is negative).\\n     *\\n     * Counterpart to Solidity's `-` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Subtraction cannot overflow.\\n     */\\n    function sub(uint256 a, uint256 b) internal pure returns (uint256) {\\n        require(b <= a, \\\"SafeMath: subtraction overflow\\\");\\n        return a - b;\\n    }\\n\\n    /**\\n     * @dev Returns the multiplication of two unsigned integers, reverting on\\n     * overflow.\\n     *\\n     * Counterpart to Solidity's `*` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Multiplication cannot overflow.\\n     */\\n    function mul(uint256 a, uint256 b) internal pure returns (uint256) {\\n        if (a == 0) return 0;\\n        uint256 c = a * b;\\n        require(c / a == b, \\\"SafeMath: multiplication overflow\\\");\\n        return c;\\n    }\\n\\n    /**\\n     * @dev Returns the integer division of two unsigned integers, reverting on\\n     * division by zero. The result is rounded towards zero.\\n     *\\n     * Counterpart to Solidity's `/` operator. Note: this function uses a\\n     * `revert` opcode (which leaves remaining gas untouched) while Solidity\\n     * uses an invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function div(uint256 a, uint256 b) internal pure returns (uint256) {\\n        require(b > 0, \\\"SafeMath: division by zero\\\");\\n        return a / b;\\n    }\\n\\n    /**\\n     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),\\n     * reverting when dividing by zero.\\n     *\\n     * Counterpart to Solidity's `%` operator. This function uses a `revert`\\n     * opcode (which leaves remaining gas untouched) while Solidity uses an\\n     * invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function mod(uint256 a, uint256 b) internal pure returns (uint256) {\\n        require(b > 0, \\\"SafeMath: modulo by zero\\\");\\n        return a % b;\\n    }\\n\\n    /**\\n     * @dev Returns the subtraction of two unsigned integers, reverting with custom message on\\n     * overflow (when the result is negative).\\n     *\\n     * CAUTION: This function is deprecated because it requires allocating memory for the error\\n     * message unnecessarily. For custom revert reasons use {trySub}.\\n     *\\n     * Counterpart to Solidity's `-` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Subtraction cannot overflow.\\n     */\\n    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {\\n        require(b <= a, errorMessage);\\n        return a - b;\\n    }\\n\\n    /**\\n     * @dev Returns the integer division of two unsigned integers, reverting with custom message on\\n     * division by zero. The result is rounded towards zero.\\n     *\\n     * CAUTION: This function is deprecated because it requires allocating memory for the error\\n     * message unnecessarily. For custom revert reasons use {tryDiv}.\\n     *\\n     * Counterpart to Solidity's `/` operator. Note: this function uses a\\n     * `revert` opcode (which leaves remaining gas untouched) while Solidity\\n     * uses an invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {\\n        require(b > 0, errorMessage);\\n        return a / b;\\n    }\\n\\n    /**\\n     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),\\n     * reverting with custom message when dividing by zero.\\n     *\\n     * CAUTION: This function is deprecated because it requires allocating memory for the error\\n     * message unnecessarily. For custom revert reasons use {tryMod}.\\n     *\\n     * Counterpart to Solidity's `%` operator. This function uses a `revert`\\n     * opcode (which leaves remaining gas untouched) while Solidity uses an\\n     * invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {\\n        require(b > 0, errorMessage);\\n        return a % b;\\n    }\\n}\\n\",\"keccak256\":\"0xcc78a17dd88fa5a2edc60c8489e2f405c0913b377216a5b26b35656b2d0dab52\",\"license\":\"MIT\"},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity >=0.6.0 <0.8.0;\\n\\n/**\\n * @dev Interface of the ERC20 standard as defined in the EIP.\\n */\\ninterface IERC20 {\\n    /**\\n     * @dev Returns the amount of tokens in existence.\\n     */\\n    function totalSupply() external view returns (uint256);\\n\\n    /**\\n     * @dev Returns the amount of tokens owned by `account`.\\n     */\\n    function balanceOf(address account) external view returns (uint256);\\n\\n    /**\\n     * @dev Moves `amount` tokens from the caller's account to `recipient`.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transfer(address recipient, uint256 amount) external returns (bool);\\n\\n    /**\\n     * @dev Returns the remaining number of tokens that `spender` will be\\n     * allowed to spend on behalf of `owner` through {transferFrom}. This is\\n     * zero by default.\\n     *\\n     * This value changes when {approve} or {transferFrom} are called.\\n     */\\n    function allowance(address owner, address spender) external view returns (uint256);\\n\\n    /**\\n     * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * IMPORTANT: Beware that changing an allowance with this method brings the risk\\n     * that someone may use both the old and the new allowance by unfortunate\\n     * transaction ordering. One possible solution to mitigate this race\\n     * condition is to first reduce the spender's allowance to 0 and set the\\n     * desired value afterwards:\\n     * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729\\n     *\\n     * Emits an {Approval} event.\\n     */\\n    function approve(address spender, uint256 amount) external returns (bool);\\n\\n    /**\\n     * @dev Moves `amount` tokens from `sender` to `recipient` using the\\n     * allowance mechanism. `amount` is then deducted from the caller's\\n     * allowance.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);\\n\\n    /**\\n     * @dev Emitted when `value` tokens are moved from one account (`from`) to\\n     * another (`to`).\\n     *\\n     * Note that `value` may be zero.\\n     */\\n    event Transfer(address indexed from, address indexed to, uint256 value);\\n\\n    /**\\n     * @dev Emitted when the allowance of a `spender` for an `owner` is set by\\n     * a call to {approve}. `value` is the new allowance.\\n     */\\n    event Approval(address indexed owner, address indexed spender, uint256 value);\\n}\\n\",\"keccak256\":\"0x5f02220344881ce43204ae4a6281145a67bc52c2bb1290a791857df3d19d78f5\",\"license\":\"MIT\"},\"contracts/release/core/fund-deployer/IFundDeployer.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\n/// @title IFundDeployer Interface\\r\\ninterface IFundDeployer {\\r\\n    enum ReleaseStatus {\\r\\n        PreLaunch,\\r\\n        Live,\\r\\n        Paused\\r\\n    }\\r\\n\\r\\n    function getOwner() external view returns (address);\\r\\n\\r\\n    function getReleaseStatus() external view returns (ReleaseStatus);\\r\\n\\r\\n    function isRegisteredVaultCall(address, bytes4) external view returns (bool);\\r\\n}\\r\\n\",\"keccak256\":\"0x744fb5f08505c174df34eccb6b8f80bb4f2af66b4eacc46c38b51f1e766a422e\",\"license\":\"GPL-3.0\"},\"contracts/release/extensions/utils/FundDeployerOwnerMixin.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\nimport \\\"../../core/fund-deployer/IFundDeployer.sol\\\";\\r\\n\\r\\n/// @title FundDeployerOwnerMixin Contract\\r\\n/// @notice A mixin contract that defers ownership to the owner of FundDeployer\\r\\nabstract contract FundDeployerOwnerMixin {\\r\\n    address internal immutable FUND_DEPLOYER;\\r\\n\\r\\n    modifier onlyFundDeployerOwner() {\\r\\n        require(\\r\\n            msg.sender == getOwner(),\\r\\n            \\\"onlyFundDeployerOwner: Only the FundDeployer owner can call this function\\\"\\r\\n        );\\r\\n        _;\\r\\n    }\\r\\n\\r\\n    constructor(address _fundDeployer) public {\\r\\n        FUND_DEPLOYER = _fundDeployer;\\r\\n    }\\r\\n\\r\\n    /// @notice Gets the owner of this contract\\r\\n    /// @return owner_ The owner\\r\\n    /// @dev Ownership is deferred to the owner of the FundDeployer contract\\r\\n    function getOwner() public view returns (address owner_) {\\r\\n        return IFundDeployer(FUND_DEPLOYER).getOwner();\\r\\n    }\\r\\n\\r\\n    ///////////////////\\r\\n    // STATE GETTERS //\\r\\n    ///////////////////\\r\\n\\r\\n    /// @notice Gets the `FUND_DEPLOYER` variable\\r\\n    /// @return fundDeployer_ The `FUND_DEPLOYER` variable value\\r\\n    function getFundDeployer() external view returns (address fundDeployer_) {\\r\\n        return FUND_DEPLOYER;\\r\\n    }\\r\\n}\\r\\n\",\"keccak256\":\"0xf67dbe07cf44b330c5f4a1c236f59fa913d72bea666144b0fca4bbd1945f69b0\",\"license\":\"GPL-3.0\"},\"contracts/release/infrastructure/price-feeds/derivatives/IDerivativePriceFeed.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\n/// @title IDerivativePriceFeed Interface\\r\\n/// @notice Simple interface for derivative price source oracle implementations\\r\\ninterface IDerivativePriceFeed {\\r\\n    function calcUnderlyingValues(address, uint256)\\r\\n        external\\r\\n        returns (address[] memory, uint256[] memory);\\r\\n\\r\\n    function isSupportedAsset(address) external view returns (bool);\\r\\n}\\r\\n\",\"keccak256\":\"0xb7e4dd73597568e591a91a97c440c1d8674695fd71cb9fc8fb8f28ab50fe3833\",\"license\":\"GPL-3.0\"},\"contracts/release/infrastructure/price-feeds/derivatives/feeds/CompoundPriceFeed.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\nimport \\\"@openzeppelin/contracts/math/SafeMath.sol\\\";\\r\\nimport \\\"../../../../extensions/utils/FundDeployerOwnerMixin.sol\\\";\\r\\nimport \\\"../../../../interfaces/ICERC20.sol\\\";\\r\\nimport \\\"../IDerivativePriceFeed.sol\\\";\\r\\n\\r\\n/// @title CompoundPriceFeed Contract\\r\\n/// @notice Price source oracle for Compound Tokens (cTokens)\\r\\ncontract CompoundPriceFeed is IDerivativePriceFeed, FundDeployerOwnerMixin {\\r\\n    using SafeMath for uint256;\\r\\n\\r\\n    event CTokenAdded(address indexed cToken, address indexed token);\\r\\n\\r\\n    uint256 private constant CTOKEN_RATE_DIVISOR = 10**18;\\r\\n\\r\\n    mapping(address => address) private cTokenToToken;\\r\\n\\r\\n    constructor(\\r\\n        address _fundDeployer,\\r\\n        address _weth,\\r\\n        address _ceth,\\r\\n        address[] memory cERC20Tokens\\r\\n    ) public FundDeployerOwnerMixin(_fundDeployer) {\\r\\n        // Set cEth\\r\\n        cTokenToToken[_ceth] = _weth;\\r\\n        emit CTokenAdded(_ceth, _weth);\\r\\n\\r\\n        // Set any other cTokens\\r\\n        if (cERC20Tokens.length > 0) {\\r\\n            __addCERC20Tokens(cERC20Tokens);\\r\\n        }\\r\\n    }\\r\\n\\r\\n    /// @notice Converts a given amount of a derivative to its underlying asset values\\r\\n    /// @param _derivative The derivative to convert\\r\\n    /// @param _derivativeAmount The amount of the derivative to convert\\r\\n    /// @return underlyings_ The underlying assets for the _derivative\\r\\n    /// @return underlyingAmounts_ The amount of each underlying asset for the equivalent derivative amount\\r\\n    function calcUnderlyingValues(address _derivative, uint256 _derivativeAmount)\\r\\n        external\\r\\n        override\\r\\n        returns (address[] memory underlyings_, uint256[] memory underlyingAmounts_)\\r\\n    {\\r\\n        underlyings_ = new address[](1);\\r\\n        underlyings_[0] = cTokenToToken[_derivative];\\r\\n        require(underlyings_[0] != address(0), \\\"calcUnderlyingValues: Unsupported derivative\\\");\\r\\n\\r\\n        underlyingAmounts_ = new uint256[](1);\\r\\n        // Returns a rate scaled to 10^18\\r\\n        underlyingAmounts_[0] = _derivativeAmount\\r\\n            .mul(ICERC20(_derivative).exchangeRateStored())\\r\\n            .div(CTOKEN_RATE_DIVISOR);\\r\\n\\r\\n        return (underlyings_, underlyingAmounts_);\\r\\n    }\\r\\n\\r\\n    /// @notice Checks if an asset is supported by the price feed\\r\\n    /// @param _asset The asset to check\\r\\n    /// @return isSupported_ True if the asset is supported\\r\\n    function isSupportedAsset(address _asset) external view override returns (bool isSupported_) {\\r\\n        return cTokenToToken[_asset] != address(0);\\r\\n    }\\r\\n\\r\\n    //////////////////////\\r\\n    // CTOKENS REGISTRY //\\r\\n    //////////////////////\\r\\n\\r\\n    /// @notice Adds cTokens to the price feed\\r\\n    /// @param _cTokens cTokens to add\\r\\n    /// @dev Only allows CERC20 tokens. CEther is set in the constructor.\\r\\n    function addCTokens(address[] calldata _cTokens) external onlyFundDeployerOwner {\\r\\n        __addCERC20Tokens(_cTokens);\\r\\n    }\\r\\n\\r\\n    /// @dev Helper to add cTokens\\r\\n    function __addCERC20Tokens(address[] memory _cTokens) private {\\r\\n        require(_cTokens.length > 0, \\\"__addCTokens: Empty _cTokens\\\");\\r\\n\\r\\n        for (uint256 i; i < _cTokens.length; i++) {\\r\\n            require(cTokenToToken[_cTokens[i]] == address(0), \\\"__addCTokens: Value already set\\\");\\r\\n\\r\\n            address token = ICERC20(_cTokens[i]).underlying();\\r\\n            cTokenToToken[_cTokens[i]] = token;\\r\\n\\r\\n            emit CTokenAdded(_cTokens[i], token);\\r\\n        }\\r\\n    }\\r\\n\\r\\n    ////////////////////\\r\\n    // STATE GETTERS //\\r\\n    ///////////////////\\r\\n\\r\\n    /// @notice Returns the underlying asset of a given cToken\\r\\n    /// @param _cToken The cToken for which to get the underlying asset\\r\\n    /// @return token_ The underlying token\\r\\n    function getTokenFromCToken(address _cToken) public view returns (address token_) {\\r\\n        return cTokenToToken[_cToken];\\r\\n    }\\r\\n}\\r\\n\",\"keccak256\":\"0x8315f3bf8d43651f47e9cd00119fb0ab53a811c8cc011d69844c0d2e9c04908c\",\"license\":\"GPL-3.0\"},\"contracts/release/interfaces/ICERC20.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity ^0.6.12;\\r\\nimport \\\"@openzeppelin/contracts/token/ERC20/IERC20.sol\\\";\\r\\n\\r\\n/// @title ICERC20 Interface\\r\\n/// @notice Minimal interface for interactions with Compound tokens (cTokens)\\r\\ninterface ICERC20 is IERC20 {\\r\\n    function decimals() external view returns (uint8);\\r\\n\\r\\n    function mint(uint256) external returns (uint256);\\r\\n\\r\\n    function redeem(uint256) external returns (uint256);\\r\\n\\r\\n    function exchangeRateStored() external view returns (uint256);\\r\\n\\r\\n    function underlying() external returns (address);\\r\\n}\\r\\n\",\"keccak256\":\"0xa76966a0a3123fd165895284e216d0c306b605993bb6484eb46b1470eeed8036\",\"license\":\"GPL-3.0\"}},\"version\":1}",
+  "bytecode": "0x60a060405234801561001057600080fd5b50604051610cb3380380610cb38339818101604052608081101561003357600080fd5b81516020830151604080850151606086018051925194969395919493918201928464010000000082111561006657600080fd5b90830190602082018581111561007b57600080fd5b825186602082028301116401000000008211171561009857600080fd5b82525081516020918201928201910280838360005b838110156100c55781810151838201526020016100ad565b5050505091909101604081815260608a901b6001600160601b0319166080526001600160a01b038881166000818152602081905292832080546001600160a01b031916928c1692831790559096509450600080516020610c9383398151915293509150a38051156101395761013981610142565b50505050610366565b6000815111610198576040805162461bcd60e51b815260206004820152601c60248201527f5f5f61646443546f6b656e733a20456d707479205f63546f6b656e7300000000604482015290519081900360640190fd5b60005b81518110156103625760006001600160a01b03166000808484815181106101be57fe5b6020908102919091018101516001600160a01b03908116835290820192909252604001600020541614610238576040805162461bcd60e51b815260206004820152601f60248201527f5f5f61646443546f6b656e733a2056616c756520616c72656164792073657400604482015290519081900360640190fd5b600082828151811061024657fe5b60200260200101516001600160a01b0316636f307dc36040518163ffffffff1660e01b8152600401602060405180830381600087803b15801561028857600080fd5b505af115801561029c573d6000803e3d6000fd5b505050506040513d60208110156102b257600080fd5b50518351909150819060009081908690869081106102cc57fe5b60200260200101516001600160a01b03166001600160a01b0316815260200190815260200160002060006101000a8154816001600160a01b0302191690836001600160a01b03160217905550806001600160a01b031683838151811061032e57fe5b60200260200101516001600160a01b0316600080516020610c9383398151915260405160405180910390a35060010161019b565b5050565b60805160601c61090b610388600039806104785280610502525061090b6000f3fe608060405234801561001057600080fd5b50600436106100625760003560e01c80631d249354146100675780634cae3ad7146100d9578063727212f61461011b578063893d20e8146101e057806397c0ac87146101e85780639be918e6146101f0575b600080fd5b6100d76004803603602081101561007d57600080fd5b81019060208101813564010000000081111561009857600080fd5b8201836020820111156100aa57600080fd5b803590602001918460208302840111640100000000831117156100cc57600080fd5b50909250905061022a565b005b6100ff600480360360208110156100ef57600080fd5b50356001600160a01b03166102c1565b604080516001600160a01b039092168252519081900360200190f35b6101476004803603604081101561013157600080fd5b506001600160a01b0381351690602001356102df565b604051808060200180602001838103835285818151815260200191508051906020019060200280838360005b8381101561018b578181015183820152602001610173565b50505050905001838103825284818151815260200191508051906020019060200280838360005b838110156101ca5781810151838201526020016101b2565b5050505090500194505050505060405180910390f35b6100ff610474565b6100ff610500565b6102166004803603602081101561020657600080fd5b50356001600160a01b0316610524565b604080519115158252519081900360200190f35b610232610474565b6001600160a01b0316336001600160a01b0316146102815760405162461bcd60e51b81526004018080602001828103825260498152602001806108406049913960600191505060405180910390fd5b6102bd82828080602002602001604051908101604052809392919081815260200183836020028082843760009201919091525061054492505050565b5050565b6001600160a01b039081166000908152602081905260409020541690565b604080516001808252818301909252606091829190602080830190803683375050506001600160a01b0385811660009081526020819052604081205483519395509091169184919061032d57fe5b60200260200101906001600160a01b031690816001600160a01b03168152505060006001600160a01b03168260008151811061036557fe5b60200260200101516001600160a01b031614156103b35760405162461bcd60e51b815260040180806020018281038252602c8152602001806108aa602c913960400191505060405180910390fd5b6040805160018082528183019092529060208083019080368337019050509050610454670de0b6b3a764000061044e866001600160a01b031663182df0f56040518163ffffffff1660e01b815260040160206040518083038186803b15801561041b57600080fd5b505afa15801561042f573d6000803e3d6000fd5b505050506040513d602081101561044557600080fd5b50518690610776565b906107d8565b8160008151811061046157fe5b6020026020010181815250509250929050565b60007f00000000000000000000000000000000000000000000000000000000000000006001600160a01b031663893d20e86040518163ffffffff1660e01b815260040160206040518083038186803b1580156104cf57600080fd5b505afa1580156104e3573d6000803e3d6000fd5b505050506040513d60208110156104f957600080fd5b5051905090565b7f000000000000000000000000000000000000000000000000000000000000000090565b6001600160a01b0390811660009081526020819052604090205416151590565b600081511161059a576040805162461bcd60e51b815260206004820152601c60248201527f5f5f61646443546f6b656e733a20456d707479205f63546f6b656e7300000000604482015290519081900360640190fd5b60005b81518110156102bd5760006001600160a01b03166000808484815181106105c057fe5b6020908102919091018101516001600160a01b0390811683529082019290925260400160002054161461063a576040805162461bcd60e51b815260206004820152601f60248201527f5f5f61646443546f6b656e733a2056616c756520616c72656164792073657400604482015290519081900360640190fd5b600082828151811061064857fe5b60200260200101516001600160a01b0316636f307dc36040518163ffffffff1660e01b8152600401602060405180830381600087803b15801561068a57600080fd5b505af115801561069e573d6000803e3d6000fd5b505050506040513d60208110156106b457600080fd5b50518351909150819060009081908690869081106106ce57fe5b60200260200101516001600160a01b03166001600160a01b0316815260200190815260200160002060006101000a8154816001600160a01b0302191690836001600160a01b03160217905550806001600160a01b031683838151811061073057fe5b60200260200101516001600160a01b03167f7acf7482a03de3fea14ab9eb8fa6f7524bb1a61a24898d2337379a5cf7421d7e60405160405180910390a35060010161059d565b600082610785575060006107d2565b8282028284828161079257fe5b04146107cf5760405162461bcd60e51b81526004018080602001828103825260218152602001806108896021913960400191505060405180910390fd5b90505b92915050565b600080821161082e576040805162461bcd60e51b815260206004820152601a60248201527f536166654d6174683a206469766973696f6e206279207a65726f000000000000604482015290519081900360640190fd5b81838161083757fe5b04939250505056fe6f6e6c7946756e644465706c6f7965724f776e65723a204f6e6c79207468652046756e644465706c6f796572206f776e65722063616e2063616c6c20746869732066756e6374696f6e536166654d6174683a206d756c7469706c69636174696f6e206f766572666c6f7763616c63556e6465726c79696e6756616c7565733a20556e737570706f727465642064657269766174697665a264697066735822122077510486555b7ccda666c4021dabc901cab147be1f2d6a3d2b222285c872d11164736f6c634300060c00337acf7482a03de3fea14ab9eb8fa6f7524bb1a61a24898d2337379a5cf7421d7e",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100625760003560e01c80631d249354146100675780634cae3ad7146100d9578063727212f61461011b578063893d20e8146101e057806397c0ac87146101e85780639be918e6146101f0575b600080fd5b6100d76004803603602081101561007d57600080fd5b81019060208101813564010000000081111561009857600080fd5b8201836020820111156100aa57600080fd5b803590602001918460208302840111640100000000831117156100cc57600080fd5b50909250905061022a565b005b6100ff600480360360208110156100ef57600080fd5b50356001600160a01b03166102c1565b604080516001600160a01b039092168252519081900360200190f35b6101476004803603604081101561013157600080fd5b506001600160a01b0381351690602001356102df565b604051808060200180602001838103835285818151815260200191508051906020019060200280838360005b8381101561018b578181015183820152602001610173565b50505050905001838103825284818151815260200191508051906020019060200280838360005b838110156101ca5781810151838201526020016101b2565b5050505090500194505050505060405180910390f35b6100ff610474565b6100ff610500565b6102166004803603602081101561020657600080fd5b50356001600160a01b0316610524565b604080519115158252519081900360200190f35b610232610474565b6001600160a01b0316336001600160a01b0316146102815760405162461bcd60e51b81526004018080602001828103825260498152602001806108406049913960600191505060405180910390fd5b6102bd82828080602002602001604051908101604052809392919081815260200183836020028082843760009201919091525061054492505050565b5050565b6001600160a01b039081166000908152602081905260409020541690565b604080516001808252818301909252606091829190602080830190803683375050506001600160a01b0385811660009081526020819052604081205483519395509091169184919061032d57fe5b60200260200101906001600160a01b031690816001600160a01b03168152505060006001600160a01b03168260008151811061036557fe5b60200260200101516001600160a01b031614156103b35760405162461bcd60e51b815260040180806020018281038252602c8152602001806108aa602c913960400191505060405180910390fd5b6040805160018082528183019092529060208083019080368337019050509050610454670de0b6b3a764000061044e866001600160a01b031663182df0f56040518163ffffffff1660e01b815260040160206040518083038186803b15801561041b57600080fd5b505afa15801561042f573d6000803e3d6000fd5b505050506040513d602081101561044557600080fd5b50518690610776565b906107d8565b8160008151811061046157fe5b6020026020010181815250509250929050565b60007f00000000000000000000000000000000000000000000000000000000000000006001600160a01b031663893d20e86040518163ffffffff1660e01b815260040160206040518083038186803b1580156104cf57600080fd5b505afa1580156104e3573d6000803e3d6000fd5b505050506040513d60208110156104f957600080fd5b5051905090565b7f000000000000000000000000000000000000000000000000000000000000000090565b6001600160a01b0390811660009081526020819052604090205416151590565b600081511161059a576040805162461bcd60e51b815260206004820152601c60248201527f5f5f61646443546f6b656e733a20456d707479205f63546f6b656e7300000000604482015290519081900360640190fd5b60005b81518110156102bd5760006001600160a01b03166000808484815181106105c057fe5b6020908102919091018101516001600160a01b0390811683529082019290925260400160002054161461063a576040805162461bcd60e51b815260206004820152601f60248201527f5f5f61646443546f6b656e733a2056616c756520616c72656164792073657400604482015290519081900360640190fd5b600082828151811061064857fe5b60200260200101516001600160a01b0316636f307dc36040518163ffffffff1660e01b8152600401602060405180830381600087803b15801561068a57600080fd5b505af115801561069e573d6000803e3d6000fd5b505050506040513d60208110156106b457600080fd5b50518351909150819060009081908690869081106106ce57fe5b60200260200101516001600160a01b03166001600160a01b0316815260200190815260200160002060006101000a8154816001600160a01b0302191690836001600160a01b03160217905550806001600160a01b031683838151811061073057fe5b60200260200101516001600160a01b03167f7acf7482a03de3fea14ab9eb8fa6f7524bb1a61a24898d2337379a5cf7421d7e60405160405180910390a35060010161059d565b600082610785575060006107d2565b8282028284828161079257fe5b04146107cf5760405162461bcd60e51b81526004018080602001828103825260218152602001806108896021913960400191505060405180910390fd5b90505b92915050565b600080821161082e576040805162461bcd60e51b815260206004820152601a60248201527f536166654d6174683a206469766973696f6e206279207a65726f000000000000604482015290519081900360640190fd5b81838161083757fe5b04939250505056fe6f6e6c7946756e644465706c6f7965724f776e65723a204f6e6c79207468652046756e644465706c6f796572206f776e65722063616e2063616c6c20746869732066756e6374696f6e536166654d6174683a206d756c7469706c69636174696f6e206f766572666c6f7763616c63556e6465726c79696e6756616c7565733a20556e737570706f727465642064657269766174697665a264697066735822122077510486555b7ccda666c4021dabc901cab147be1f2d6a3d2b222285c872d11164736f6c634300060c0033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "addCTokens(address[])": {
+        "details": "Only allows CERC20 tokens. CEther is set in the constructor.",
+        "params": {
+          "_cTokens": "cTokens to add"
+        }
+      },
+      "calcUnderlyingValues(address,uint256)": {
+        "params": {
+          "_derivative": "The derivative to convert",
+          "_derivativeAmount": "The amount of the derivative to convert"
+        },
+        "returns": {
+          "underlyingAmounts_": "The amount of each underlying asset for the equivalent derivative amount",
+          "underlyings_": "The underlying assets for the _derivative"
+        }
+      },
+      "getFundDeployer()": {
+        "returns": {
+          "fundDeployer_": "The `FUND_DEPLOYER` variable value"
+        }
+      },
+      "getOwner()": {
+        "details": "Ownership is deferred to the owner of the FundDeployer contract",
+        "returns": {
+          "owner_": "The owner"
+        }
+      },
+      "getTokenFromCToken(address)": {
+        "params": {
+          "_cToken": "The cToken for which to get the underlying asset"
+        },
+        "returns": {
+          "token_": "The underlying token"
+        }
+      },
+      "isSupportedAsset(address)": {
+        "params": {
+          "_asset": "The asset to check"
+        },
+        "returns": {
+          "isSupported_": "True if the asset is supported"
+        }
+      }
+    },
+    "title": "CompoundPriceFeed Contract",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "addCTokens(address[])": {
+        "notice": "Adds cTokens to the price feed"
+      },
+      "calcUnderlyingValues(address,uint256)": {
+        "notice": "Converts a given amount of a derivative to its underlying asset values"
+      },
+      "getFundDeployer()": {
+        "notice": "Gets the `FUND_DEPLOYER` variable"
+      },
+      "getOwner()": {
+        "notice": "Gets the owner of this contract"
+      },
+      "getTokenFromCToken(address)": {
+        "notice": "Returns the underlying asset of a given cToken"
+      },
+      "isSupportedAsset(address)": {
+        "notice": "Checks if an asset is supported by the price feed"
+      }
+    },
+    "notice": "Price source oracle for Compound Tokens (cTokens)",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 33053,
+        "contract": "contracts/release/infrastructure/price-feeds/derivatives/feeds/CompoundPriceFeed.sol:CompoundPriceFeed",
+        "label": "cTokenToToken",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_mapping(t_address,t_address)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_mapping(t_address,t_address)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => address)",
+        "numberOfBytes": "32",
+        "value": "t_address"
+      }
+    }
+  }
+}

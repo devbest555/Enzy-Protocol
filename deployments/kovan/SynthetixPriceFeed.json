@@ -1,0 +1,429 @@
+{
+  "address": "0xA98c3D3a1Bf847cA20AcC374F75aaD68A1B19fDb",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_fundDeployer",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_addressResolver",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_sUSD",
+          "type": "address"
+        },
+        {
+          "internalType": "address[]",
+          "name": "_synths",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "synth",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "currencyKey",
+          "type": "bytes32"
+        }
+      ],
+      "name": "SynthAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "synth",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "prevCurrencyKey",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "nextCurrencyKey",
+          "type": "bytes32"
+        }
+      ],
+      "name": "SynthCurrencyKeyUpdated",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "_synths",
+          "type": "address[]"
+        }
+      ],
+      "name": "addSynths",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_derivative",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_derivativeAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "calcUnderlyingValues",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "underlyings_",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "underlyingAmounts_",
+          "type": "uint256[]"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAddressResolver",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_synth",
+          "type": "address"
+        }
+      ],
+      "name": "getCurrencyKeyForSynth",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "currencyKey_",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "_synths",
+          "type": "address[]"
+        }
+      ],
+      "name": "getCurrencyKeysForSynths",
+      "outputs": [
+        {
+          "internalType": "bytes32[]",
+          "name": "currencyKeys_",
+          "type": "bytes32[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getFundDeployer",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "fundDeployer_",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getOwner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "owner_",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getSUSD",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "susd_",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_asset",
+          "type": "address"
+        }
+      ],
+      "name": "isSupportedAsset",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "isSupported_",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "_synths",
+          "type": "address[]"
+        }
+      ],
+      "name": "updateSynthCurrencyKeys",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x17261f8225b17ae526695f1176e1c72d396408b59263ec7d9a4e266d10288693",
+  "receipt": {
+    "to": null,
+    "from": "0xb10bcC8B508174c761CFB1E7143bFE37c4fBC3a1",
+    "contractAddress": "0xA98c3D3a1Bf847cA20AcC374F75aaD68A1B19fDb",
+    "transactionIndex": 5,
+    "gasUsed": "1011349",
+    "logsBloom": "0x00000000000000000000000000000000000200000000020000000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000020000000000100000200000000000000040000000000000000000000000000000000000000000000000000004000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000100000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x3d5ebb687996a7e805d860a5f83410b9d2dda7381d1c00ab51f2ee4f456743c2",
+    "transactionHash": "0x17261f8225b17ae526695f1176e1c72d396408b59263ec7d9a4e266d10288693",
+    "logs": [
+      {
+        "transactionIndex": 5,
+        "blockNumber": 27382170,
+        "transactionHash": "0x17261f8225b17ae526695f1176e1c72d396408b59263ec7d9a4e266d10288693",
+        "address": "0xA98c3D3a1Bf847cA20AcC374F75aaD68A1B19fDb",
+        "topics": [
+          "0x61209fb9d54461f939ea62c8e068ffba9ade97587787c035e7e09d44ebab2cb8",
+          "0x000000000000000000000000190cece40aef39a2a15d8858cafa691f01a909c5"
+        ],
+        "data": "0x7355534400000000000000000000000000000000000000000000000000000000",
+        "logIndex": 2,
+        "blockHash": "0x3d5ebb687996a7e805d860a5f83410b9d2dda7381d1c00ab51f2ee4f456743c2"
+      },
+      {
+        "transactionIndex": 5,
+        "blockNumber": 27382170,
+        "transactionHash": "0x17261f8225b17ae526695f1176e1c72d396408b59263ec7d9a4e266d10288693",
+        "address": "0xA98c3D3a1Bf847cA20AcC374F75aaD68A1B19fDb",
+        "topics": [
+          "0x61209fb9d54461f939ea62c8e068ffba9ade97587787c035e7e09d44ebab2cb8",
+          "0x000000000000000000000000f1762903953e3729335be6cf02b846501c9049a8"
+        ],
+        "data": "0x7344454649000000000000000000000000000000000000000000000000000000",
+        "logIndex": 3,
+        "blockHash": "0x3d5ebb687996a7e805d860a5f83410b9d2dda7381d1c00ab51f2ee4f456743c2"
+      }
+    ],
+    "blockNumber": 27382170,
+    "cumulativeGasUsed": "1289011",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x4925f5B17e731C16bA4f33eeABd8fE23d683e95F",
+    "0x93A5c5c7547832c8ebFcCAbc2157D43A9c5E68d4",
+    "0x190cece40aef39a2a15d8858cafa691f01a909c5",
+    [
+      "0xf1762903953e3729335be6cf02b846501c9049a8"
+    ]
+  ],
+  "solcInputHash": "616bcd197648f809b4b4e612fb09cc9a",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_fundDeployer\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_addressResolver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_sUSD\",\"type\":\"address\"},{\"internalType\":\"address[]\",\"name\":\"_synths\",\"type\":\"address[]\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"synth\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"currencyKey\",\"type\":\"bytes32\"}],\"name\":\"SynthAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"synth\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"prevCurrencyKey\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"nextCurrencyKey\",\"type\":\"bytes32\"}],\"name\":\"SynthCurrencyKeyUpdated\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_synths\",\"type\":\"address[]\"}],\"name\":\"addSynths\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_derivative\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_derivativeAmount\",\"type\":\"uint256\"}],\"name\":\"calcUnderlyingValues\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"underlyings_\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"underlyingAmounts_\",\"type\":\"uint256[]\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getAddressResolver\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_synth\",\"type\":\"address\"}],\"name\":\"getCurrencyKeyForSynth\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"currencyKey_\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_synths\",\"type\":\"address[]\"}],\"name\":\"getCurrencyKeysForSynths\",\"outputs\":[{\"internalType\":\"bytes32[]\",\"name\":\"currencyKeys_\",\"type\":\"bytes32[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getFundDeployer\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"fundDeployer_\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getOwner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"owner_\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getSUSD\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"susd_\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_asset\",\"type\":\"address\"}],\"name\":\"isSupportedAsset\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isSupported_\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_synths\",\"type\":\"address[]\"}],\"name\":\"updateSynthCurrencyKeys\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"addSynths(address[])\":{\"params\":{\"_synths\":\"Synths to add\"}},\"calcUnderlyingValues(address,uint256)\":{\"params\":{\"_derivative\":\"The derivative to convert\",\"_derivativeAmount\":\"The amount of the derivative to convert\"},\"returns\":{\"underlyingAmounts_\":\"The amount of each underlying asset for the equivalent derivative amount\",\"underlyings_\":\"The underlying assets for the _derivative\"}},\"getAddressResolver()\":{\"returns\":{\"_0\":\"addressResolver_ The `ADDRESS_RESOLVER` variable value\"}},\"getCurrencyKeyForSynth(address)\":{\"returns\":{\"currencyKey_\":\"The currencyKey value\"}},\"getCurrencyKeysForSynths(address[])\":{\"returns\":{\"currencyKeys_\":\"The currencyKey values\"}},\"getFundDeployer()\":{\"returns\":{\"fundDeployer_\":\"The `FUND_DEPLOYER` variable value\"}},\"getOwner()\":{\"details\":\"Ownership is deferred to the owner of the FundDeployer contract\",\"returns\":{\"owner_\":\"The owner\"}},\"getSUSD()\":{\"returns\":{\"susd_\":\"The `SUSD` variable value\"}},\"isSupportedAsset(address)\":{\"params\":{\"_asset\":\"The asset to check\"},\"returns\":{\"isSupported_\":\"True if the asset is a supported primitive\"}},\"updateSynthCurrencyKeys(address[])\":{\"details\":\"Anybody can call this function\",\"params\":{\"_synths\":\"Synths to update\"}}},\"title\":\"SynthetixPriceFeed Contract\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"addSynths(address[])\":{\"notice\":\"Adds Synths to the price feed\"},\"calcUnderlyingValues(address,uint256)\":{\"notice\":\"Converts a given amount of a derivative to its underlying asset values\"},\"getAddressResolver()\":{\"notice\":\"Gets the `ADDRESS_RESOLVER` variable\"},\"getCurrencyKeyForSynth(address)\":{\"notice\":\"Gets the currencyKey for a given Synth\"},\"getCurrencyKeysForSynths(address[])\":{\"notice\":\"Gets the currencyKey for multiple given Synths\"},\"getFundDeployer()\":{\"notice\":\"Gets the `FUND_DEPLOYER` variable\"},\"getOwner()\":{\"notice\":\"Gets the owner of this contract\"},\"getSUSD()\":{\"notice\":\"Gets the `SUSD` variable\"},\"isSupportedAsset(address)\":{\"notice\":\"Checks whether an asset is a supported primitive of the price feed\"},\"updateSynthCurrencyKeys(address[])\":{\"notice\":\"Updates the cached currencyKey value for specified Synths\"}},\"notice\":\"A price feed that uses Synthetix oracles as price sources\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/release/infrastructure/price-feeds/derivatives/feeds/SynthetixPriceFeed.sol\":\"SynthetixPriceFeed\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"details\":{\"constantOptimizer\":true,\"cse\":true,\"deduplicate\":true,\"jumpdestRemover\":true,\"orderLiterals\":true,\"peephole\":true,\"yul\":false},\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/math/SafeMath.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity >=0.6.0 <0.8.0;\\n\\n/**\\n * @dev Wrappers over Solidity's arithmetic operations with added overflow\\n * checks.\\n *\\n * Arithmetic operations in Solidity wrap on overflow. This can easily result\\n * in bugs, because programmers usually assume that an overflow raises an\\n * error, which is the standard behavior in high level programming languages.\\n * `SafeMath` restores this intuition by reverting the transaction when an\\n * operation overflows.\\n *\\n * Using this library instead of the unchecked operations eliminates an entire\\n * class of bugs, so it's recommended to use it always.\\n */\\nlibrary SafeMath {\\n    /**\\n     * @dev Returns the addition of two unsigned integers, with an overflow flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryAdd(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        uint256 c = a + b;\\n        if (c < a) return (false, 0);\\n        return (true, c);\\n    }\\n\\n    /**\\n     * @dev Returns the substraction of two unsigned integers, with an overflow flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function trySub(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        if (b > a) return (false, 0);\\n        return (true, a - b);\\n    }\\n\\n    /**\\n     * @dev Returns the multiplication of two unsigned integers, with an overflow flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryMul(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        // Gas optimization: this is cheaper than requiring 'a' not being zero, but the\\n        // benefit is lost if 'b' is also tested.\\n        // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522\\n        if (a == 0) return (true, 0);\\n        uint256 c = a * b;\\n        if (c / a != b) return (false, 0);\\n        return (true, c);\\n    }\\n\\n    /**\\n     * @dev Returns the division of two unsigned integers, with a division by zero flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryDiv(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        if (b == 0) return (false, 0);\\n        return (true, a / b);\\n    }\\n\\n    /**\\n     * @dev Returns the remainder of dividing two unsigned integers, with a division by zero flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryMod(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        if (b == 0) return (false, 0);\\n        return (true, a % b);\\n    }\\n\\n    /**\\n     * @dev Returns the addition of two unsigned integers, reverting on\\n     * overflow.\\n     *\\n     * Counterpart to Solidity's `+` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Addition cannot overflow.\\n     */\\n    function add(uint256 a, uint256 b) internal pure returns (uint256) {\\n        uint256 c = a + b;\\n        require(c >= a, \\\"SafeMath: addition overflow\\\");\\n        return c;\\n    }\\n\\n    /**\\n     * @dev Returns the subtraction of two unsigned integers, reverting on\\n     * overflow (when the result is negative).\\n     *\\n     * Counterpart to Solidity's `-` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Subtraction cannot overflow.\\n     */\\n    function sub(uint256 a, uint256 b) internal pure returns (uint256) {\\n        require(b <= a, \\\"SafeMath: subtraction overflow\\\");\\n        return a - b;\\n    }\\n\\n    /**\\n     * @dev Returns the multiplication of two unsigned integers, reverting on\\n     * overflow.\\n     *\\n     * Counterpart to Solidity's `*` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Multiplication cannot overflow.\\n     */\\n    function mul(uint256 a, uint256 b) internal pure returns (uint256) {\\n        if (a == 0) return 0;\\n        uint256 c = a * b;\\n        require(c / a == b, \\\"SafeMath: multiplication overflow\\\");\\n        return c;\\n    }\\n\\n    /**\\n     * @dev Returns the integer division of two unsigned integers, reverting on\\n     * division by zero. The result is rounded towards zero.\\n     *\\n     * Counterpart to Solidity's `/` operator. Note: this function uses a\\n     * `revert` opcode (which leaves remaining gas untouched) while Solidity\\n     * uses an invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function div(uint256 a, uint256 b) internal pure returns (uint256) {\\n        require(b > 0, \\\"SafeMath: division by zero\\\");\\n        return a / b;\\n    }\\n\\n    /**\\n     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),\\n     * reverting when dividing by zero.\\n     *\\n     * Counterpart to Solidity's `%` operator. This function uses a `revert`\\n     * opcode (which leaves remaining gas untouched) while Solidity uses an\\n     * invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function mod(uint256 a, uint256 b) internal pure returns (uint256) {\\n        require(b > 0, \\\"SafeMath: modulo by zero\\\");\\n        return a % b;\\n    }\\n\\n    /**\\n     * @dev Returns the subtraction of two unsigned integers, reverting with custom message on\\n     * overflow (when the result is negative).\\n     *\\n     * CAUTION: This function is deprecated because it requires allocating memory for the error\\n     * message unnecessarily. For custom revert reasons use {trySub}.\\n     *\\n     * Counterpart to Solidity's `-` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Subtraction cannot overflow.\\n     */\\n    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {\\n        require(b <= a, errorMessage);\\n        return a - b;\\n    }\\n\\n    /**\\n     * @dev Returns the integer division of two unsigned integers, reverting with custom message on\\n     * division by zero. The result is rounded towards zero.\\n     *\\n     * CAUTION: This function is deprecated because it requires allocating memory for the error\\n     * message unnecessarily. For custom revert reasons use {tryDiv}.\\n     *\\n     * Counterpart to Solidity's `/` operator. Note: this function uses a\\n     * `revert` opcode (which leaves remaining gas untouched) while Solidity\\n     * uses an invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {\\n        require(b > 0, errorMessage);\\n        return a / b;\\n    }\\n\\n    /**\\n     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),\\n     * reverting with custom message when dividing by zero.\\n     *\\n     * CAUTION: This function is deprecated because it requires allocating memory for the error\\n     * message unnecessarily. For custom revert reasons use {tryMod}.\\n     *\\n     * Counterpart to Solidity's `%` operator. This function uses a `revert`\\n     * opcode (which leaves remaining gas untouched) while Solidity uses an\\n     * invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {\\n        require(b > 0, errorMessage);\\n        return a % b;\\n    }\\n}\\n\",\"keccak256\":\"0xcc78a17dd88fa5a2edc60c8489e2f405c0913b377216a5b26b35656b2d0dab52\",\"license\":\"MIT\"},\"contracts/release/core/fund-deployer/IFundDeployer.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\n/// @title IFundDeployer Interface\\r\\ninterface IFundDeployer {\\r\\n    enum ReleaseStatus {\\r\\n        PreLaunch,\\r\\n        Live,\\r\\n        Paused\\r\\n    }\\r\\n\\r\\n    function getOwner() external view returns (address);\\r\\n\\r\\n    function getReleaseStatus() external view returns (ReleaseStatus);\\r\\n\\r\\n    function isRegisteredVaultCall(address, bytes4) external view returns (bool);\\r\\n}\\r\\n\",\"keccak256\":\"0x744fb5f08505c174df34eccb6b8f80bb4f2af66b4eacc46c38b51f1e766a422e\",\"license\":\"GPL-3.0\"},\"contracts/release/extensions/utils/FundDeployerOwnerMixin.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\nimport \\\"../../core/fund-deployer/IFundDeployer.sol\\\";\\r\\n\\r\\n/// @title FundDeployerOwnerMixin Contract\\r\\n/// @notice A mixin contract that defers ownership to the owner of FundDeployer\\r\\nabstract contract FundDeployerOwnerMixin {\\r\\n    address internal immutable FUND_DEPLOYER;\\r\\n\\r\\n    modifier onlyFundDeployerOwner() {\\r\\n        require(\\r\\n            msg.sender == getOwner(),\\r\\n            \\\"onlyFundDeployerOwner: Only the FundDeployer owner can call this function\\\"\\r\\n        );\\r\\n        _;\\r\\n    }\\r\\n\\r\\n    constructor(address _fundDeployer) public {\\r\\n        FUND_DEPLOYER = _fundDeployer;\\r\\n    }\\r\\n\\r\\n    /// @notice Gets the owner of this contract\\r\\n    /// @return owner_ The owner\\r\\n    /// @dev Ownership is deferred to the owner of the FundDeployer contract\\r\\n    function getOwner() public view returns (address owner_) {\\r\\n        return IFundDeployer(FUND_DEPLOYER).getOwner();\\r\\n    }\\r\\n\\r\\n    ///////////////////\\r\\n    // STATE GETTERS //\\r\\n    ///////////////////\\r\\n\\r\\n    /// @notice Gets the `FUND_DEPLOYER` variable\\r\\n    /// @return fundDeployer_ The `FUND_DEPLOYER` variable value\\r\\n    function getFundDeployer() external view returns (address fundDeployer_) {\\r\\n        return FUND_DEPLOYER;\\r\\n    }\\r\\n}\\r\\n\",\"keccak256\":\"0xf67dbe07cf44b330c5f4a1c236f59fa913d72bea666144b0fca4bbd1945f69b0\",\"license\":\"GPL-3.0\"},\"contracts/release/infrastructure/price-feeds/derivatives/IDerivativePriceFeed.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\n/// @title IDerivativePriceFeed Interface\\r\\n/// @notice Simple interface for derivative price source oracle implementations\\r\\ninterface IDerivativePriceFeed {\\r\\n    function calcUnderlyingValues(address, uint256)\\r\\n        external\\r\\n        returns (address[] memory, uint256[] memory);\\r\\n\\r\\n    function isSupportedAsset(address) external view returns (bool);\\r\\n}\\r\\n\",\"keccak256\":\"0xb7e4dd73597568e591a91a97c440c1d8674695fd71cb9fc8fb8f28ab50fe3833\",\"license\":\"GPL-3.0\"},\"contracts/release/infrastructure/price-feeds/derivatives/feeds/SynthetixPriceFeed.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\nimport \\\"@openzeppelin/contracts/math/SafeMath.sol\\\";\\r\\nimport \\\"../../../../extensions/utils/FundDeployerOwnerMixin.sol\\\";\\r\\nimport \\\"../../../../interfaces/ISynthetix.sol\\\";\\r\\nimport \\\"../../../../interfaces/ISynthetixAddressResolver.sol\\\";\\r\\nimport \\\"../../../../interfaces/ISynthetixExchangeRates.sol\\\";\\r\\nimport \\\"../../../../interfaces/ISynthetixProxyERC20.sol\\\";\\r\\nimport \\\"../../../../interfaces/ISynthetixSynth.sol\\\";\\r\\nimport \\\"../IDerivativePriceFeed.sol\\\";\\r\\n\\r\\n/// @title SynthetixPriceFeed Contract\\r\\n/// @notice A price feed that uses Synthetix oracles as price sources\\r\\ncontract SynthetixPriceFeed is IDerivativePriceFeed, FundDeployerOwnerMixin {\\r\\n    using SafeMath for uint256;\\r\\n\\r\\n    event SynthAdded(address indexed synth, bytes32 currencyKey);\\r\\n\\r\\n    event SynthCurrencyKeyUpdated(\\r\\n        address indexed synth,\\r\\n        bytes32 prevCurrencyKey,\\r\\n        bytes32 nextCurrencyKey\\r\\n    );\\r\\n\\r\\n    uint256 private constant SYNTH_UNIT = 10**18;\\r\\n    address private immutable ADDRESS_RESOLVER;\\r\\n    address private immutable SUSD;\\r\\n\\r\\n    mapping(address => bytes32) private synthToCurrencyKey;\\r\\n\\r\\n    constructor(\\r\\n        address _fundDeployer,\\r\\n        address _addressResolver,\\r\\n        address _sUSD,\\r\\n        address[] memory _synths\\r\\n    ) public FundDeployerOwnerMixin(_fundDeployer) {\\r\\n        ADDRESS_RESOLVER = _addressResolver;\\r\\n        SUSD = _sUSD;\\r\\n\\r\\n        address[] memory sUSDSynths = new address[](1);\\r\\n        sUSDSynths[0] = _sUSD;\\r\\n\\r\\n        __addSynths(sUSDSynths);\\r\\n        __addSynths(_synths);\\r\\n    }\\r\\n\\r\\n    /// @notice Converts a given amount of a derivative to its underlying asset values\\r\\n    /// @param _derivative The derivative to convert\\r\\n    /// @param _derivativeAmount The amount of the derivative to convert\\r\\n    /// @return underlyings_ The underlying assets for the _derivative\\r\\n    /// @return underlyingAmounts_ The amount of each underlying asset for the equivalent derivative amount\\r\\n    function calcUnderlyingValues(address _derivative, uint256 _derivativeAmount)\\r\\n        external\\r\\n        override\\r\\n        returns (address[] memory underlyings_, uint256[] memory underlyingAmounts_)\\r\\n    {\\r\\n        underlyings_ = new address[](1);\\r\\n        underlyings_[0] = SUSD;\\r\\n        underlyingAmounts_ = new uint256[](1);\\r\\n\\r\\n        bytes32 currencyKey = getCurrencyKeyForSynth(_derivative);\\r\\n        require(currencyKey != 0, \\\"calcUnderlyingValues: _derivative is not supported\\\");\\r\\n\\r\\n        address exchangeRates = ISynthetixAddressResolver(ADDRESS_RESOLVER).requireAndGetAddress(\\r\\n            \\\"ExchangeRates\\\",\\r\\n            \\\"calcUnderlyingValues: Missing ExchangeRates\\\"\\r\\n        );\\r\\n\\r\\n        (uint256 rate, bool isInvalid) = ISynthetixExchangeRates(exchangeRates).rateAndInvalid(\\r\\n            currencyKey\\r\\n        );\\r\\n        require(!isInvalid, \\\"calcUnderlyingValues: _derivative rate is not valid\\\");\\r\\n\\r\\n        underlyingAmounts_[0] = _derivativeAmount.mul(rate).div(SYNTH_UNIT);\\r\\n\\r\\n        return (underlyings_, underlyingAmounts_);\\r\\n    }\\r\\n\\r\\n    /// @notice Checks whether an asset is a supported primitive of the price feed\\r\\n    /// @param _asset The asset to check\\r\\n    /// @return isSupported_ True if the asset is a supported primitive\\r\\n    function isSupportedAsset(address _asset) public view override returns (bool isSupported_) {\\r\\n        return getCurrencyKeyForSynth(_asset) != 0;\\r\\n    }\\r\\n\\r\\n    /////////////////////\\r\\n    // SYNTHS REGISTRY //\\r\\n    /////////////////////\\r\\n\\r\\n    /// @notice Adds Synths to the price feed\\r\\n    /// @param _synths Synths to add\\r\\n    function addSynths(address[] calldata _synths) external onlyFundDeployerOwner {\\r\\n        require(_synths.length > 0, \\\"addSynths: Empty _synths\\\");\\r\\n\\r\\n        __addSynths(_synths);\\r\\n    }\\r\\n\\r\\n    /// @notice Updates the cached currencyKey value for specified Synths\\r\\n    /// @param _synths Synths to update\\r\\n    /// @dev Anybody can call this function\\r\\n    function updateSynthCurrencyKeys(address[] calldata _synths) external {\\r\\n        require(_synths.length > 0, \\\"updateSynthCurrencyKeys: Empty _synths\\\");\\r\\n\\r\\n        for (uint256 i; i < _synths.length; i++) {\\r\\n            bytes32 prevCurrencyKey = synthToCurrencyKey[_synths[i]];\\r\\n            require(prevCurrencyKey != 0, \\\"updateSynthCurrencyKeys: Synth not set\\\");\\r\\n\\r\\n            bytes32 nextCurrencyKey = __getCurrencyKey(_synths[i]);\\r\\n            require(\\r\\n                nextCurrencyKey != prevCurrencyKey,\\r\\n                \\\"updateSynthCurrencyKeys: Synth has correct currencyKey\\\"\\r\\n            );\\r\\n\\r\\n            synthToCurrencyKey[_synths[i]] = nextCurrencyKey;\\r\\n\\r\\n            emit SynthCurrencyKeyUpdated(_synths[i], prevCurrencyKey, nextCurrencyKey);\\r\\n        }\\r\\n    }\\r\\n\\r\\n    /// @dev Helper to add Synths\\r\\n    function __addSynths(address[] memory _synths) private {\\r\\n        for (uint256 i; i < _synths.length; i++) {\\r\\n            require(synthToCurrencyKey[_synths[i]] == 0, \\\"__addSynths: Value already set\\\");\\r\\n\\r\\n            bytes32 currencyKey = __getCurrencyKey(_synths[i]);\\r\\n            require(currencyKey != 0, \\\"__addSynths: No currencyKey\\\");\\r\\n\\r\\n            synthToCurrencyKey[_synths[i]] = currencyKey;\\r\\n\\r\\n            emit SynthAdded(_synths[i], currencyKey);\\r\\n        }\\r\\n    }\\r\\n\\r\\n    /// @dev Helper to query a currencyKey from Synthetix\\r\\n    function __getCurrencyKey(address _synthProxy) private view returns (bytes32 currencyKey_) {\\r\\n        return ISynthetixSynth(ISynthetixProxyERC20(_synthProxy).target()).currencyKey();\\r\\n    }\\r\\n\\r\\n    ///////////////////\\r\\n    // STATE GETTERS //\\r\\n    ///////////////////\\r\\n\\r\\n    /// @notice Gets the `ADDRESS_RESOLVER` variable\\r\\n    /// @return addressResolver_ The `ADDRESS_RESOLVER` variable value\\r\\n    function getAddressResolver() external view returns (address) {\\r\\n        return ADDRESS_RESOLVER;\\r\\n    }\\r\\n\\r\\n    /// @notice Gets the currencyKey for multiple given Synths\\r\\n    /// @return currencyKeys_ The currencyKey values\\r\\n    function getCurrencyKeysForSynths(address[] calldata _synths)\\r\\n        external\\r\\n        view\\r\\n        returns (bytes32[] memory currencyKeys_)\\r\\n    {\\r\\n        currencyKeys_ = new bytes32[](_synths.length);\\r\\n        for (uint256 i; i < _synths.length; i++) {\\r\\n            currencyKeys_[i] = synthToCurrencyKey[_synths[i]];\\r\\n        }\\r\\n\\r\\n        return currencyKeys_;\\r\\n    }\\r\\n\\r\\n    /// @notice Gets the `SUSD` variable\\r\\n    /// @return susd_ The `SUSD` variable value\\r\\n    function getSUSD() external view returns (address susd_) {\\r\\n        return SUSD;\\r\\n    }\\r\\n\\r\\n    /// @notice Gets the currencyKey for a given Synth\\r\\n    /// @return currencyKey_ The currencyKey value\\r\\n    function getCurrencyKeyForSynth(address _synth) public view returns (bytes32 currencyKey_) {\\r\\n        return synthToCurrencyKey[_synth];\\r\\n    }\\r\\n}\\r\\n\",\"keccak256\":\"0xc269c68629539538b8cb41718390bc7d13f8d3dc13675c71e87be25cbe3302ad\",\"license\":\"GPL-3.0\"},\"contracts/release/interfaces/ISynthetix.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\n/// @title ISynthetix Interface\\r\\ninterface ISynthetix {\\r\\n    function exchangeOnBehalfWithTracking(\\r\\n        address,\\r\\n        bytes32,\\r\\n        uint256,\\r\\n        bytes32,\\r\\n        address,\\r\\n        bytes32\\r\\n    ) external returns (uint256);\\r\\n}\\r\\n\",\"keccak256\":\"0xe7d86d41a7a402c09d74c48c869e58c2a9279bf47a78c9baa7f58e164099976c\",\"license\":\"GPL-3.0\"},\"contracts/release/interfaces/ISynthetixAddressResolver.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\n/// @title ISynthetixAddressResolver Interface\\r\\ninterface ISynthetixAddressResolver {\\r\\n    function requireAndGetAddress(bytes32, string calldata) external view returns (address);\\r\\n}\\r\\n\",\"keccak256\":\"0xc42fdd4fb7ee1fc7d7403ee9ac4478277c2a48937d42fbf71e2a5cd52b844862\",\"license\":\"GPL-3.0\"},\"contracts/release/interfaces/ISynthetixExchangeRates.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\n/// @title ISynthetixExchangeRates Interface\\r\\ninterface ISynthetixExchangeRates {\\r\\n    function rateAndInvalid(bytes32) external view returns (uint256, bool);\\r\\n}\\r\\n\",\"keccak256\":\"0x4b55f601798360e27c9e260a5bc2c50b32aa95ddbf04cd1d30be601a7d354779\",\"license\":\"GPL-3.0\"},\"contracts/release/interfaces/ISynthetixProxyERC20.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\n/// @title ISynthetixProxyERC20 Interface\\r\\ninterface ISynthetixProxyERC20 {\\r\\n    function target() external view returns (address);\\r\\n}\\r\\n\",\"keccak256\":\"0x3f02cc1f2827ff2913eab9029168c871fef1a7e4742815f516c1979e511d5cb2\",\"license\":\"GPL-3.0\"},\"contracts/release/interfaces/ISynthetixSynth.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\n/// @title ISynthetixSynth Interface\\r\\ninterface ISynthetixSynth {\\r\\n    function currencyKey() external view returns (bytes32);\\r\\n}\\r\\n\",\"keccak256\":\"0x8ab942def2f5aa0a95bbdf3c125022c170c5cb130247968087e57643d0422524\",\"license\":\"GPL-3.0\"}},\"version\":1}",
+  "bytecode": "0x60e06040523480156200001157600080fd5b506040516200143938038062001439833981810160405260808110156200003757600080fd5b8151602083015160408085015160608601805192519496939591949391820192846401000000008211156200006b57600080fd5b9083019060208201858111156200008157600080fd5b82518660208202830111640100000000821117156200009f57600080fd5b82525081516020918201928201910280838360005b83811015620000ce578181015183820152602001620000b4565b5050505060608a811b6001600160601b03199081166080528a821b811660a05289821b1660c05260019190930181815260408082019052929550919350909150506020808301908036833701905050905082816000815181106200012e57fe5b6001600160a01b0390921660209283029190910190910152620001518162000167565b6200015c8262000167565b505050505062000401565b60005b81518110156200031c576000808383815181106200018457fe5b60200260200101516001600160a01b03166001600160a01b03168152602001908152602001600020546000801b1462000204576040805162461bcd60e51b815260206004820152601e60248201527f5f5f61646453796e7468733a2056616c756520616c7265616479207365740000604482015290519081900360640190fd5b60006200022b8383815181106200021757fe5b60200260200101516200032060201b60201c565b90508062000280576040805162461bcd60e51b815260206004820152601b60248201527f5f5f61646453796e7468733a204e6f2063757272656e63794b65790000000000604482015290519081900360640190fd5b806000808585815181106200029157fe5b60200260200101516001600160a01b03166001600160a01b0316815260200190815260200160002081905550828281518110620002ca57fe5b60200260200101516001600160a01b03167f61209fb9d54461f939ea62c8e068ffba9ade97587787c035e7e09d44ebab2cb8826040518082815260200191505060405180910390a2506001016200016a565b5050565b6000816001600160a01b031663d4b839926040518163ffffffff1660e01b815260040160206040518083038186803b1580156200035c57600080fd5b505afa15801562000371573d6000803e3d6000fd5b505050506040513d60208110156200038857600080fd5b50516040805163dbd06c8560e01b815290516001600160a01b039092169163dbd06c8591600480820192602092909190829003018186803b158015620003cd57600080fd5b505afa158015620003e2573d6000803e3d6000fd5b505050506040513d6020811015620003f957600080fd5b505192915050565b60805160601c60a05160601c60c05160601c610ff362000446600039806104ec528061080f5250806104a3528061059b5250806108355280610ac55250610ff36000f3fe608060405234801561001057600080fd5b506004361061009e5760003560e01c8063893d20e811610066578063893d20e8146102c65780638bc3981c146102ce5780638d8c19851461033e57806397c0ac87146103765780639be918e61461037e5761009e565b806347a9b6db146100a357806371c1c54914610115578063727212f6146101395780637827f4f6146101fe57806386eab215146102be575b600080fd5b610113600480360360208110156100b957600080fd5b8101906020810181356401000000008111156100d457600080fd5b8201836020820111156100e657600080fd5b8035906020019184602083028401116401000000008311171561010857600080fd5b5090925090506103b8565b005b61011d6104a1565b604080516001600160a01b039092168252519081900360200190f35b6101656004803603604081101561014f57600080fd5b506001600160a01b0381351690602001356104c5565b604051808060200180602001838103835285818151815260200191508051906020019060200280838360005b838110156101a9578181015183820152602001610191565b50505050905001838103825284818151815260200191508051906020019060200280838360005b838110156101e85781810151838201526020016101d0565b5050505090500194505050505060405180910390f35b61026e6004803603602081101561021457600080fd5b81019060208101813564010000000081111561022f57600080fd5b82018360208201111561024157600080fd5b8035906020019184602083028401116401000000008311171561026357600080fd5b509092509050610755565b60408051602080825283518183015283519192839290830191858101910280838360005b838110156102aa578181015183820152602001610292565b505050509050019250505060405180910390f35b61011d61080d565b61011d610831565b610113600480360360208110156102e457600080fd5b8101906020810181356401000000008111156102ff57600080fd5b82018360208201111561031157600080fd5b8035906020019184602083028401116401000000008311171561033357600080fd5b5090925090506108bd565b6103646004803603602081101561035457600080fd5b50356001600160a01b0316610aa8565b60408051918252519081900360200190f35b61011d610ac3565b6103a46004803603602081101561039457600080fd5b50356001600160a01b0316610ae7565b604080519115158252519081900360200190f35b6103c0610831565b6001600160a01b0316336001600160a01b03161461040f5760405162461bcd60e51b8152600401808060200182810382526049815260200180610ec56049913960600191505060405180910390fd5b80610461576040805162461bcd60e51b815260206004820152601860248201527f61646453796e7468733a20456d707479205f73796e7468730000000000000000604482015290519081900360640190fd5b61049d828280806020026020016040519081016040528093929190818152602001838360200280828437600092019190915250610afa92505050565b5050565b7f000000000000000000000000000000000000000000000000000000000000000090565b604080516001808252818301909252606091829190602080830190803683370190505091507f00000000000000000000000000000000000000000000000000000000000000008260008151811061051857fe5b6001600160a01b0392909216602092830291909101820152604080516001808252818301909252918281019080368337019050509050600061055985610aa8565b9050806105975760405162461bcd60e51b8152600401808060200182810382526032815260200180610e686032913960400191505060405180910390fd5b60007f00000000000000000000000000000000000000000000000000000000000000006001600160a01b031663dacb2d016040518163ffffffff1660e01b815260040180806c45786368616e6765526174657360981b815250602001806020018281038252602b815260200180610e9a602b913960400191505060206040518083038186803b15801561062957600080fd5b505afa15801561063d573d6000803e3d6000fd5b505050506040513d602081101561065357600080fd5b505160408051630c71cd2360e01b815260048101859052815192935060009283926001600160a01b03861692630c71cd239260248083019392829003018186803b1580156106a057600080fd5b505afa1580156106b4573d6000803e3d6000fd5b505050506040513d60408110156106ca57600080fd5b508051602090910151909250905080156107155760405162461bcd60e51b8152600401808060200182810382526033815260200180610f656033913960400191505060405180910390fd5b610731670de0b6b3a764000061072b8985610c9f565b90610cff565b8560008151811061073e57fe5b602002602001018181525050505050509250929050565b60608167ffffffffffffffff8111801561076e57600080fd5b50604051908082528060200260200182016040528015610798578160200160208202803683370190505b50905060005b82811015610805576000808585848181106107b557fe5b905060200201356001600160a01b03166001600160a01b03166001600160a01b03168152602001908152602001600020548282815181106107f257fe5b602090810291909101015260010161079e565b505b92915050565b7f000000000000000000000000000000000000000000000000000000000000000090565b60007f00000000000000000000000000000000000000000000000000000000000000006001600160a01b031663893d20e86040518163ffffffff1660e01b815260040160206040518083038186803b15801561088c57600080fd5b505afa1580156108a0573d6000803e3d6000fd5b505050506040513d60208110156108b657600080fd5b5051905090565b806108f95760405162461bcd60e51b8152600401808060200182810382526026815260200180610e426026913960400191505060405180910390fd5b60005b81811015610aa357600080600085858581811061091557fe5b905060200201356001600160a01b03166001600160a01b03166001600160a01b03168152602001908152602001600020549050806000801b141561098a5760405162461bcd60e51b8152600401808060200182810382526026815260200180610f986026913960400191505060405180910390fd5b60006109b085858581811061099b57fe5b905060200201356001600160a01b0316610d66565b9050818114156109f15760405162461bcd60e51b8152600401808060200182810382526036815260200180610f0e6036913960400191505060405180910390fd5b80600080878787818110610a0157fe5b905060200201356001600160a01b03166001600160a01b03166001600160a01b0316815260200190815260200160002081905550848484818110610a4157fe5b905060200201356001600160a01b03166001600160a01b03167f55ae8b6fd923a02180a807d2eb1ef5bd50db0347ca1be7ab7f5f1680cb8301978383604051808381526020018281526020019250505060405180910390a250506001016108fc565b505050565b6001600160a01b031660009081526020819052604090205490565b7f000000000000000000000000000000000000000000000000000000000000000090565b6000610af282610aa8565b151592915050565b60005b815181101561049d57600080838381518110610b1557fe5b60200260200101516001600160a01b03166001600160a01b03168152602001908152602001600020546000801b14610b94576040805162461bcd60e51b815260206004820152601e60248201527f5f5f61646453796e7468733a2056616c756520616c7265616479207365740000604482015290519081900360640190fd5b6000610bb2838381518110610ba557fe5b6020026020010151610d66565b905080610c06576040805162461bcd60e51b815260206004820152601b60248201527f5f5f61646453796e7468733a204e6f2063757272656e63794b65790000000000604482015290519081900360640190fd5b80600080858581518110610c1657fe5b60200260200101516001600160a01b03166001600160a01b0316815260200190815260200160002081905550828281518110610c4e57fe5b60200260200101516001600160a01b03167f61209fb9d54461f939ea62c8e068ffba9ade97587787c035e7e09d44ebab2cb8826040518082815260200191505060405180910390a250600101610afd565b600082610cae57506000610807565b82820282848281610cbb57fe5b0414610cf85760405162461bcd60e51b8152600401808060200182810382526021815260200180610f446021913960400191505060405180910390fd5b9392505050565b6000808211610d55576040805162461bcd60e51b815260206004820152601a60248201527f536166654d6174683a206469766973696f6e206279207a65726f000000000000604482015290519081900360640190fd5b818381610d5e57fe5b049392505050565b6000816001600160a01b031663d4b839926040518163ffffffff1660e01b815260040160206040518083038186803b158015610da157600080fd5b505afa158015610db5573d6000803e3d6000fd5b505050506040513d6020811015610dcb57600080fd5b50516040805163dbd06c8560e01b815290516001600160a01b039092169163dbd06c8591600480820192602092909190829003018186803b158015610e0f57600080fd5b505afa158015610e23573d6000803e3d6000fd5b505050506040513d6020811015610e3957600080fd5b50519291505056fe75706461746553796e746843757272656e63794b6579733a20456d707479205f73796e74687363616c63556e6465726c79696e6756616c7565733a205f64657269766174697665206973206e6f7420737570706f7274656463616c63556e6465726c79696e6756616c7565733a204d697373696e672045786368616e676552617465736f6e6c7946756e644465706c6f7965724f776e65723a204f6e6c79207468652046756e644465706c6f796572206f776e65722063616e2063616c6c20746869732066756e6374696f6e75706461746553796e746843757272656e63794b6579733a2053796e74682068617320636f72726563742063757272656e63794b6579536166654d6174683a206d756c7469706c69636174696f6e206f766572666c6f7763616c63556e6465726c79696e6756616c7565733a205f646572697661746976652072617465206973206e6f742076616c696475706461746553796e746843757272656e63794b6579733a2053796e7468206e6f7420736574a2646970667358221220f4c1774b0bb008780c19f0473b97e927a49ba59423ba8a20218e2353b3cc639e64736f6c634300060c0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061009e5760003560e01c8063893d20e811610066578063893d20e8146102c65780638bc3981c146102ce5780638d8c19851461033e57806397c0ac87146103765780639be918e61461037e5761009e565b806347a9b6db146100a357806371c1c54914610115578063727212f6146101395780637827f4f6146101fe57806386eab215146102be575b600080fd5b610113600480360360208110156100b957600080fd5b8101906020810181356401000000008111156100d457600080fd5b8201836020820111156100e657600080fd5b8035906020019184602083028401116401000000008311171561010857600080fd5b5090925090506103b8565b005b61011d6104a1565b604080516001600160a01b039092168252519081900360200190f35b6101656004803603604081101561014f57600080fd5b506001600160a01b0381351690602001356104c5565b604051808060200180602001838103835285818151815260200191508051906020019060200280838360005b838110156101a9578181015183820152602001610191565b50505050905001838103825284818151815260200191508051906020019060200280838360005b838110156101e85781810151838201526020016101d0565b5050505090500194505050505060405180910390f35b61026e6004803603602081101561021457600080fd5b81019060208101813564010000000081111561022f57600080fd5b82018360208201111561024157600080fd5b8035906020019184602083028401116401000000008311171561026357600080fd5b509092509050610755565b60408051602080825283518183015283519192839290830191858101910280838360005b838110156102aa578181015183820152602001610292565b505050509050019250505060405180910390f35b61011d61080d565b61011d610831565b610113600480360360208110156102e457600080fd5b8101906020810181356401000000008111156102ff57600080fd5b82018360208201111561031157600080fd5b8035906020019184602083028401116401000000008311171561033357600080fd5b5090925090506108bd565b6103646004803603602081101561035457600080fd5b50356001600160a01b0316610aa8565b60408051918252519081900360200190f35b61011d610ac3565b6103a46004803603602081101561039457600080fd5b50356001600160a01b0316610ae7565b604080519115158252519081900360200190f35b6103c0610831565b6001600160a01b0316336001600160a01b03161461040f5760405162461bcd60e51b8152600401808060200182810382526049815260200180610ec56049913960600191505060405180910390fd5b80610461576040805162461bcd60e51b815260206004820152601860248201527f61646453796e7468733a20456d707479205f73796e7468730000000000000000604482015290519081900360640190fd5b61049d828280806020026020016040519081016040528093929190818152602001838360200280828437600092019190915250610afa92505050565b5050565b7f000000000000000000000000000000000000000000000000000000000000000090565b604080516001808252818301909252606091829190602080830190803683370190505091507f00000000000000000000000000000000000000000000000000000000000000008260008151811061051857fe5b6001600160a01b0392909216602092830291909101820152604080516001808252818301909252918281019080368337019050509050600061055985610aa8565b9050806105975760405162461bcd60e51b8152600401808060200182810382526032815260200180610e686032913960400191505060405180910390fd5b60007f00000000000000000000000000000000000000000000000000000000000000006001600160a01b031663dacb2d016040518163ffffffff1660e01b815260040180806c45786368616e6765526174657360981b815250602001806020018281038252602b815260200180610e9a602b913960400191505060206040518083038186803b15801561062957600080fd5b505afa15801561063d573d6000803e3d6000fd5b505050506040513d602081101561065357600080fd5b505160408051630c71cd2360e01b815260048101859052815192935060009283926001600160a01b03861692630c71cd239260248083019392829003018186803b1580156106a057600080fd5b505afa1580156106b4573d6000803e3d6000fd5b505050506040513d60408110156106ca57600080fd5b508051602090910151909250905080156107155760405162461bcd60e51b8152600401808060200182810382526033815260200180610f656033913960400191505060405180910390fd5b610731670de0b6b3a764000061072b8985610c9f565b90610cff565b8560008151811061073e57fe5b602002602001018181525050505050509250929050565b60608167ffffffffffffffff8111801561076e57600080fd5b50604051908082528060200260200182016040528015610798578160200160208202803683370190505b50905060005b82811015610805576000808585848181106107b557fe5b905060200201356001600160a01b03166001600160a01b03166001600160a01b03168152602001908152602001600020548282815181106107f257fe5b602090810291909101015260010161079e565b505b92915050565b7f000000000000000000000000000000000000000000000000000000000000000090565b60007f00000000000000000000000000000000000000000000000000000000000000006001600160a01b031663893d20e86040518163ffffffff1660e01b815260040160206040518083038186803b15801561088c57600080fd5b505afa1580156108a0573d6000803e3d6000fd5b505050506040513d60208110156108b657600080fd5b5051905090565b806108f95760405162461bcd60e51b8152600401808060200182810382526026815260200180610e426026913960400191505060405180910390fd5b60005b81811015610aa357600080600085858581811061091557fe5b905060200201356001600160a01b03166001600160a01b03166001600160a01b03168152602001908152602001600020549050806000801b141561098a5760405162461bcd60e51b8152600401808060200182810382526026815260200180610f986026913960400191505060405180910390fd5b60006109b085858581811061099b57fe5b905060200201356001600160a01b0316610d66565b9050818114156109f15760405162461bcd60e51b8152600401808060200182810382526036815260200180610f0e6036913960400191505060405180910390fd5b80600080878787818110610a0157fe5b905060200201356001600160a01b03166001600160a01b03166001600160a01b0316815260200190815260200160002081905550848484818110610a4157fe5b905060200201356001600160a01b03166001600160a01b03167f55ae8b6fd923a02180a807d2eb1ef5bd50db0347ca1be7ab7f5f1680cb8301978383604051808381526020018281526020019250505060405180910390a250506001016108fc565b505050565b6001600160a01b031660009081526020819052604090205490565b7f000000000000000000000000000000000000000000000000000000000000000090565b6000610af282610aa8565b151592915050565b60005b815181101561049d57600080838381518110610b1557fe5b60200260200101516001600160a01b03166001600160a01b03168152602001908152602001600020546000801b14610b94576040805162461bcd60e51b815260206004820152601e60248201527f5f5f61646453796e7468733a2056616c756520616c7265616479207365740000604482015290519081900360640190fd5b6000610bb2838381518110610ba557fe5b6020026020010151610d66565b905080610c06576040805162461bcd60e51b815260206004820152601b60248201527f5f5f61646453796e7468733a204e6f2063757272656e63794b65790000000000604482015290519081900360640190fd5b80600080858581518110610c1657fe5b60200260200101516001600160a01b03166001600160a01b0316815260200190815260200160002081905550828281518110610c4e57fe5b60200260200101516001600160a01b03167f61209fb9d54461f939ea62c8e068ffba9ade97587787c035e7e09d44ebab2cb8826040518082815260200191505060405180910390a250600101610afd565b600082610cae57506000610807565b82820282848281610cbb57fe5b0414610cf85760405162461bcd60e51b8152600401808060200182810382526021815260200180610f446021913960400191505060405180910390fd5b9392505050565b6000808211610d55576040805162461bcd60e51b815260206004820152601a60248201527f536166654d6174683a206469766973696f6e206279207a65726f000000000000604482015290519081900360640190fd5b818381610d5e57fe5b049392505050565b6000816001600160a01b031663d4b839926040518163ffffffff1660e01b815260040160206040518083038186803b158015610da157600080fd5b505afa158015610db5573d6000803e3d6000fd5b505050506040513d6020811015610dcb57600080fd5b50516040805163dbd06c8560e01b815290516001600160a01b039092169163dbd06c8591600480820192602092909190829003018186803b158015610e0f57600080fd5b505afa158015610e23573d6000803e3d6000fd5b505050506040513d6020811015610e3957600080fd5b50519291505056fe75706461746553796e746843757272656e63794b6579733a20456d707479205f73796e74687363616c63556e6465726c79696e6756616c7565733a205f64657269766174697665206973206e6f7420737570706f7274656463616c63556e6465726c79696e6756616c7565733a204d697373696e672045786368616e676552617465736f6e6c7946756e644465706c6f7965724f776e65723a204f6e6c79207468652046756e644465706c6f796572206f776e65722063616e2063616c6c20746869732066756e6374696f6e75706461746553796e746843757272656e63794b6579733a2053796e74682068617320636f72726563742063757272656e63794b6579536166654d6174683a206d756c7469706c69636174696f6e206f766572666c6f7763616c63556e6465726c79696e6756616c7565733a205f646572697661746976652072617465206973206e6f742076616c696475706461746553796e746843757272656e63794b6579733a2053796e7468206e6f7420736574a2646970667358221220f4c1774b0bb008780c19f0473b97e927a49ba59423ba8a20218e2353b3cc639e64736f6c634300060c0033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "addSynths(address[])": {
+        "params": {
+          "_synths": "Synths to add"
+        }
+      },
+      "calcUnderlyingValues(address,uint256)": {
+        "params": {
+          "_derivative": "The derivative to convert",
+          "_derivativeAmount": "The amount of the derivative to convert"
+        },
+        "returns": {
+          "underlyingAmounts_": "The amount of each underlying asset for the equivalent derivative amount",
+          "underlyings_": "The underlying assets for the _derivative"
+        }
+      },
+      "getAddressResolver()": {
+        "returns": {
+          "_0": "addressResolver_ The `ADDRESS_RESOLVER` variable value"
+        }
+      },
+      "getCurrencyKeyForSynth(address)": {
+        "returns": {
+          "currencyKey_": "The currencyKey value"
+        }
+      },
+      "getCurrencyKeysForSynths(address[])": {
+        "returns": {
+          "currencyKeys_": "The currencyKey values"
+        }
+      },
+      "getFundDeployer()": {
+        "returns": {
+          "fundDeployer_": "The `FUND_DEPLOYER` variable value"
+        }
+      },
+      "getOwner()": {
+        "details": "Ownership is deferred to the owner of the FundDeployer contract",
+        "returns": {
+          "owner_": "The owner"
+        }
+      },
+      "getSUSD()": {
+        "returns": {
+          "susd_": "The `SUSD` variable value"
+        }
+      },
+      "isSupportedAsset(address)": {
+        "params": {
+          "_asset": "The asset to check"
+        },
+        "returns": {
+          "isSupported_": "True if the asset is a supported primitive"
+        }
+      },
+      "updateSynthCurrencyKeys(address[])": {
+        "details": "Anybody can call this function",
+        "params": {
+          "_synths": "Synths to update"
+        }
+      }
+    },
+    "title": "SynthetixPriceFeed Contract",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "addSynths(address[])": {
+        "notice": "Adds Synths to the price feed"
+      },
+      "calcUnderlyingValues(address,uint256)": {
+        "notice": "Converts a given amount of a derivative to its underlying asset values"
+      },
+      "getAddressResolver()": {
+        "notice": "Gets the `ADDRESS_RESOLVER` variable"
+      },
+      "getCurrencyKeyForSynth(address)": {
+        "notice": "Gets the currencyKey for a given Synth"
+      },
+      "getCurrencyKeysForSynths(address[])": {
+        "notice": "Gets the currencyKey for multiple given Synths"
+      },
+      "getFundDeployer()": {
+        "notice": "Gets the `FUND_DEPLOYER` variable"
+      },
+      "getOwner()": {
+        "notice": "Gets the owner of this contract"
+      },
+      "getSUSD()": {
+        "notice": "Gets the `SUSD` variable"
+      },
+      "isSupportedAsset(address)": {
+        "notice": "Checks whether an asset is a supported primitive of the price feed"
+      },
+      "updateSynthCurrencyKeys(address[])": {
+        "notice": "Updates the cached currencyKey value for specified Synths"
+      }
+    },
+    "notice": "A price feed that uses Synthetix oracles as price sources",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 33477,
+        "contract": "contracts/release/infrastructure/price-feeds/derivatives/feeds/SynthetixPriceFeed.sol:SynthetixPriceFeed",
+        "label": "synthToCurrencyKey",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_mapping(t_address,t_bytes32)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_bytes32": {
+        "encoding": "inplace",
+        "label": "bytes32",
+        "numberOfBytes": "32"
+      },
+      "t_mapping(t_address,t_bytes32)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => bytes32)",
+        "numberOfBytes": "32",
+        "value": "t_bytes32"
+      }
+    }
+  }
+}

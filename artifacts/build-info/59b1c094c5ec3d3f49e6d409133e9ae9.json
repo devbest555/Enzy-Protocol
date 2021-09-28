@@ -1,0 +1,357 @@
+{
+  "id": "59b1c094c5ec3d3f49e6d409133e9ae9",
+  "_format": "hh-sol-build-info-1",
+  "solcVersion": "0.6.12",
+  "solcLongVersion": "0.6.12+commit.27d51765",
+  "input": {
+    "language": "Solidity",
+    "sources": {
+      "contracts/release/interfaces/IMakerDaoPot.sol": {
+        "content": "// SPDX-License-Identifier: GPL-3.0\r\n\r\n\r\n\r\npragma solidity 0.6.12;\r\n\r\n/// @notice Limited interface for Maker DSR's Pot contract\r\n/// @dev See DSR integration guide: https://github.com/makerdao/developerguides/blob/master/dai/dsr-integration-guide/dsr-integration-guide-01.md\r\ninterface IMakerDaoPot {\r\n    function chi() external view returns (uint256);\r\n\r\n    function rho() external view returns (uint256);\r\n\r\n    function drip() external returns (uint256);\r\n}\r\n"
+      }
+    },
+    "settings": {
+      "optimizer": {
+        "enabled": true,
+        "runs": 200,
+        "details": {
+          "yul": false
+        }
+      },
+      "outputSelection": {
+        "*": {
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata",
+            "devdoc",
+            "userdoc",
+            "storageLayout",
+            "evm.gasEstimates"
+          ],
+          "": [
+            "ast"
+          ]
+        }
+      },
+      "metadata": {
+        "useLiteralContent": true
+      }
+    }
+  },
+  "output": {
+    "contracts": {
+      "contracts/release/interfaces/IMakerDaoPot.sol": {
+        "IMakerDaoPot": {
+          "abi": [
+            {
+              "inputs": [],
+              "name": "chi",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "drip",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "rho",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            }
+          ],
+          "devdoc": {
+            "details": "See DSR integration guide: https://github.com/makerdao/developerguides/blob/master/dai/dsr-integration-guide/dsr-integration-guide-01.md",
+            "kind": "dev",
+            "methods": {},
+            "version": 1
+          },
+          "evm": {
+            "bytecode": {
+              "linkReferences": {},
+              "object": "",
+              "opcodes": "",
+              "sourceMap": ""
+            },
+            "deployedBytecode": {
+              "immutableReferences": {},
+              "linkReferences": {},
+              "object": "",
+              "opcodes": "",
+              "sourceMap": ""
+            },
+            "gasEstimates": null,
+            "methodIdentifiers": {
+              "chi()": "c92aecc4",
+              "drip()": "9f678cca",
+              "rho()": "20aba08b"
+            }
+          },
+          "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"chi\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"drip\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"rho\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"See DSR integration guide: https://github.com/makerdao/developerguides/blob/master/dai/dsr-integration-guide/dsr-integration-guide-01.md\",\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"notice\":\"Limited interface for Maker DSR's Pot contract\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/release/interfaces/IMakerDaoPot.sol\":\"IMakerDaoPot\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"details\":{\"constantOptimizer\":true,\"cse\":true,\"deduplicate\":true,\"jumpdestRemover\":true,\"orderLiterals\":true,\"peephole\":true,\"yul\":false},\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/release/interfaces/IMakerDaoPot.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\n/// @notice Limited interface for Maker DSR's Pot contract\\r\\n/// @dev See DSR integration guide: https://github.com/makerdao/developerguides/blob/master/dai/dsr-integration-guide/dsr-integration-guide-01.md\\r\\ninterface IMakerDaoPot {\\r\\n    function chi() external view returns (uint256);\\r\\n\\r\\n    function rho() external view returns (uint256);\\r\\n\\r\\n    function drip() external returns (uint256);\\r\\n}\\r\\n\",\"keccak256\":\"0xa83cc1e7b1b49d324e21c781fed481a401281cd1e4197d3e13f0c35b2640c999\",\"license\":\"GPL-3.0\"}},\"version\":1}",
+          "storageLayout": {
+            "storage": [],
+            "types": null
+          },
+          "userdoc": {
+            "kind": "user",
+            "methods": {},
+            "notice": "Limited interface for Maker DSR's Pot contract",
+            "version": 1
+          }
+        }
+      }
+    },
+    "sources": {
+      "contracts/release/interfaces/IMakerDaoPot.sol": {
+        "ast": {
+          "absolutePath": "contracts/release/interfaces/IMakerDaoPot.sol",
+          "exportedSymbols": {
+            "IMakerDaoPot": [
+              18
+            ]
+          },
+          "id": 19,
+          "license": "GPL-3.0",
+          "nodeType": "SourceUnit",
+          "nodes": [
+            {
+              "id": 1,
+              "literals": [
+                "solidity",
+                "0.6",
+                ".12"
+              ],
+              "nodeType": "PragmaDirective",
+              "src": "43:23:0"
+            },
+            {
+              "abstract": false,
+              "baseContracts": [],
+              "contractDependencies": [],
+              "contractKind": "interface",
+              "documentation": {
+                "id": 2,
+                "nodeType": "StructuredDocumentation",
+                "src": "70:207:0",
+                "text": "@notice Limited interface for Maker DSR's Pot contract\n @dev See DSR integration guide: https://github.com/makerdao/developerguides/blob/master/dai/dsr-integration-guide/dsr-integration-guide-01.md"
+              },
+              "fullyImplemented": false,
+              "id": 18,
+              "linearizedBaseContracts": [
+                18
+              ],
+              "name": "IMakerDaoPot",
+              "nodeType": "ContractDefinition",
+              "nodes": [
+                {
+                  "body": null,
+                  "documentation": null,
+                  "functionSelector": "c92aecc4",
+                  "id": 7,
+                  "implemented": false,
+                  "kind": "function",
+                  "modifiers": [],
+                  "name": "chi",
+                  "nodeType": "FunctionDefinition",
+                  "overrides": null,
+                  "parameters": {
+                    "id": 3,
+                    "nodeType": "ParameterList",
+                    "parameters": [],
+                    "src": "319:2:0"
+                  },
+                  "returnParameters": {
+                    "id": 6,
+                    "nodeType": "ParameterList",
+                    "parameters": [
+                      {
+                        "constant": false,
+                        "id": 5,
+                        "mutability": "mutable",
+                        "name": "",
+                        "nodeType": "VariableDeclaration",
+                        "overrides": null,
+                        "scope": 7,
+                        "src": "345:7:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        "typeName": {
+                          "id": 4,
+                          "name": "uint256",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "345:7:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "value": null,
+                        "visibility": "internal"
+                      }
+                    ],
+                    "src": "344:9:0"
+                  },
+                  "scope": 18,
+                  "src": "307:47:0",
+                  "stateMutability": "view",
+                  "virtual": false,
+                  "visibility": "external"
+                },
+                {
+                  "body": null,
+                  "documentation": null,
+                  "functionSelector": "20aba08b",
+                  "id": 12,
+                  "implemented": false,
+                  "kind": "function",
+                  "modifiers": [],
+                  "name": "rho",
+                  "nodeType": "FunctionDefinition",
+                  "overrides": null,
+                  "parameters": {
+                    "id": 8,
+                    "nodeType": "ParameterList",
+                    "parameters": [],
+                    "src": "374:2:0"
+                  },
+                  "returnParameters": {
+                    "id": 11,
+                    "nodeType": "ParameterList",
+                    "parameters": [
+                      {
+                        "constant": false,
+                        "id": 10,
+                        "mutability": "mutable",
+                        "name": "",
+                        "nodeType": "VariableDeclaration",
+                        "overrides": null,
+                        "scope": 12,
+                        "src": "400:7:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        "typeName": {
+                          "id": 9,
+                          "name": "uint256",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "400:7:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "value": null,
+                        "visibility": "internal"
+                      }
+                    ],
+                    "src": "399:9:0"
+                  },
+                  "scope": 18,
+                  "src": "362:47:0",
+                  "stateMutability": "view",
+                  "virtual": false,
+                  "visibility": "external"
+                },
+                {
+                  "body": null,
+                  "documentation": null,
+                  "functionSelector": "9f678cca",
+                  "id": 17,
+                  "implemented": false,
+                  "kind": "function",
+                  "modifiers": [],
+                  "name": "drip",
+                  "nodeType": "FunctionDefinition",
+                  "overrides": null,
+                  "parameters": {
+                    "id": 13,
+                    "nodeType": "ParameterList",
+                    "parameters": [],
+                    "src": "430:2:0"
+                  },
+                  "returnParameters": {
+                    "id": 16,
+                    "nodeType": "ParameterList",
+                    "parameters": [
+                      {
+                        "constant": false,
+                        "id": 15,
+                        "mutability": "mutable",
+                        "name": "",
+                        "nodeType": "VariableDeclaration",
+                        "overrides": null,
+                        "scope": 17,
+                        "src": "451:7:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        "typeName": {
+                          "id": 14,
+                          "name": "uint256",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "451:7:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "value": null,
+                        "visibility": "internal"
+                      }
+                    ],
+                    "src": "450:9:0"
+                  },
+                  "scope": 18,
+                  "src": "417:43:0",
+                  "stateMutability": "nonpayable",
+                  "virtual": false,
+                  "visibility": "external"
+                }
+              ],
+              "scope": 19,
+              "src": "277:186:0"
+            }
+          ],
+          "src": "43:422:0"
+        },
+        "id": 0
+      }
+    }
+  }
+}

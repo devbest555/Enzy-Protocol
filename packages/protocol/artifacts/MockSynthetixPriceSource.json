@@ -1,0 +1,180 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_ethUsdAggregator",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_currencyKey",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getAggregatorFromCurrencyKey",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "aggregator",
+            "type": "address"
+          },
+          {
+            "internalType": "enum MockSynthetixPriceSource.RateAsset",
+            "name": "rateAsset",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct MockSynthetixPriceSource.AggregatorInfo",
+        "name": "_aggregator",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_currencyKey",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getFixedRate",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_currencyKey",
+        "type": "bytes32"
+      }
+    ],
+    "name": "rateAndInvalid",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "rate_",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isInvalid_",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32[]",
+        "name": "_currencyKeys",
+        "type": "bytes32[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "_aggregators",
+        "type": "address[]"
+      },
+      {
+        "internalType": "enum MockSynthetixPriceSource.RateAsset[]",
+        "name": "_rateAssets",
+        "type": "uint8[]"
+      }
+    ],
+    "name": "setPriceSourcesForCurrencyKeys",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_currencyKey",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_rate",
+        "type": "uint256"
+      }
+    ],
+    "name": "setRate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

@@ -1,0 +1,28 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "SwapperBase",
+  "sourceName": "contracts/mocks/utils/SwapperBase.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "ETH_ADDRESS",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

@@ -1,0 +1,79 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IMigratableVault",
+  "sourceName": "contracts/persistent/utils/IMigratableVault.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_who",
+          "type": "address"
+        }
+      ],
+      "name": "canMigrate",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "canMigrate_",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_owner",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_accessor",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "_fundName",
+          "type": "string"
+        }
+      ],
+      "name": "init",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_nextAccessor",
+          "type": "address"
+        }
+      ],
+      "name": "setAccessor",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_nextVaultLib",
+          "type": "address"
+        }
+      ],
+      "name": "setVaultLib",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

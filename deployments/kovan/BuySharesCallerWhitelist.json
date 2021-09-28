@@ -1,0 +1,475 @@
+{
+  "address": "0xa2bd0Ce2B0a2eF9737bc4F686D6FD736836fEDC0",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_policyManager",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "comptrollerProxy",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address[]",
+          "name": "items",
+          "type": "address[]"
+        }
+      ],
+      "name": "AddressesAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "comptrollerProxy",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address[]",
+          "name": "items",
+          "type": "address[]"
+        }
+      ],
+      "name": "AddressesRemoved",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "activateForFund",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_comptrollerProxy",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_encodedSettings",
+          "type": "bytes"
+        }
+      ],
+      "name": "addFundSettings",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_comptrollerProxy",
+          "type": "address"
+        }
+      ],
+      "name": "getList",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "list_",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPolicyManager",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "policyManager_",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "identifier",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "identifier_",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "implementedHooks",
+      "outputs": [
+        {
+          "internalType": "enum IPolicyManager.PolicyHook[]",
+          "name": "implementedHooks_",
+          "type": "uint8[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_comptrollerProxy",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_item",
+          "type": "address"
+        }
+      ],
+      "name": "isInList",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "isInList_",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_comptrollerProxy",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_buySharesCaller",
+          "type": "address"
+        }
+      ],
+      "name": "passesRule",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "isValid_",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_comptrollerProxy",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_encodedSettings",
+          "type": "bytes"
+        }
+      ],
+      "name": "updateFundSettings",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_comptrollerProxy",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "enum IPolicyManager.PolicyHook",
+          "name": "",
+          "type": "uint8"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_encodedArgs",
+          "type": "bytes"
+        }
+      ],
+      "name": "validateRule",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "isValid_",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x1d098872d0db1ca1387fdf10e8db02c6d14dd58163dc6244fd251d8d6301b310",
+  "receipt": {
+    "to": null,
+    "from": "0xb10bcC8B508174c761CFB1E7143bFE37c4fBC3a1",
+    "contractAddress": "0xa2bd0Ce2B0a2eF9737bc4F686D6FD736836fEDC0",
+    "transactionIndex": 3,
+    "gasUsed": "888054",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x8fc4338314acaa4f1d264d15bc2e97eb07c9594d211f0daec16a00fcc61bf226",
+    "transactionHash": "0x1d098872d0db1ca1387fdf10e8db02c6d14dd58163dc6244fd251d8d6301b310",
+    "logs": [],
+    "blockNumber": 27382222,
+    "cumulativeGasUsed": "1163818",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x9889DfAAb3AC441c8E211D7eEda131066c5fa6d2"
+  ],
+  "linkedData": {
+    "type": "POLICY"
+  },
+  "solcInputHash": "616bcd197648f809b4b4e612fb09cc9a",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_policyManager\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"comptrollerProxy\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"items\",\"type\":\"address[]\"}],\"name\":\"AddressesAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"comptrollerProxy\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"items\",\"type\":\"address[]\"}],\"name\":\"AddressesRemoved\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"activateForFund\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_comptrollerProxy\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"_encodedSettings\",\"type\":\"bytes\"}],\"name\":\"addFundSettings\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_comptrollerProxy\",\"type\":\"address\"}],\"name\":\"getList\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"list_\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPolicyManager\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"policyManager_\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"identifier\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"identifier_\",\"type\":\"string\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"implementedHooks\",\"outputs\":[{\"internalType\":\"enum IPolicyManager.PolicyHook[]\",\"name\":\"implementedHooks_\",\"type\":\"uint8[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_comptrollerProxy\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_item\",\"type\":\"address\"}],\"name\":\"isInList\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isInList_\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_comptrollerProxy\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_buySharesCaller\",\"type\":\"address\"}],\"name\":\"passesRule\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isValid_\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_comptrollerProxy\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"_encodedSettings\",\"type\":\"bytes\"}],\"name\":\"updateFundSettings\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_comptrollerProxy\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"enum IPolicyManager.PolicyHook\",\"name\":\"\",\"type\":\"uint8\"},{\"internalType\":\"bytes\",\"name\":\"_encodedArgs\",\"type\":\"bytes\"}],\"name\":\"validateRule\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isValid_\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"activateForFund(address,address)\":{\"details\":\"Unimplemented by default, can be overridden by the policy\"},\"addFundSettings(address,bytes)\":{\"params\":{\"_comptrollerProxy\":\"The fund's ComptrollerProxy address\",\"_encodedSettings\":\"Encoded settings to apply to a fund\"}},\"getList(address)\":{\"params\":{\"_comptrollerProxy\":\"The fund's ComptrollerProxy address\"},\"returns\":{\"list_\":\"The addresses in the fund's list\"}},\"getPolicyManager()\":{\"returns\":{\"policyManager_\":\"The `POLICY_MANAGER` variable value\"}},\"identifier()\":{\"returns\":{\"identifier_\":\"The identifer string\"}},\"implementedHooks()\":{\"returns\":{\"implementedHooks_\":\"The implemented PolicyHooks\"}},\"isInList(address,address)\":{\"params\":{\"_comptrollerProxy\":\"The fund's ComptrollerProxy address\",\"_item\":\"The address to check against the list\"},\"returns\":{\"isInList_\":\"True if the address is in the list\"}},\"passesRule(address,address)\":{\"params\":{\"_buySharesCaller\":\"The buyShares caller for which to check the rule\",\"_comptrollerProxy\":\"The fund's ComptrollerProxy address\"},\"returns\":{\"isValid_\":\"True if the rule passes\"}},\"updateFundSettings(address,address,bytes)\":{\"params\":{\"_comptrollerProxy\":\"The fund's ComptrollerProxy address\",\"_encodedSettings\":\"Encoded settings to apply to a fund\"}},\"validateRule(address,address,uint8,bytes)\":{\"params\":{\"_comptrollerProxy\":\"The fund's ComptrollerProxy address\",\"_encodedArgs\":\"Encoded args with which to validate the rule\"},\"returns\":{\"isValid_\":\"True if the rule passes\"}}},\"title\":\"BuySharesCallerWhitelist Contract\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"activateForFund(address,address)\":{\"notice\":\"Validates and initializes a policy as necessary prior to fund activation\"},\"addFundSettings(address,bytes)\":{\"notice\":\"Adds the initial policy settings for a fund\"},\"getList(address)\":{\"notice\":\"Get all addresses in a fund's list\"},\"getPolicyManager()\":{\"notice\":\"Gets the `POLICY_MANAGER` variable value\"},\"identifier()\":{\"notice\":\"Provides a constant string identifier for a policy\"},\"implementedHooks()\":{\"notice\":\"Gets the implemented PolicyHooks for a policy\"},\"isInList(address,address)\":{\"notice\":\"Check if an address is in a fund's list\"},\"passesRule(address,address)\":{\"notice\":\"Checks whether a particular condition passes the rule for a particular fund\"},\"updateFundSettings(address,address,bytes)\":{\"notice\":\"Updates the policy settings for a fund\"},\"validateRule(address,address,uint8,bytes)\":{\"notice\":\"Apply the rule with the specified parameters of a PolicyHook\"}},\"notice\":\"A policy that only allows a configurable whitelist of buyShares callers for a fund\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/release/extensions/policy-manager/policies/buy-shares/BuySharesCallerWhitelist.sol\":\"BuySharesCallerWhitelist\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"details\":{\"constantOptimizer\":true,\"cse\":true,\"deduplicate\":true,\"jumpdestRemover\":true,\"orderLiterals\":true,\"peephole\":true,\"yul\":false},\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/utils/EnumerableSet.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity >=0.6.0 <0.8.0;\\n\\n/**\\n * @dev Library for managing\\n * https://en.wikipedia.org/wiki/Set_(abstract_data_type)[sets] of primitive\\n * types.\\n *\\n * Sets have the following properties:\\n *\\n * - Elements are added, removed, and checked for existence in constant time\\n * (O(1)).\\n * - Elements are enumerated in O(n). No guarantees are made on the ordering.\\n *\\n * ```\\n * contract Example {\\n *     // Add the library methods\\n *     using EnumerableSet for EnumerableSet.AddressSet;\\n *\\n *     // Declare a set state variable\\n *     EnumerableSet.AddressSet private mySet;\\n * }\\n * ```\\n *\\n * As of v3.3.0, sets of type `bytes32` (`Bytes32Set`), `address` (`AddressSet`)\\n * and `uint256` (`UintSet`) are supported.\\n */\\nlibrary EnumerableSet {\\n    // To implement this library for multiple types with as little code\\n    // repetition as possible, we write it in terms of a generic Set type with\\n    // bytes32 values.\\n    // The Set implementation uses private functions, and user-facing\\n    // implementations (such as AddressSet) are just wrappers around the\\n    // underlying Set.\\n    // This means that we can only create new EnumerableSets for types that fit\\n    // in bytes32.\\n\\n    struct Set {\\n        // Storage of set values\\n        bytes32[] _values;\\n\\n        // Position of the value in the `values` array, plus 1 because index 0\\n        // means a value is not in the set.\\n        mapping (bytes32 => uint256) _indexes;\\n    }\\n\\n    /**\\n     * @dev Add a value to a set. O(1).\\n     *\\n     * Returns true if the value was added to the set, that is if it was not\\n     * already present.\\n     */\\n    function _add(Set storage set, bytes32 value) private returns (bool) {\\n        if (!_contains(set, value)) {\\n            set._values.push(value);\\n            // The value is stored at length-1, but we add 1 to all indexes\\n            // and use 0 as a sentinel value\\n            set._indexes[value] = set._values.length;\\n            return true;\\n        } else {\\n            return false;\\n        }\\n    }\\n\\n    /**\\n     * @dev Removes a value from a set. O(1).\\n     *\\n     * Returns true if the value was removed from the set, that is if it was\\n     * present.\\n     */\\n    function _remove(Set storage set, bytes32 value) private returns (bool) {\\n        // We read and store the value's index to prevent multiple reads from the same storage slot\\n        uint256 valueIndex = set._indexes[value];\\n\\n        if (valueIndex != 0) { // Equivalent to contains(set, value)\\n            // To delete an element from the _values array in O(1), we swap the element to delete with the last one in\\n            // the array, and then remove the last element (sometimes called as 'swap and pop').\\n            // This modifies the order of the array, as noted in {at}.\\n\\n            uint256 toDeleteIndex = valueIndex - 1;\\n            uint256 lastIndex = set._values.length - 1;\\n\\n            // When the value to delete is the last one, the swap operation is unnecessary. However, since this occurs\\n            // so rarely, we still do the swap anyway to avoid the gas cost of adding an 'if' statement.\\n\\n            bytes32 lastvalue = set._values[lastIndex];\\n\\n            // Move the last value to the index where the value to delete is\\n            set._values[toDeleteIndex] = lastvalue;\\n            // Update the index for the moved value\\n            set._indexes[lastvalue] = toDeleteIndex + 1; // All indexes are 1-based\\n\\n            // Delete the slot where the moved value was stored\\n            set._values.pop();\\n\\n            // Delete the index for the deleted slot\\n            delete set._indexes[value];\\n\\n            return true;\\n        } else {\\n            return false;\\n        }\\n    }\\n\\n    /**\\n     * @dev Returns true if the value is in the set. O(1).\\n     */\\n    function _contains(Set storage set, bytes32 value) private view returns (bool) {\\n        return set._indexes[value] != 0;\\n    }\\n\\n    /**\\n     * @dev Returns the number of values on the set. O(1).\\n     */\\n    function _length(Set storage set) private view returns (uint256) {\\n        return set._values.length;\\n    }\\n\\n   /**\\n    * @dev Returns the value stored at position `index` in the set. O(1).\\n    *\\n    * Note that there are no guarantees on the ordering of values inside the\\n    * array, and it may change when more values are added or removed.\\n    *\\n    * Requirements:\\n    *\\n    * - `index` must be strictly less than {length}.\\n    */\\n    function _at(Set storage set, uint256 index) private view returns (bytes32) {\\n        require(set._values.length > index, \\\"EnumerableSet: index out of bounds\\\");\\n        return set._values[index];\\n    }\\n\\n    // Bytes32Set\\n\\n    struct Bytes32Set {\\n        Set _inner;\\n    }\\n\\n    /**\\n     * @dev Add a value to a set. O(1).\\n     *\\n     * Returns true if the value was added to the set, that is if it was not\\n     * already present.\\n     */\\n    function add(Bytes32Set storage set, bytes32 value) internal returns (bool) {\\n        return _add(set._inner, value);\\n    }\\n\\n    /**\\n     * @dev Removes a value from a set. O(1).\\n     *\\n     * Returns true if the value was removed from the set, that is if it was\\n     * present.\\n     */\\n    function remove(Bytes32Set storage set, bytes32 value) internal returns (bool) {\\n        return _remove(set._inner, value);\\n    }\\n\\n    /**\\n     * @dev Returns true if the value is in the set. O(1).\\n     */\\n    function contains(Bytes32Set storage set, bytes32 value) internal view returns (bool) {\\n        return _contains(set._inner, value);\\n    }\\n\\n    /**\\n     * @dev Returns the number of values in the set. O(1).\\n     */\\n    function length(Bytes32Set storage set) internal view returns (uint256) {\\n        return _length(set._inner);\\n    }\\n\\n   /**\\n    * @dev Returns the value stored at position `index` in the set. O(1).\\n    *\\n    * Note that there are no guarantees on the ordering of values inside the\\n    * array, and it may change when more values are added or removed.\\n    *\\n    * Requirements:\\n    *\\n    * - `index` must be strictly less than {length}.\\n    */\\n    function at(Bytes32Set storage set, uint256 index) internal view returns (bytes32) {\\n        return _at(set._inner, index);\\n    }\\n\\n    // AddressSet\\n\\n    struct AddressSet {\\n        Set _inner;\\n    }\\n\\n    /**\\n     * @dev Add a value to a set. O(1).\\n     *\\n     * Returns true if the value was added to the set, that is if it was not\\n     * already present.\\n     */\\n    function add(AddressSet storage set, address value) internal returns (bool) {\\n        return _add(set._inner, bytes32(uint256(uint160(value))));\\n    }\\n\\n    /**\\n     * @dev Removes a value from a set. O(1).\\n     *\\n     * Returns true if the value was removed from the set, that is if it was\\n     * present.\\n     */\\n    function remove(AddressSet storage set, address value) internal returns (bool) {\\n        return _remove(set._inner, bytes32(uint256(uint160(value))));\\n    }\\n\\n    /**\\n     * @dev Returns true if the value is in the set. O(1).\\n     */\\n    function contains(AddressSet storage set, address value) internal view returns (bool) {\\n        return _contains(set._inner, bytes32(uint256(uint160(value))));\\n    }\\n\\n    /**\\n     * @dev Returns the number of values in the set. O(1).\\n     */\\n    function length(AddressSet storage set) internal view returns (uint256) {\\n        return _length(set._inner);\\n    }\\n\\n   /**\\n    * @dev Returns the value stored at position `index` in the set. O(1).\\n    *\\n    * Note that there are no guarantees on the ordering of values inside the\\n    * array, and it may change when more values are added or removed.\\n    *\\n    * Requirements:\\n    *\\n    * - `index` must be strictly less than {length}.\\n    */\\n    function at(AddressSet storage set, uint256 index) internal view returns (address) {\\n        return address(uint160(uint256(_at(set._inner, index))));\\n    }\\n\\n\\n    // UintSet\\n\\n    struct UintSet {\\n        Set _inner;\\n    }\\n\\n    /**\\n     * @dev Add a value to a set. O(1).\\n     *\\n     * Returns true if the value was added to the set, that is if it was not\\n     * already present.\\n     */\\n    function add(UintSet storage set, uint256 value) internal returns (bool) {\\n        return _add(set._inner, bytes32(value));\\n    }\\n\\n    /**\\n     * @dev Removes a value from a set. O(1).\\n     *\\n     * Returns true if the value was removed from the set, that is if it was\\n     * present.\\n     */\\n    function remove(UintSet storage set, uint256 value) internal returns (bool) {\\n        return _remove(set._inner, bytes32(value));\\n    }\\n\\n    /**\\n     * @dev Returns true if the value is in the set. O(1).\\n     */\\n    function contains(UintSet storage set, uint256 value) internal view returns (bool) {\\n        return _contains(set._inner, bytes32(value));\\n    }\\n\\n    /**\\n     * @dev Returns the number of values on the set. O(1).\\n     */\\n    function length(UintSet storage set) internal view returns (uint256) {\\n        return _length(set._inner);\\n    }\\n\\n   /**\\n    * @dev Returns the value stored at position `index` in the set. O(1).\\n    *\\n    * Note that there are no guarantees on the ordering of values inside the\\n    * array, and it may change when more values are added or removed.\\n    *\\n    * Requirements:\\n    *\\n    * - `index` must be strictly less than {length}.\\n    */\\n    function at(UintSet storage set, uint256 index) internal view returns (uint256) {\\n        return uint256(_at(set._inner, index));\\n    }\\n}\\n\",\"keccak256\":\"0x1562cd9922fbf739edfb979f506809e2743789cbde3177515542161c3d04b164\",\"license\":\"MIT\"},\"contracts/release/extensions/policy-manager/IPolicy.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\nimport \\\"./IPolicyManager.sol\\\";\\r\\n\\r\\n/// @title Policy Interface\\r\\ninterface IPolicy {\\r\\n    function activateForFund(address _comptrollerProxy, address _vaultProxy) external;\\r\\n\\r\\n    function addFundSettings(address _comptrollerProxy, bytes calldata _encodedSettings) external;\\r\\n\\r\\n    function identifier() external pure returns (string memory identifier_);\\r\\n\\r\\n    function implementedHooks()\\r\\n        external\\r\\n        view\\r\\n        returns (IPolicyManager.PolicyHook[] memory implementedHooks_);\\r\\n\\r\\n    function updateFundSettings(\\r\\n        address _comptrollerProxy,\\r\\n        address _vaultProxy,\\r\\n        bytes calldata _encodedSettings\\r\\n    ) external;\\r\\n\\r\\n    function validateRule(\\r\\n        address _comptrollerProxy,\\r\\n        address _vaultProxy,\\r\\n        IPolicyManager.PolicyHook _hook,\\r\\n        bytes calldata _encodedArgs\\r\\n    ) external returns (bool isValid_);\\r\\n}\\r\\n\",\"keccak256\":\"0xd6f0b7ccf87ca09c7e48da27ad7316b49543869ce4d363f8cac1671b849f6fd0\",\"license\":\"GPL-3.0\"},\"contracts/release/extensions/policy-manager/IPolicyManager.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\npragma experimental ABIEncoderV2;\\r\\n\\r\\n/// @title PolicyManager Interface\\r\\n/// @notice Interface for the PolicyManager\\r\\ninterface IPolicyManager {\\r\\n    enum PolicyHook {\\r\\n        BuySharesSetup,\\r\\n        PreBuyShares,\\r\\n        PostBuyShares,\\r\\n        BuySharesCompleted,\\r\\n        PreCallOnIntegration,\\r\\n        PostCallOnIntegration\\r\\n    }\\r\\n\\r\\n    function validatePolicies(\\r\\n        address,\\r\\n        PolicyHook,\\r\\n        bytes calldata\\r\\n    ) external;\\r\\n}\\r\\n\",\"keccak256\":\"0x8b9669ae704f434c72d4aa2b9eb3468dab5db58d708d44b84664faa7885dfc63\",\"license\":\"GPL-3.0\"},\"contracts/release/extensions/policy-manager/policies/buy-shares/BuySharesCallerWhitelist.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\nimport \\\"../utils/AddressListPolicyMixin.sol\\\";\\r\\nimport \\\"./utils/BuySharesSetupPolicyBase.sol\\\";\\r\\n\\r\\n/// @title BuySharesCallerWhitelist Contract\\r\\n/// @notice A policy that only allows a configurable whitelist of buyShares callers for a fund\\r\\ncontract BuySharesCallerWhitelist is BuySharesSetupPolicyBase, AddressListPolicyMixin {\\r\\n    constructor(address _policyManager) public PolicyBase(_policyManager) {}\\r\\n\\r\\n    /// @notice Adds the initial policy settings for a fund\\r\\n    /// @param _comptrollerProxy The fund's ComptrollerProxy address\\r\\n    /// @param _encodedSettings Encoded settings to apply to a fund\\r\\n    function addFundSettings(address _comptrollerProxy, bytes calldata _encodedSettings)\\r\\n        external\\r\\n        override\\r\\n        onlyPolicyManager\\r\\n    {\\r\\n        __updateList(_comptrollerProxy, _encodedSettings);\\r\\n    }\\r\\n\\r\\n    /// @notice Provides a constant string identifier for a policy\\r\\n    /// @return identifier_ The identifer string\\r\\n    function identifier() external pure override returns (string memory identifier_) {\\r\\n        return \\\"BUY_SHARES_CALLER_WHITELIST\\\";\\r\\n    }\\r\\n\\r\\n    /// @notice Updates the policy settings for a fund\\r\\n    /// @param _comptrollerProxy The fund's ComptrollerProxy address\\r\\n    /// @param _encodedSettings Encoded settings to apply to a fund\\r\\n    function updateFundSettings(\\r\\n        address _comptrollerProxy,\\r\\n        address,\\r\\n        bytes calldata _encodedSettings\\r\\n    ) external override onlyPolicyManager {\\r\\n        __updateList(_comptrollerProxy, _encodedSettings);\\r\\n    }\\r\\n\\r\\n    /// @notice Checks whether a particular condition passes the rule for a particular fund\\r\\n    /// @param _comptrollerProxy The fund's ComptrollerProxy address\\r\\n    /// @param _buySharesCaller The buyShares caller for which to check the rule\\r\\n    /// @return isValid_ True if the rule passes\\r\\n    function passesRule(address _comptrollerProxy, address _buySharesCaller)\\r\\n        public\\r\\n        view\\r\\n        returns (bool isValid_)\\r\\n    {\\r\\n        return isInList(_comptrollerProxy, _buySharesCaller);\\r\\n    }\\r\\n\\r\\n    /// @notice Apply the rule with the specified parameters of a PolicyHook\\r\\n    /// @param _comptrollerProxy The fund's ComptrollerProxy address\\r\\n    /// @param _encodedArgs Encoded args with which to validate the rule\\r\\n    /// @return isValid_ True if the rule passes\\r\\n    function validateRule(\\r\\n        address _comptrollerProxy,\\r\\n        address,\\r\\n        IPolicyManager.PolicyHook,\\r\\n        bytes calldata _encodedArgs\\r\\n    ) external override returns (bool isValid_) {\\r\\n        (address caller, , ) = __decodeRuleArgs(_encodedArgs);\\r\\n\\r\\n        return passesRule(_comptrollerProxy, caller);\\r\\n    }\\r\\n\\r\\n    /// @dev Helper to update the whitelist by adding and/or removing addresses\\r\\n    function __updateList(address _comptrollerProxy, bytes memory _settingsData) private {\\r\\n        (address[] memory itemsToAdd, address[] memory itemsToRemove) = abi.decode(\\r\\n            _settingsData,\\r\\n            (address[], address[])\\r\\n        );\\r\\n\\r\\n        // If an address is in both add and remove arrays, they will not be in the final list.\\r\\n        // We do not check for uniqueness between the two arrays for efficiency.\\r\\n        if (itemsToAdd.length > 0) {\\r\\n            __addToList(_comptrollerProxy, itemsToAdd);\\r\\n        }\\r\\n        if (itemsToRemove.length > 0) {\\r\\n            __removeFromList(_comptrollerProxy, itemsToRemove);\\r\\n        }\\r\\n    }\\r\\n}\\r\\n\",\"keccak256\":\"0xbb3a8f9fc4a2d3fe22fd446ae4d8aa2a0ca2c49267ceb02386cb4ce9accaa86d\",\"license\":\"GPL-3.0\"},\"contracts/release/extensions/policy-manager/policies/buy-shares/utils/BuySharesSetupPolicyBase.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\nimport \\\"../../utils/PolicyBase.sol\\\";\\r\\n\\r\\n/// @title BuySharesSetupPolicyBase Contract\\r\\n/// @notice A mixin contract for policies that only implement the BuySharesSetup policy hook\\r\\nabstract contract BuySharesSetupPolicyBase is PolicyBase {\\r\\n    /// @notice Gets the implemented PolicyHooks for a policy\\r\\n    /// @return implementedHooks_ The implemented PolicyHooks\\r\\n    function implementedHooks()\\r\\n        external\\r\\n        view\\r\\n        override\\r\\n        returns (IPolicyManager.PolicyHook[] memory implementedHooks_)\\r\\n    {\\r\\n        implementedHooks_ = new IPolicyManager.PolicyHook[](1);\\r\\n        implementedHooks_[0] = IPolicyManager.PolicyHook.BuySharesSetup;\\r\\n\\r\\n        return implementedHooks_;\\r\\n    }\\r\\n\\r\\n    /// @notice Helper to decode rule arguments\\r\\n    function __decodeRuleArgs(bytes memory _encodedArgs)\\r\\n        internal\\r\\n        pure\\r\\n        returns (\\r\\n            address caller_,\\r\\n            uint256[] memory investmentAmounts_,\\r\\n            uint256 gav_\\r\\n        )\\r\\n    {\\r\\n        return abi.decode(_encodedArgs, (address, uint256[], uint256));\\r\\n    }\\r\\n}\\r\\n\",\"keccak256\":\"0x07dbfba34afc879ffaf0bd2d7c60569007b2ee3553ea6552756909c0022717a5\",\"license\":\"GPL-3.0\"},\"contracts/release/extensions/policy-manager/policies/utils/AddressListPolicyMixin.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\nimport \\\"@openzeppelin/contracts/utils/EnumerableSet.sol\\\";\\r\\n\\r\\n/// @title AddressListPolicyMixin Contract\\r\\n/// @notice An abstract mixin contract for policies that use an address list\\r\\nabstract contract AddressListPolicyMixin {\\r\\n    using EnumerableSet for EnumerableSet.AddressSet;\\r\\n\\r\\n    event AddressesAdded(address indexed comptrollerProxy, address[] items);\\r\\n\\r\\n    event AddressesRemoved(address indexed comptrollerProxy, address[] items);\\r\\n\\r\\n    mapping(address => EnumerableSet.AddressSet) private comptrollerProxyToList;\\r\\n\\r\\n    // EXTERNAL FUNCTIONS\\r\\n\\r\\n    /// @notice Get all addresses in a fund's list\\r\\n    /// @param _comptrollerProxy The fund's ComptrollerProxy address\\r\\n    /// @return list_ The addresses in the fund's list\\r\\n    function getList(address _comptrollerProxy) external view returns (address[] memory list_) {\\r\\n        list_ = new address[](comptrollerProxyToList[_comptrollerProxy].length());\\r\\n        for (uint256 i = 0; i < list_.length; i++) {\\r\\n            list_[i] = comptrollerProxyToList[_comptrollerProxy].at(i);\\r\\n        }\\r\\n        return list_;\\r\\n    }\\r\\n\\r\\n    // PUBLIC FUNCTIONS\\r\\n\\r\\n    /// @notice Check if an address is in a fund's list\\r\\n    /// @param _comptrollerProxy The fund's ComptrollerProxy address\\r\\n    /// @param _item The address to check against the list\\r\\n    /// @return isInList_ True if the address is in the list\\r\\n    function isInList(address _comptrollerProxy, address _item)\\r\\n        public\\r\\n        view\\r\\n        returns (bool isInList_)\\r\\n    {\\r\\n        return comptrollerProxyToList[_comptrollerProxy].contains(_item);\\r\\n    }\\r\\n\\r\\n    // INTERNAL FUNCTIONS\\r\\n\\r\\n    /// @dev Helper to add addresses to the calling fund's list\\r\\n    function __addToList(address _comptrollerProxy, address[] memory _items) internal {\\r\\n        require(_items.length > 0, \\\"__addToList: No addresses provided\\\");\\r\\n\\r\\n        for (uint256 i = 0; i < _items.length; i++) {\\r\\n            require(\\r\\n                comptrollerProxyToList[_comptrollerProxy].add(_items[i]),\\r\\n                \\\"__addToList: Address already exists in list\\\"\\r\\n            );\\r\\n        }\\r\\n\\r\\n        emit AddressesAdded(_comptrollerProxy, _items);\\r\\n    }\\r\\n\\r\\n    /// @dev Helper to remove addresses from the calling fund's list\\r\\n    function __removeFromList(address _comptrollerProxy, address[] memory _items) internal {\\r\\n        require(_items.length > 0, \\\"__removeFromList: No addresses provided\\\");\\r\\n\\r\\n        for (uint256 i = 0; i < _items.length; i++) {\\r\\n            require(\\r\\n                comptrollerProxyToList[_comptrollerProxy].remove(_items[i]),\\r\\n                \\\"__removeFromList: Address does not exist in list\\\"\\r\\n            );\\r\\n        }\\r\\n\\r\\n        emit AddressesRemoved(_comptrollerProxy, _items);\\r\\n    }\\r\\n}\\r\\n\",\"keccak256\":\"0xa63b5f010c3ff0c3219d7367eedebaa0d1c673539740d0ae5b76ee4940c1c16f\",\"license\":\"GPL-3.0\"},\"contracts/release/extensions/policy-manager/policies/utils/PolicyBase.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\nimport \\\"../../IPolicy.sol\\\";\\r\\n\\r\\n/// @title PolicyBase Contract\\r\\n/// @notice Abstract base contract for all policies\\r\\nabstract contract PolicyBase is IPolicy {\\r\\n    address internal immutable POLICY_MANAGER;\\r\\n\\r\\n    modifier onlyPolicyManager() {\\r\\n        require(msg.sender == POLICY_MANAGER, \\\"Only the PolicyManager can make this call\\\");\\r\\n        _;\\r\\n    }\\r\\n\\r\\n    constructor(address _policyManager) public {\\r\\n        POLICY_MANAGER = _policyManager;\\r\\n    }\\r\\n\\r\\n    /// @notice Validates and initializes a policy as necessary prior to fund activation\\r\\n    /// @dev Unimplemented by default, can be overridden by the policy\\r\\n    function activateForFund(address, address) external virtual override {\\r\\n        return;\\r\\n    }\\r\\n\\r\\n    /// @notice Updates the policy settings for a fund\\r\\n    /// @dev Disallowed by default, can be overridden by the policy\\r\\n    function updateFundSettings(\\r\\n        address,\\r\\n        address,\\r\\n        bytes calldata\\r\\n    ) external virtual override {\\r\\n        revert(\\\"updateFundSettings: Updates not allowed for this policy\\\");\\r\\n    }\\r\\n\\r\\n    ///////////////////\\r\\n    // STATE GETTERS //\\r\\n    ///////////////////\\r\\n\\r\\n    /// @notice Gets the `POLICY_MANAGER` variable value\\r\\n    /// @return policyManager_ The `POLICY_MANAGER` variable value\\r\\n    function getPolicyManager() external view returns (address policyManager_) {\\r\\n        return POLICY_MANAGER;\\r\\n    }\\r\\n}\\r\\n\",\"keccak256\":\"0x61d625eaed87b20895f7004c921dde6d93c6734e80988145beb2a8cd2fcbb4ec\",\"license\":\"GPL-3.0\"}},\"version\":1}",
+  "bytecode": "0x60a060405234801561001057600080fd5b50604051610f88380380610f888339818101604052602081101561003357600080fd5b5051606081901b6001600160601b0319166080526001600160a01b0316610f1761007160003980610403528061057052806106775250610f176000f3fe608060405234801561001057600080fd5b506004361061009e5760003560e01c80638945f190116100665780638945f190146102a1578063b67cb40c14610328578063cbf54bb214610356578063d44ad6cb146103ae578063ef00e37a146103d25761009e565b80630f5f6b4f146100a35780633146d0581461012357806335595704146101515780635b8f1c5a146101935780637998a1c414610224575b600080fd5b610121600480360360408110156100b957600080fd5b6001600160a01b038235169190810190604081016020820135600160201b8111156100e357600080fd5b8201836020820111156100f557600080fd5b803590602001918460018302840111600160201b8311171561011657600080fd5b5090925090506103f8565b005b6101216004803603604081101561013957600080fd5b506001600160a01b03813581169160200135166104a4565b61017f6004803603604081101561016757600080fd5b506001600160a01b03813581169160200135166104a8565b604080519115158252519081900360200190f35b61017f600480360360808110156101a957600080fd5b6001600160a01b03823581169260208101359091169160ff6040830135169190810190608081016060820135600160201b8111156101e657600080fd5b8201836020820111156101f857600080fd5b803590602001918460018302840111600160201b8311171561021957600080fd5b5090925090506104d3565b61022c61052e565b6040805160208082528351818301528351919283929083019185019080838360005b8381101561026657818101518382015260200161024e565b50505050905090810190601f1680156102935780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b610121600480360360608110156102b757600080fd5b6001600160a01b038235811692602081013590911691810190606081016040820135600160201b8111156102ea57600080fd5b8201836020820111156102fc57600080fd5b803590602001918460018302840111600160201b8311171561031d57600080fd5b509092509050610565565b61017f6004803603604081101561033e57600080fd5b506001600160a01b0381358116916020013516610612565b61035e61061e565b60408051602080825283518183015283519192839290830191858101910280838360005b8381101561039a578181015183820152602001610382565b505050509050019250505060405180910390f35b6103b6610675565b604080516001600160a01b039092168252519081900360200190f35b61035e600480360360208110156103e857600080fd5b50356001600160a01b0316610699565b336001600160a01b037f0000000000000000000000000000000000000000000000000000000000000000161461045f5760405162461bcd60e51b8152600401808060200182810382526029815260200180610e976029913960400191505060405180910390fd5b61049f8383838080601f01602080910402602001604051908101604052809392919081815260200183838082843760009201919091525061076092505050565b505050565b5050565b6001600160a01b03821660009081526020819052604081206104ca90836108b1565b90505b92915050565b60008061051584848080601f0160208091040260200160405190810160405280939291908181526020018383808284376000920191909152506108c692505050565b505090506105238782610612565b979650505050505050565b60408051808201909152601b81527f4255595f5348415245535f43414c4c45525f57484954454c4953540000000000602082015290565b336001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016146105cc5760405162461bcd60e51b8152600401808060200182810382526029815260200180610e976029913960400191505060405180910390fd5b61060c8483838080601f01602080910402602001604051908101604052809392919081815260200183838082843760009201919091525061076092505050565b50505050565b60006104ca83836104a8565b6040805160018082528183019092526060916020808301908036833701905050905060008160008151811061064f57fe5b6020026020010190600581111561066257fe5b9081600581111561066f57fe5b90525090565b7f000000000000000000000000000000000000000000000000000000000000000090565b6001600160a01b03811660009081526020819052604090206060906106bd90610985565b67ffffffffffffffff811180156106d357600080fd5b506040519080825280602002602001820160405280156106fd578160200160208202803683370190505b50905060005b815181101561075a576001600160a01b038316600090815260208190526040902061072e9082610990565b82828151811061073a57fe5b6001600160a01b0390921660209283029190910190910152600101610703565b50919050565b60608082806020019051604081101561077857600080fd5b8101908080516040519392919084600160201b82111561079757600080fd5b9083019060208201858111156107ac57600080fd5b82518660208202830111600160201b821117156107c857600080fd5b82525081516020918201928201910280838360005b838110156107f55781810151838201526020016107dd565b5050505090500160405260200180516040519392919084600160201b82111561081d57600080fd5b90830190602082018581111561083257600080fd5b82518660208202830111600160201b8211171561084e57600080fd5b82525081516020918201928201910280838360005b8381101561087b578181015183820152602001610863565b50505050905001604052505050915091506000825111156108a0576108a0848361099c565b80511561060c5761060c8482610af8565b60006104ca836001600160a01b038416610c38565b6000606060008380602001905160608110156108e157600080fd5b815160208301805160405192949293830192919084600160201b82111561090757600080fd5b90830190602082018581111561091c57600080fd5b82518660208202830111600160201b8211171561093857600080fd5b82525081516020918201928201910280838360005b8381101561096557818101518382015260200161094d565b505050509190910160405250602001519398929750929550909350505050565b60006104cd82610c50565b60006104ca8383610c54565b60008151116109dc5760405162461bcd60e51b8152600401808060200182810382526022815260200180610ec06022913960400191505060405180910390fd5b60005b8151811015610a7457610a318282815181106109f757fe5b6020026020010151600080866001600160a01b03166001600160a01b03168152602001908152602001600020610cb890919063ffffffff16565b610a6c5760405162461bcd60e51b815260040180806020018281038252602b815260200180610e15602b913960400191505060405180910390fd5b6001016109df565b50816001600160a01b03167fe3754690adb33d1fe0511f97e82086f6097babaea494124a0196a61a949ef2cf826040518080602001828103825283818151815260200191508051906020019060200280838360005b83811015610ae1578181015183820152602001610ac9565b505050509050019250505060405180910390a25050565b6000815111610b385760405162461bcd60e51b8152600401808060200182810382526027815260200180610e406027913960400191505060405180910390fd5b60005b8151811015610bd057610b8d828281518110610b5357fe5b6020026020010151600080866001600160a01b03166001600160a01b03168152602001908152602001600020610ccd90919063ffffffff16565b610bc85760405162461bcd60e51b8152600401808060200182810382526030815260200180610e676030913960400191505060405180910390fd5b600101610b3b565b5060408051602080825283518183015283516001600160a01b038616937ffa28b09abbaa834d4ec77cdfd905fdabcc5cd7cea3a0794093404be865f749e293869390928392830191808601910280838360008315610ae1578181015183820152602001610ac9565b60009081526001919091016020526040902054151590565b5490565b81546000908210610c965760405162461bcd60e51b8152600401808060200182810382526022815260200180610df36022913960400191505060405180910390fd5b826000018281548110610ca557fe5b9060005260206000200154905092915050565b60006104ca836001600160a01b038416610ce2565b60006104ca836001600160a01b038416610d2c565b6000610cee8383610c38565b610d24575081546001818101845560008481526020808220909301849055845484825282860190935260409020919091556104cd565b5060006104cd565b60008181526001830160205260408120548015610de85783546000198083019190810190600090879083908110610d5f57fe5b9060005260206000200154905080876000018481548110610d7c57fe5b600091825260208083209091019290925582815260018981019092526040902090840190558654879080610dac57fe5b600190038181906000526020600020016000905590558660010160008781526020019081526020016000206000905560019450505050506104cd565b60009150506104cd56fe456e756d657261626c655365743a20696e646578206f7574206f6620626f756e64735f5f616464546f4c6973743a204164647265737320616c72656164792065786973747320696e206c6973745f5f72656d6f766546726f6d4c6973743a204e6f206164647265737365732070726f76696465645f5f72656d6f766546726f6d4c6973743a204164647265737320646f6573206e6f7420657869737420696e206c6973744f6e6c792074686520506f6c6963794d616e616765722063616e206d616b6520746869732063616c6c5f5f616464546f4c6973743a204e6f206164647265737365732070726f7669646564a2646970667358221220b01eaf9108e760ca285d306089b9e71ec7c40833d3a812c166c06b83fa6b407664736f6c634300060c0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061009e5760003560e01c80638945f190116100665780638945f190146102a1578063b67cb40c14610328578063cbf54bb214610356578063d44ad6cb146103ae578063ef00e37a146103d25761009e565b80630f5f6b4f146100a35780633146d0581461012357806335595704146101515780635b8f1c5a146101935780637998a1c414610224575b600080fd5b610121600480360360408110156100b957600080fd5b6001600160a01b038235169190810190604081016020820135600160201b8111156100e357600080fd5b8201836020820111156100f557600080fd5b803590602001918460018302840111600160201b8311171561011657600080fd5b5090925090506103f8565b005b6101216004803603604081101561013957600080fd5b506001600160a01b03813581169160200135166104a4565b61017f6004803603604081101561016757600080fd5b506001600160a01b03813581169160200135166104a8565b604080519115158252519081900360200190f35b61017f600480360360808110156101a957600080fd5b6001600160a01b03823581169260208101359091169160ff6040830135169190810190608081016060820135600160201b8111156101e657600080fd5b8201836020820111156101f857600080fd5b803590602001918460018302840111600160201b8311171561021957600080fd5b5090925090506104d3565b61022c61052e565b6040805160208082528351818301528351919283929083019185019080838360005b8381101561026657818101518382015260200161024e565b50505050905090810190601f1680156102935780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b610121600480360360608110156102b757600080fd5b6001600160a01b038235811692602081013590911691810190606081016040820135600160201b8111156102ea57600080fd5b8201836020820111156102fc57600080fd5b803590602001918460018302840111600160201b8311171561031d57600080fd5b509092509050610565565b61017f6004803603604081101561033e57600080fd5b506001600160a01b0381358116916020013516610612565b61035e61061e565b60408051602080825283518183015283519192839290830191858101910280838360005b8381101561039a578181015183820152602001610382565b505050509050019250505060405180910390f35b6103b6610675565b604080516001600160a01b039092168252519081900360200190f35b61035e600480360360208110156103e857600080fd5b50356001600160a01b0316610699565b336001600160a01b037f0000000000000000000000000000000000000000000000000000000000000000161461045f5760405162461bcd60e51b8152600401808060200182810382526029815260200180610e976029913960400191505060405180910390fd5b61049f8383838080601f01602080910402602001604051908101604052809392919081815260200183838082843760009201919091525061076092505050565b505050565b5050565b6001600160a01b03821660009081526020819052604081206104ca90836108b1565b90505b92915050565b60008061051584848080601f0160208091040260200160405190810160405280939291908181526020018383808284376000920191909152506108c692505050565b505090506105238782610612565b979650505050505050565b60408051808201909152601b81527f4255595f5348415245535f43414c4c45525f57484954454c4953540000000000602082015290565b336001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016146105cc5760405162461bcd60e51b8152600401808060200182810382526029815260200180610e976029913960400191505060405180910390fd5b61060c8483838080601f01602080910402602001604051908101604052809392919081815260200183838082843760009201919091525061076092505050565b50505050565b60006104ca83836104a8565b6040805160018082528183019092526060916020808301908036833701905050905060008160008151811061064f57fe5b6020026020010190600581111561066257fe5b9081600581111561066f57fe5b90525090565b7f000000000000000000000000000000000000000000000000000000000000000090565b6001600160a01b03811660009081526020819052604090206060906106bd90610985565b67ffffffffffffffff811180156106d357600080fd5b506040519080825280602002602001820160405280156106fd578160200160208202803683370190505b50905060005b815181101561075a576001600160a01b038316600090815260208190526040902061072e9082610990565b82828151811061073a57fe5b6001600160a01b0390921660209283029190910190910152600101610703565b50919050565b60608082806020019051604081101561077857600080fd5b8101908080516040519392919084600160201b82111561079757600080fd5b9083019060208201858111156107ac57600080fd5b82518660208202830111600160201b821117156107c857600080fd5b82525081516020918201928201910280838360005b838110156107f55781810151838201526020016107dd565b5050505090500160405260200180516040519392919084600160201b82111561081d57600080fd5b90830190602082018581111561083257600080fd5b82518660208202830111600160201b8211171561084e57600080fd5b82525081516020918201928201910280838360005b8381101561087b578181015183820152602001610863565b50505050905001604052505050915091506000825111156108a0576108a0848361099c565b80511561060c5761060c8482610af8565b60006104ca836001600160a01b038416610c38565b6000606060008380602001905160608110156108e157600080fd5b815160208301805160405192949293830192919084600160201b82111561090757600080fd5b90830190602082018581111561091c57600080fd5b82518660208202830111600160201b8211171561093857600080fd5b82525081516020918201928201910280838360005b8381101561096557818101518382015260200161094d565b505050509190910160405250602001519398929750929550909350505050565b60006104cd82610c50565b60006104ca8383610c54565b60008151116109dc5760405162461bcd60e51b8152600401808060200182810382526022815260200180610ec06022913960400191505060405180910390fd5b60005b8151811015610a7457610a318282815181106109f757fe5b6020026020010151600080866001600160a01b03166001600160a01b03168152602001908152602001600020610cb890919063ffffffff16565b610a6c5760405162461bcd60e51b815260040180806020018281038252602b815260200180610e15602b913960400191505060405180910390fd5b6001016109df565b50816001600160a01b03167fe3754690adb33d1fe0511f97e82086f6097babaea494124a0196a61a949ef2cf826040518080602001828103825283818151815260200191508051906020019060200280838360005b83811015610ae1578181015183820152602001610ac9565b505050509050019250505060405180910390a25050565b6000815111610b385760405162461bcd60e51b8152600401808060200182810382526027815260200180610e406027913960400191505060405180910390fd5b60005b8151811015610bd057610b8d828281518110610b5357fe5b6020026020010151600080866001600160a01b03166001600160a01b03168152602001908152602001600020610ccd90919063ffffffff16565b610bc85760405162461bcd60e51b8152600401808060200182810382526030815260200180610e676030913960400191505060405180910390fd5b600101610b3b565b5060408051602080825283518183015283516001600160a01b038616937ffa28b09abbaa834d4ec77cdfd905fdabcc5cd7cea3a0794093404be865f749e293869390928392830191808601910280838360008315610ae1578181015183820152602001610ac9565b60009081526001919091016020526040902054151590565b5490565b81546000908210610c965760405162461bcd60e51b8152600401808060200182810382526022815260200180610df36022913960400191505060405180910390fd5b826000018281548110610ca557fe5b9060005260206000200154905092915050565b60006104ca836001600160a01b038416610ce2565b60006104ca836001600160a01b038416610d2c565b6000610cee8383610c38565b610d24575081546001818101845560008481526020808220909301849055845484825282860190935260409020919091556104cd565b5060006104cd565b60008181526001830160205260408120548015610de85783546000198083019190810190600090879083908110610d5f57fe5b9060005260206000200154905080876000018481548110610d7c57fe5b600091825260208083209091019290925582815260018981019092526040902090840190558654879080610dac57fe5b600190038181906000526020600020016000905590558660010160008781526020019081526020016000206000905560019450505050506104cd565b60009150506104cd56fe456e756d657261626c655365743a20696e646578206f7574206f6620626f756e64735f5f616464546f4c6973743a204164647265737320616c72656164792065786973747320696e206c6973745f5f72656d6f766546726f6d4c6973743a204e6f206164647265737365732070726f76696465645f5f72656d6f766546726f6d4c6973743a204164647265737320646f6573206e6f7420657869737420696e206c6973744f6e6c792074686520506f6c6963794d616e616765722063616e206d616b6520746869732063616c6c5f5f616464546f4c6973743a204e6f206164647265737365732070726f7669646564a2646970667358221220b01eaf9108e760ca285d306089b9e71ec7c40833d3a812c166c06b83fa6b407664736f6c634300060c0033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "activateForFund(address,address)": {
+        "details": "Unimplemented by default, can be overridden by the policy"
+      },
+      "addFundSettings(address,bytes)": {
+        "params": {
+          "_comptrollerProxy": "The fund's ComptrollerProxy address",
+          "_encodedSettings": "Encoded settings to apply to a fund"
+        }
+      },
+      "getList(address)": {
+        "params": {
+          "_comptrollerProxy": "The fund's ComptrollerProxy address"
+        },
+        "returns": {
+          "list_": "The addresses in the fund's list"
+        }
+      },
+      "getPolicyManager()": {
+        "returns": {
+          "policyManager_": "The `POLICY_MANAGER` variable value"
+        }
+      },
+      "identifier()": {
+        "returns": {
+          "identifier_": "The identifer string"
+        }
+      },
+      "implementedHooks()": {
+        "returns": {
+          "implementedHooks_": "The implemented PolicyHooks"
+        }
+      },
+      "isInList(address,address)": {
+        "params": {
+          "_comptrollerProxy": "The fund's ComptrollerProxy address",
+          "_item": "The address to check against the list"
+        },
+        "returns": {
+          "isInList_": "True if the address is in the list"
+        }
+      },
+      "passesRule(address,address)": {
+        "params": {
+          "_buySharesCaller": "The buyShares caller for which to check the rule",
+          "_comptrollerProxy": "The fund's ComptrollerProxy address"
+        },
+        "returns": {
+          "isValid_": "True if the rule passes"
+        }
+      },
+      "updateFundSettings(address,address,bytes)": {
+        "params": {
+          "_comptrollerProxy": "The fund's ComptrollerProxy address",
+          "_encodedSettings": "Encoded settings to apply to a fund"
+        }
+      },
+      "validateRule(address,address,uint8,bytes)": {
+        "params": {
+          "_comptrollerProxy": "The fund's ComptrollerProxy address",
+          "_encodedArgs": "Encoded args with which to validate the rule"
+        },
+        "returns": {
+          "isValid_": "True if the rule passes"
+        }
+      }
+    },
+    "title": "BuySharesCallerWhitelist Contract",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "activateForFund(address,address)": {
+        "notice": "Validates and initializes a policy as necessary prior to fund activation"
+      },
+      "addFundSettings(address,bytes)": {
+        "notice": "Adds the initial policy settings for a fund"
+      },
+      "getList(address)": {
+        "notice": "Get all addresses in a fund's list"
+      },
+      "getPolicyManager()": {
+        "notice": "Gets the `POLICY_MANAGER` variable value"
+      },
+      "identifier()": {
+        "notice": "Provides a constant string identifier for a policy"
+      },
+      "implementedHooks()": {
+        "notice": "Gets the implemented PolicyHooks for a policy"
+      },
+      "isInList(address,address)": {
+        "notice": "Check if an address is in a fund's list"
+      },
+      "passesRule(address,address)": {
+        "notice": "Checks whether a particular condition passes the rule for a particular fund"
+      },
+      "updateFundSettings(address,address,bytes)": {
+        "notice": "Updates the policy settings for a fund"
+      },
+      "validateRule(address,address,uint8,bytes)": {
+        "notice": "Apply the rule with the specified parameters of a PolicyHook"
+      }
+    },
+    "notice": "A policy that only allows a configurable whitelist of buyShares callers for a fund",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 31753,
+        "contract": "contracts/release/extensions/policy-manager/policies/buy-shares/BuySharesCallerWhitelist.sol:BuySharesCallerWhitelist",
+        "label": "comptrollerProxyToList",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_mapping(t_address,t_struct(AddressSet)2091_storage)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_bytes32)dyn_storage": {
+        "base": "t_bytes32",
+        "encoding": "dynamic_array",
+        "label": "bytes32[]",
+        "numberOfBytes": "32"
+      },
+      "t_bytes32": {
+        "encoding": "inplace",
+        "label": "bytes32",
+        "numberOfBytes": "32"
+      },
+      "t_mapping(t_address,t_struct(AddressSet)2091_storage)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => struct EnumerableSet.AddressSet)",
+        "numberOfBytes": "32",
+        "value": "t_struct(AddressSet)2091_storage"
+      },
+      "t_mapping(t_bytes32,t_uint256)": {
+        "encoding": "mapping",
+        "key": "t_bytes32",
+        "label": "mapping(bytes32 => uint256)",
+        "numberOfBytes": "32",
+        "value": "t_uint256"
+      },
+      "t_struct(AddressSet)2091_storage": {
+        "encoding": "inplace",
+        "label": "struct EnumerableSet.AddressSet",
+        "members": [
+          {
+            "astId": 2090,
+            "contract": "contracts/release/extensions/policy-manager/policies/buy-shares/BuySharesCallerWhitelist.sol:BuySharesCallerWhitelist",
+            "label": "_inner",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_struct(Set)1826_storage"
+          }
+        ],
+        "numberOfBytes": "64"
+      },
+      "t_struct(Set)1826_storage": {
+        "encoding": "inplace",
+        "label": "struct EnumerableSet.Set",
+        "members": [
+          {
+            "astId": 1821,
+            "contract": "contracts/release/extensions/policy-manager/policies/buy-shares/BuySharesCallerWhitelist.sol:BuySharesCallerWhitelist",
+            "label": "_values",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_array(t_bytes32)dyn_storage"
+          },
+          {
+            "astId": 1825,
+            "contract": "contracts/release/extensions/policy-manager/policies/buy-shares/BuySharesCallerWhitelist.sol:BuySharesCallerWhitelist",
+            "label": "_indexes",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_mapping(t_bytes32,t_uint256)"
+          }
+        ],
+        "numberOfBytes": "64"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

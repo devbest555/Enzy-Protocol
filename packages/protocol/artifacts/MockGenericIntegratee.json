@@ -1,0 +1,80 @@
+[
+  {
+    "inputs": [],
+    "name": "ETH_ADDRESS",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_assetsToIntegratee",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_assetsToIntegrateeAmounts",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "_assetsFromIntegratee",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_assetsFromIntegrateeAmounts",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "swap",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address payable",
+        "name": "_trader",
+        "type": "address"
+      },
+      {
+        "internalType": "address[]",
+        "name": "_assetsToIntegratee",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_assetsToIntegrateeAmounts",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "_assetsFromIntegratee",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_assetsFromIntegrateeAmounts",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "swapOnBehalf",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
+  }
+]

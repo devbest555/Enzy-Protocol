@@ -1,0 +1,53 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "AssetFinalityResolver",
+  "sourceName": "contracts/release/utils/AssetFinalityResolver.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_synthetixPriceFeed",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_synthetixAddressResolver",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "getSynthetixAddressResolver",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "synthetixAddressResolver_",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getSynthetixPriceFeed",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "synthetixPriceFeed_",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

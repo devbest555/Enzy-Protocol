@@ -1,0 +1,278 @@
+{
+  "address": "0x5c1c767FDb33A0FC0740831c6F4F1F3F162d90C9",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_primitivePriceFeed",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_aggregatedDerivativePriceFeed",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_baseAsset",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_quoteAsset",
+          "type": "address"
+        }
+      ],
+      "name": "calcCanonicalAssetValue",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "value_",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "isValid_",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "_baseAssets",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "_amounts",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "address",
+          "name": "_quoteAsset",
+          "type": "address"
+        }
+      ],
+      "name": "calcCanonicalAssetsTotalValue",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "value_",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "isValid_",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_baseAsset",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_quoteAsset",
+          "type": "address"
+        }
+      ],
+      "name": "calcLiveAssetValue",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "value_",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "isValid_",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "_baseAssets",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "_amounts",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "address",
+          "name": "_quoteAsset",
+          "type": "address"
+        }
+      ],
+      "name": "calcLiveAssetsTotalValue",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "value_",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "isValid_",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAggregatedDerivativePriceFeed",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "aggregatedDerivativePriceFeed_",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPrimitivePriceFeed",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "primitivePriceFeed_",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xd6c733c83e60719839cbefac5db4e0f840b246a470eee6574b3512625855c968",
+  "receipt": {
+    "to": null,
+    "from": "0xb10bcC8B508174c761CFB1E7143bFE37c4fBC3a1",
+    "contractAddress": "0x5c1c767FDb33A0FC0740831c6F4F1F3F162d90C9",
+    "transactionIndex": 3,
+    "gasUsed": "789322",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0xefdff32425d51ea0903fcc36b54d65c7c263e5a3cdf72505b92f71b1af9120ec",
+    "transactionHash": "0xd6c733c83e60719839cbefac5db4e0f840b246a470eee6574b3512625855c968",
+    "logs": [],
+    "blockNumber": 27382176,
+    "cumulativeGasUsed": "1126006",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x1C65eE4E98012DEFa6110B5B23bc6e8Ab6d07E8A",
+    "0xfF090cC732f2b3188554889141F7b8e52c7FcFfc"
+  ],
+  "solcInputHash": "616bcd197648f809b4b4e612fb09cc9a",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_primitivePriceFeed\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_aggregatedDerivativePriceFeed\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_baseAsset\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_quoteAsset\",\"type\":\"address\"}],\"name\":\"calcCanonicalAssetValue\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"value_\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"isValid_\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_baseAssets\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"_amounts\",\"type\":\"uint256[]\"},{\"internalType\":\"address\",\"name\":\"_quoteAsset\",\"type\":\"address\"}],\"name\":\"calcCanonicalAssetsTotalValue\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"value_\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"isValid_\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_baseAsset\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_quoteAsset\",\"type\":\"address\"}],\"name\":\"calcLiveAssetValue\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"value_\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"isValid_\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_baseAssets\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"_amounts\",\"type\":\"uint256[]\"},{\"internalType\":\"address\",\"name\":\"_quoteAsset\",\"type\":\"address\"}],\"name\":\"calcLiveAssetsTotalValue\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"value_\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"isValid_\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getAggregatedDerivativePriceFeed\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"aggregatedDerivativePriceFeed_\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPrimitivePriceFeed\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"primitivePriceFeed_\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"This contract contains several \\\"live\\\" value calculations, which for this release are simply aliases to their \\\"canonical\\\" value counterparts since the only primitive price feed (Chainlink) is immutable in this contract and only has one type of value. Including the \\\"live\\\" versions of functions only serves as a placeholder for infrastructural components and plugins (e.g., policies) to explicitly define the types of values that they should (and will) be using in a future release.\",\"kind\":\"dev\",\"methods\":{\"calcCanonicalAssetValue(address,uint256,address)\":{\"details\":\"Does not alter protocol state, but not a view because calls to price feeds can potentially update third party state\",\"params\":{\"_amount\":\"The amount of the _baseAsset to convert\",\"_baseAsset\":\"The asset from which to convert\",\"_quoteAsset\":\"The asset to which to convert\"},\"returns\":{\"isValid_\":\"True if the price feed rates used to derive value are all valid\",\"value_\":\"The equivalent quantity in the _quoteAsset\"}},\"calcCanonicalAssetsTotalValue(address[],uint256[],address)\":{\"details\":\"Does not alter protocol state, but not a view because calls to price feeds can potentially update third party state\",\"params\":{\"_amounts\":\"The amounts of the _baseAssets to convert\",\"_baseAssets\":\"The assets to convert\",\"_quoteAsset\":\"The asset to which to convert\"},\"returns\":{\"isValid_\":\"True if the price feed rates used to derive value are all valid\",\"value_\":\"The sum value of _baseAssets, denominated in the _quoteAsset\"}},\"getAggregatedDerivativePriceFeed()\":{\"returns\":{\"aggregatedDerivativePriceFeed_\":\"The `AGGREGATED_DERIVATIVE_PRICE_FEED` variable value\"}},\"getPrimitivePriceFeed()\":{\"returns\":{\"primitivePriceFeed_\":\"The `PRIMITIVE_PRICE_FEED` variable value\"}}},\"title\":\"ValueInterpreter Contract\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"calcCanonicalAssetValue(address,uint256,address)\":{\"notice\":\"Calculates the value of a given amount of one asset in terms of another asset\"},\"calcCanonicalAssetsTotalValue(address[],uint256[],address)\":{\"notice\":\"Calculates the total value of given amounts of assets in a single quote asset\"},\"calcLiveAssetValue(address,uint256,address)\":{\"notice\":\"An alias of calcCanonicalAssetValue\"},\"calcLiveAssetsTotalValue(address[],uint256[],address)\":{\"notice\":\"An alias of calcCanonicalAssetsTotalValue\"},\"getAggregatedDerivativePriceFeed()\":{\"notice\":\"Gets the `AGGREGATED_DERIVATIVE_PRICE_FEED` variable\"},\"getPrimitivePriceFeed()\":{\"notice\":\"Gets the `PRIMITIVE_PRICE_FEED` variable\"}},\"notice\":\"Interprets price feeds to provide covert value between asset pairs\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/release/infrastructure/value-interpreter/ValueInterpreter.sol\":\"ValueInterpreter\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"details\":{\"constantOptimizer\":true,\"cse\":true,\"deduplicate\":true,\"jumpdestRemover\":true,\"orderLiterals\":true,\"peephole\":true,\"yul\":false},\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/math/SafeMath.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity >=0.6.0 <0.8.0;\\n\\n/**\\n * @dev Wrappers over Solidity's arithmetic operations with added overflow\\n * checks.\\n *\\n * Arithmetic operations in Solidity wrap on overflow. This can easily result\\n * in bugs, because programmers usually assume that an overflow raises an\\n * error, which is the standard behavior in high level programming languages.\\n * `SafeMath` restores this intuition by reverting the transaction when an\\n * operation overflows.\\n *\\n * Using this library instead of the unchecked operations eliminates an entire\\n * class of bugs, so it's recommended to use it always.\\n */\\nlibrary SafeMath {\\n    /**\\n     * @dev Returns the addition of two unsigned integers, with an overflow flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryAdd(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        uint256 c = a + b;\\n        if (c < a) return (false, 0);\\n        return (true, c);\\n    }\\n\\n    /**\\n     * @dev Returns the substraction of two unsigned integers, with an overflow flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function trySub(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        if (b > a) return (false, 0);\\n        return (true, a - b);\\n    }\\n\\n    /**\\n     * @dev Returns the multiplication of two unsigned integers, with an overflow flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryMul(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        // Gas optimization: this is cheaper than requiring 'a' not being zero, but the\\n        // benefit is lost if 'b' is also tested.\\n        // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522\\n        if (a == 0) return (true, 0);\\n        uint256 c = a * b;\\n        if (c / a != b) return (false, 0);\\n        return (true, c);\\n    }\\n\\n    /**\\n     * @dev Returns the division of two unsigned integers, with a division by zero flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryDiv(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        if (b == 0) return (false, 0);\\n        return (true, a / b);\\n    }\\n\\n    /**\\n     * @dev Returns the remainder of dividing two unsigned integers, with a division by zero flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryMod(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        if (b == 0) return (false, 0);\\n        return (true, a % b);\\n    }\\n\\n    /**\\n     * @dev Returns the addition of two unsigned integers, reverting on\\n     * overflow.\\n     *\\n     * Counterpart to Solidity's `+` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Addition cannot overflow.\\n     */\\n    function add(uint256 a, uint256 b) internal pure returns (uint256) {\\n        uint256 c = a + b;\\n        require(c >= a, \\\"SafeMath: addition overflow\\\");\\n        return c;\\n    }\\n\\n    /**\\n     * @dev Returns the subtraction of two unsigned integers, reverting on\\n     * overflow (when the result is negative).\\n     *\\n     * Counterpart to Solidity's `-` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Subtraction cannot overflow.\\n     */\\n    function sub(uint256 a, uint256 b) internal pure returns (uint256) {\\n        require(b <= a, \\\"SafeMath: subtraction overflow\\\");\\n        return a - b;\\n    }\\n\\n    /**\\n     * @dev Returns the multiplication of two unsigned integers, reverting on\\n     * overflow.\\n     *\\n     * Counterpart to Solidity's `*` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Multiplication cannot overflow.\\n     */\\n    function mul(uint256 a, uint256 b) internal pure returns (uint256) {\\n        if (a == 0) return 0;\\n        uint256 c = a * b;\\n        require(c / a == b, \\\"SafeMath: multiplication overflow\\\");\\n        return c;\\n    }\\n\\n    /**\\n     * @dev Returns the integer division of two unsigned integers, reverting on\\n     * division by zero. The result is rounded towards zero.\\n     *\\n     * Counterpart to Solidity's `/` operator. Note: this function uses a\\n     * `revert` opcode (which leaves remaining gas untouched) while Solidity\\n     * uses an invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function div(uint256 a, uint256 b) internal pure returns (uint256) {\\n        require(b > 0, \\\"SafeMath: division by zero\\\");\\n        return a / b;\\n    }\\n\\n    /**\\n     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),\\n     * reverting when dividing by zero.\\n     *\\n     * Counterpart to Solidity's `%` operator. This function uses a `revert`\\n     * opcode (which leaves remaining gas untouched) while Solidity uses an\\n     * invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function mod(uint256 a, uint256 b) internal pure returns (uint256) {\\n        require(b > 0, \\\"SafeMath: modulo by zero\\\");\\n        return a % b;\\n    }\\n\\n    /**\\n     * @dev Returns the subtraction of two unsigned integers, reverting with custom message on\\n     * overflow (when the result is negative).\\n     *\\n     * CAUTION: This function is deprecated because it requires allocating memory for the error\\n     * message unnecessarily. For custom revert reasons use {trySub}.\\n     *\\n     * Counterpart to Solidity's `-` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Subtraction cannot overflow.\\n     */\\n    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {\\n        require(b <= a, errorMessage);\\n        return a - b;\\n    }\\n\\n    /**\\n     * @dev Returns the integer division of two unsigned integers, reverting with custom message on\\n     * division by zero. The result is rounded towards zero.\\n     *\\n     * CAUTION: This function is deprecated because it requires allocating memory for the error\\n     * message unnecessarily. For custom revert reasons use {tryDiv}.\\n     *\\n     * Counterpart to Solidity's `/` operator. Note: this function uses a\\n     * `revert` opcode (which leaves remaining gas untouched) while Solidity\\n     * uses an invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {\\n        require(b > 0, errorMessage);\\n        return a / b;\\n    }\\n\\n    /**\\n     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),\\n     * reverting with custom message when dividing by zero.\\n     *\\n     * CAUTION: This function is deprecated because it requires allocating memory for the error\\n     * message unnecessarily. For custom revert reasons use {tryMod}.\\n     *\\n     * Counterpart to Solidity's `%` operator. This function uses a `revert`\\n     * opcode (which leaves remaining gas untouched) while Solidity uses an\\n     * invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {\\n        require(b > 0, errorMessage);\\n        return a % b;\\n    }\\n}\\n\",\"keccak256\":\"0xcc78a17dd88fa5a2edc60c8489e2f405c0913b377216a5b26b35656b2d0dab52\",\"license\":\"MIT\"},\"contracts/release/infrastructure/price-feeds/derivatives/IAggregatedDerivativePriceFeed.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\nimport \\\"./IDerivativePriceFeed.sol\\\";\\r\\n\\r\\n/// @title IDerivativePriceFeed Interface\\r\\ninterface IAggregatedDerivativePriceFeed is IDerivativePriceFeed {\\r\\n    function getPriceFeedForDerivative(address) external view returns (address);\\r\\n}\\r\\n\",\"keccak256\":\"0x35491c896944701a98bb32a44e2e91ef7aacb62ff9424e104e01d9dfc1082745\",\"license\":\"GPL-3.0\"},\"contracts/release/infrastructure/price-feeds/derivatives/IDerivativePriceFeed.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\n/// @title IDerivativePriceFeed Interface\\r\\n/// @notice Simple interface for derivative price source oracle implementations\\r\\ninterface IDerivativePriceFeed {\\r\\n    function calcUnderlyingValues(address, uint256)\\r\\n        external\\r\\n        returns (address[] memory, uint256[] memory);\\r\\n\\r\\n    function isSupportedAsset(address) external view returns (bool);\\r\\n}\\r\\n\",\"keccak256\":\"0xb7e4dd73597568e591a91a97c440c1d8674695fd71cb9fc8fb8f28ab50fe3833\",\"license\":\"GPL-3.0\"},\"contracts/release/infrastructure/price-feeds/primitives/IPrimitivePriceFeed.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\n/// @title IPrimitivePriceFeed Interface\\r\\n/// @notice Interface for primitive price feeds\\r\\ninterface IPrimitivePriceFeed {\\r\\n    function calcCanonicalValue(\\r\\n        address,\\r\\n        uint256,\\r\\n        address\\r\\n    ) external view returns (uint256, bool);\\r\\n\\r\\n    function calcLiveValue(\\r\\n        address,\\r\\n        uint256,\\r\\n        address\\r\\n    ) external view returns (uint256, bool);\\r\\n\\r\\n    function isSupportedAsset(address) external view returns (bool);\\r\\n}\\r\\n\",\"keccak256\":\"0x291f3419a5ecbfec0ce1a5799aca6e8cdeb0b292f6bac8911cf45a547617a442\",\"license\":\"GPL-3.0\"},\"contracts/release/infrastructure/value-interpreter/IValueInterpreter.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\n/// @title IValueInterpreter interface\\r\\n/// @notice Interface for ValueInterpreter\\r\\ninterface IValueInterpreter {\\r\\n    function calcCanonicalAssetValue(\\r\\n        address,\\r\\n        uint256,\\r\\n        address\\r\\n    ) external returns (uint256, bool);\\r\\n\\r\\n    function calcCanonicalAssetsTotalValue(\\r\\n        address[] calldata,\\r\\n        uint256[] calldata,\\r\\n        address\\r\\n    ) external returns (uint256, bool);\\r\\n\\r\\n    function calcLiveAssetValue(\\r\\n        address,\\r\\n        uint256,\\r\\n        address\\r\\n    ) external returns (uint256, bool);\\r\\n\\r\\n    function calcLiveAssetsTotalValue(\\r\\n        address[] calldata,\\r\\n        uint256[] calldata,\\r\\n        address\\r\\n    ) external returns (uint256, bool);\\r\\n}\\r\\n\",\"keccak256\":\"0xf323aef46306641ac24642142244a6cca2cd7e9f12840129d0d7ba9d30b0ac01\",\"license\":\"GPL-3.0\"},\"contracts/release/infrastructure/value-interpreter/ValueInterpreter.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\nimport \\\"@openzeppelin/contracts/math/SafeMath.sol\\\";\\r\\nimport \\\"../price-feeds/derivatives/IAggregatedDerivativePriceFeed.sol\\\";\\r\\nimport \\\"../price-feeds/derivatives/IDerivativePriceFeed.sol\\\";\\r\\nimport \\\"../price-feeds/primitives/IPrimitivePriceFeed.sol\\\";\\r\\nimport \\\"./IValueInterpreter.sol\\\";\\r\\n\\r\\n/// @title ValueInterpreter Contract\\r\\n/// @notice Interprets price feeds to provide covert value between asset pairs\\r\\n/// @dev This contract contains several \\\"live\\\" value calculations, which for this release are simply\\r\\n/// aliases to their \\\"canonical\\\" value counterparts since the only primitive price feed (Chainlink)\\r\\n/// is immutable in this contract and only has one type of value. Including the \\\"live\\\" versions of\\r\\n/// functions only serves as a placeholder for infrastructural components and plugins (e.g., policies)\\r\\n/// to explicitly define the types of values that they should (and will) be using in a future release.\\r\\ncontract ValueInterpreter is IValueInterpreter {\\r\\n    using SafeMath for uint256;\\r\\n\\r\\n    address private immutable AGGREGATED_DERIVATIVE_PRICE_FEED;\\r\\n    address private immutable PRIMITIVE_PRICE_FEED;\\r\\n\\r\\n    constructor(address _primitivePriceFeed, address _aggregatedDerivativePriceFeed) public {\\r\\n        AGGREGATED_DERIVATIVE_PRICE_FEED = _aggregatedDerivativePriceFeed;\\r\\n        PRIMITIVE_PRICE_FEED = _primitivePriceFeed;\\r\\n    }\\r\\n\\r\\n    // EXTERNAL FUNCTIONS\\r\\n\\r\\n    /// @notice An alias of calcCanonicalAssetsTotalValue\\r\\n    function calcLiveAssetsTotalValue(\\r\\n        address[] calldata _baseAssets,\\r\\n        uint256[] calldata _amounts,\\r\\n        address _quoteAsset\\r\\n    ) external override returns (uint256 value_, bool isValid_) {\\r\\n        return calcCanonicalAssetsTotalValue(_baseAssets, _amounts, _quoteAsset);\\r\\n    }\\r\\n\\r\\n    /// @notice An alias of calcCanonicalAssetValue\\r\\n    function calcLiveAssetValue(\\r\\n        address _baseAsset,\\r\\n        uint256 _amount,\\r\\n        address _quoteAsset\\r\\n    ) external override returns (uint256 value_, bool isValid_) {\\r\\n        return calcCanonicalAssetValue(_baseAsset, _amount, _quoteAsset);\\r\\n    }\\r\\n\\r\\n    // PUBLIC FUNCTIONS\\r\\n\\r\\n    /// @notice Calculates the total value of given amounts of assets in a single quote asset\\r\\n    /// @param _baseAssets The assets to convert\\r\\n    /// @param _amounts The amounts of the _baseAssets to convert\\r\\n    /// @param _quoteAsset The asset to which to convert\\r\\n    /// @return value_ The sum value of _baseAssets, denominated in the _quoteAsset\\r\\n    /// @return isValid_ True if the price feed rates used to derive value are all valid\\r\\n    /// @dev Does not alter protocol state,\\r\\n    /// but not a view because calls to price feeds can potentially update third party state\\r\\n    function calcCanonicalAssetsTotalValue(\\r\\n        address[] memory _baseAssets,\\r\\n        uint256[] memory _amounts,\\r\\n        address _quoteAsset\\r\\n    ) public override returns (uint256 value_, bool isValid_) {\\r\\n        require(\\r\\n            _baseAssets.length == _amounts.length,\\r\\n            \\\"calcCanonicalAssetsTotalValue: Arrays unequal lengths\\\"\\r\\n        );\\r\\n        require(\\r\\n            IPrimitivePriceFeed(PRIMITIVE_PRICE_FEED).isSupportedAsset(_quoteAsset),\\r\\n            \\\"calcCanonicalAssetsTotalValue: Unsupported _quoteAsset\\\"\\r\\n        );\\r\\n\\r\\n        isValid_ = true;\\r\\n        for (uint256 i; i < _baseAssets.length; i++) {\\r\\n            (uint256 assetValue, bool assetValueIsValid) = __calcAssetValue(\\r\\n                _baseAssets[i],\\r\\n                _amounts[i],\\r\\n                _quoteAsset\\r\\n            );\\r\\n            value_ = value_.add(assetValue);\\r\\n            if (!assetValueIsValid) {\\r\\n                isValid_ = false;\\r\\n            }\\r\\n        }\\r\\n\\r\\n        return (value_, isValid_);\\r\\n    }\\r\\n\\r\\n    /// @notice Calculates the value of a given amount of one asset in terms of another asset\\r\\n    /// @param _baseAsset The asset from which to convert\\r\\n    /// @param _amount The amount of the _baseAsset to convert\\r\\n    /// @param _quoteAsset The asset to which to convert\\r\\n    /// @return value_ The equivalent quantity in the _quoteAsset\\r\\n    /// @return isValid_ True if the price feed rates used to derive value are all valid\\r\\n    /// @dev Does not alter protocol state,\\r\\n    /// but not a view because calls to price feeds can potentially update third party state\\r\\n    function calcCanonicalAssetValue(\\r\\n        address _baseAsset,\\r\\n        uint256 _amount,\\r\\n        address _quoteAsset\\r\\n    ) public override returns (uint256 value_, bool isValid_) {\\r\\n        if (_baseAsset == _quoteAsset || _amount == 0) {\\r\\n            return (_amount, true);\\r\\n        }\\r\\n\\r\\n        require(\\r\\n            IPrimitivePriceFeed(PRIMITIVE_PRICE_FEED).isSupportedAsset(_quoteAsset),\\r\\n            \\\"calcCanonicalAssetValue: Unsupported _quoteAsset\\\"\\r\\n        );\\r\\n\\r\\n        return __calcAssetValue(_baseAsset, _amount, _quoteAsset);\\r\\n    }\\r\\n\\r\\n    // PRIVATE FUNCTIONS\\r\\n\\r\\n    /// @dev Helper to differentially calculate an asset value\\r\\n    /// based on if it is a primitive or derivative asset.\\r\\n    function __calcAssetValue(\\r\\n        address _baseAsset,\\r\\n        uint256 _amount,\\r\\n        address _quoteAsset\\r\\n    ) private returns (uint256 value_, bool isValid_) {\\r\\n        if (_baseAsset == _quoteAsset || _amount == 0) {\\r\\n            return (_amount, true);\\r\\n        }\\r\\n\\r\\n        // Handle case that asset is a primitive\\r\\n        if (IPrimitivePriceFeed(PRIMITIVE_PRICE_FEED).isSupportedAsset(_baseAsset)) {\\r\\n            return\\r\\n                IPrimitivePriceFeed(PRIMITIVE_PRICE_FEED).calcCanonicalValue(\\r\\n                    _baseAsset,\\r\\n                    _amount,\\r\\n                    _quoteAsset\\r\\n                );\\r\\n        }\\r\\n\\r\\n        // Handle case that asset is a derivative\\r\\n        address derivativePriceFeed = IAggregatedDerivativePriceFeed(\\r\\n            AGGREGATED_DERIVATIVE_PRICE_FEED\\r\\n        ).getPriceFeedForDerivative(_baseAsset);\\r\\n        if (derivativePriceFeed != address(0)) {\\r\\n            return __calcDerivativeValue(derivativePriceFeed, _baseAsset, _amount, _quoteAsset);\\r\\n        }\\r\\n\\r\\n        revert(\\\"__calcAssetValue: Unsupported _baseAsset\\\");\\r\\n    }\\r\\n\\r\\n    /// @dev Helper to calculate the value of a derivative in an arbitrary asset.\\r\\n    /// Handles multiple underlying assets (e.g., Uniswap and Balancer pool tokens).\\r\\n    /// Handles underlying assets that are also derivatives (e.g., a cDAI-ETH LP)\\r\\n    function __calcDerivativeValue(\\r\\n        address _derivativePriceFeed,\\r\\n        address _derivative,\\r\\n        uint256 _amount,\\r\\n        address _quoteAsset\\r\\n    ) private returns (uint256 value_, bool isValid_) {\\r\\n        (address[] memory underlyings, uint256[] memory underlyingAmounts) = IDerivativePriceFeed(\\r\\n            _derivativePriceFeed\\r\\n        ).calcUnderlyingValues(_derivative, _amount);\\r\\n\\r\\n        require(underlyings.length > 0, \\\"__calcDerivativeValue: No underlyings\\\");\\r\\n        require(\\r\\n            underlyings.length == underlyingAmounts.length,\\r\\n            \\\"__calcDerivativeValue: Arrays unequal lengths\\\"\\r\\n        );\\r\\n\\r\\n        // Let validity be negated if any of the underlying value calculations are invalid\\r\\n        isValid_ = true;\\r\\n        for (uint256 i = 0; i < underlyings.length; i++) {\\r\\n            (uint256 underlyingValue, bool underlyingValueIsValid) = __calcAssetValue(\\r\\n                underlyings[i],\\r\\n                underlyingAmounts[i],\\r\\n                _quoteAsset\\r\\n            );\\r\\n\\r\\n            if (!underlyingValueIsValid) {\\r\\n                isValid_ = false;\\r\\n            }\\r\\n            value_ = value_.add(underlyingValue);\\r\\n        }\\r\\n    }\\r\\n\\r\\n    ///////////////////\\r\\n    // STATE GETTERS //\\r\\n    ///////////////////\\r\\n\\r\\n    /// @notice Gets the `AGGREGATED_DERIVATIVE_PRICE_FEED` variable\\r\\n    /// @return aggregatedDerivativePriceFeed_ The `AGGREGATED_DERIVATIVE_PRICE_FEED` variable value\\r\\n    function getAggregatedDerivativePriceFeed()\\r\\n        external\\r\\n        view\\r\\n        returns (address aggregatedDerivativePriceFeed_)\\r\\n    {\\r\\n        return AGGREGATED_DERIVATIVE_PRICE_FEED;\\r\\n    }\\r\\n\\r\\n    /// @notice Gets the `PRIMITIVE_PRICE_FEED` variable\\r\\n    /// @return primitivePriceFeed_ The `PRIMITIVE_PRICE_FEED` variable value\\r\\n    function getPrimitivePriceFeed() external view returns (address primitivePriceFeed_) {\\r\\n        return PRIMITIVE_PRICE_FEED;\\r\\n    }\\r\\n}\\r\\n\",\"keccak256\":\"0x3bac902f230ea41c1986fbb7449c6f229d412bf97e99d666786e39f6ddd983bd\",\"license\":\"GPL-3.0\"}},\"version\":1}",
+  "bytecode": "0x60c060405234801561001057600080fd5b50604051610de8380380610de88339818101604052604081101561003357600080fd5b5080516020909101516001600160601b0319606091821b811660805291901b1660a05260805160601c60a05160601c610d506100986000398061030f5280610364528061054552806106bb5280610788525080610450528061080d5250610d506000f3fe608060405234801561001057600080fd5b50600436106100625760003560e01c806349be72f3146100675780634c67e1061461008b5780635d880c7d146100da5780637733db7d146100e2578063ae3be7f414610118578063ae6f52ad146101df575b600080fd5b61006f61030d565b604080516001600160a01b039092168252519081900360200190f35b6100c1600480360360608110156100a157600080fd5b506001600160a01b03813581169160208101359160409091013516610331565b6040805192835290151560208301528051918290030190f35b61006f61044e565b6100c1600480360360608110156100f857600080fd5b506001600160a01b03813581169160208101359160409091013516610472565b6100c16004803603606081101561012e57600080fd5b810190602081018135600160201b81111561014857600080fd5b82018360208201111561015a57600080fd5b803590602001918460208302840111600160201b8311171561017b57600080fd5b919390929091602081019035600160201b81111561019857600080fd5b8201836020820111156101aa57600080fd5b803590602001918460208302840111600160201b831117156101cb57600080fd5b9193509150356001600160a01b0316610480565b6100c1600480360360608110156101f557600080fd5b810190602081018135600160201b81111561020f57600080fd5b82018360208201111561022157600080fd5b803590602001918460208302840111600160201b8311171561024257600080fd5b9190808060200260200160405190810160405280939291908181526020018383602002808284376000920191909152509295949360208101935035915050600160201b81111561029157600080fd5b8201836020820111156102a357600080fd5b803590602001918460208302840111600160201b831117156102c457600080fd5b919080806020026020016040519081016040528093929190818152602001838360200280828437600092019190915250929550505090356001600160a01b031691506105009050565b7f000000000000000000000000000000000000000000000000000000000000000090565b600080826001600160a01b0316856001600160a01b03161480610352575083155b1561036257508290506001610446565b7f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316639be918e6846040518263ffffffff1660e01b815260040180826001600160a01b0316815260200191505060206040518083038186803b1580156103cf57600080fd5b505afa1580156103e3573d6000803e3d6000fd5b505050506040513d60208110156103f957600080fd5b50516104365760405162461bcd60e51b8152600401808060200182810382526030815260200180610ceb6030913960400191505060405180910390fd5b610441858585610688565b915091505b935093915050565b7f000000000000000000000000000000000000000000000000000000000000000090565b600080610441858585610331565b6000806104f287878080602002602001604051908101604052809392919081815260200183836020028082843760009201919091525050604080516020808b0282810182019093528a82529093508a925089918291850190849080828437600092019190915250889250610500915050565b915091509550959350505050565b60008083518551146105435760405162461bcd60e51b8152600401808060200182810382526035815260200180610c696035913960400191505060405180910390fd5b7f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316639be918e6846040518263ffffffff1660e01b815260040180826001600160a01b0316815260200191505060206040518083038186803b1580156105b057600080fd5b505afa1580156105c4573d6000803e3d6000fd5b505050506040513d60208110156105da57600080fd5b50516106175760405162461bcd60e51b8152600401808060200182810382526036815260200180610c066036913960400191505060405180910390fd5b50600160005b855181101561067f5760008061065a88848151811061063857fe5b602002602001015188858151811061064c57fe5b602002602001015188610688565b90925090506106698583610902565b94508061067557600093505b505060010161061d565b50935093915050565b600080826001600160a01b0316856001600160a01b031614806106a9575083155b156106b957508290506001610446565b7f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316639be918e6866040518263ffffffff1660e01b815260040180826001600160a01b0316815260200191505060206040518083038186803b15801561072657600080fd5b505afa15801561073a573d6000803e3d6000fd5b505050506040513d602081101561075057600080fd5b5051156108095760408051630372a91f60e31b81526001600160a01b03878116600483015260248201879052858116604483015282517f000000000000000000000000000000000000000000000000000000000000000090911692631b9548f89260648082019391829003018186803b1580156107cc57600080fd5b505afa1580156107e0573d6000803e3d6000fd5b505050506040513d60408110156107f657600080fd5b5080516020909101519092509050610446565b60007f00000000000000000000000000000000000000000000000000000000000000006001600160a01b03166368e81c6d876040518263ffffffff1660e01b815260040180826001600160a01b0316815260200191505060206040518083038186803b15801561087857600080fd5b505afa15801561088c573d6000803e3d6000fd5b505050506040513d60208110156108a257600080fd5b505190506001600160a01b038116156108cb576108c181878787610963565b9250925050610446565b60405162461bcd60e51b8152600401808060200182810382526028815260200180610cc36028913960400191505060405180910390fd5b60008282018381101561095c576040805162461bcd60e51b815260206004820152601b60248201527f536166654d6174683a206164646974696f6e206f766572666c6f770000000000604482015290519081900360640190fd5b9392505050565b600080606080876001600160a01b031663727212f688886040518363ffffffff1660e01b815260040180836001600160a01b0316815260200182815260200192505050600060405180830381600087803b1580156109c057600080fd5b505af11580156109d4573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f1916820160409081528110156109fd57600080fd5b8101908080516040519392919084600160201b821115610a1c57600080fd5b908301906020820185811115610a3157600080fd5b82518660208202830111600160201b82111715610a4d57600080fd5b82525081516020918201928201910280838360005b83811015610a7a578181015183820152602001610a62565b5050505090500160405260200180516040519392919084600160201b821115610aa257600080fd5b908301906020820185811115610ab757600080fd5b82518660208202830111600160201b82111715610ad357600080fd5b82525081516020918201928201910280838360005b83811015610b00578181015183820152602001610ae8565b50505050905001604052505050915091506000825111610b515760405162461bcd60e51b8152600401808060200182810382526025815260200180610c9e6025913960400191505060405180910390fd5b8051825114610b915760405162461bcd60e51b815260040180806020018281038252602d815260200180610c3c602d913960400191505060405180910390fd5b6001925060005b8251811015610bf957600080610bd5858481518110610bb357fe5b6020026020010151858581518110610bc757fe5b60200260200101518a610688565b9150915080610be357600095505b610bed8783610902565b96505050600101610b98565b5050509450949250505056fe63616c6343616e6f6e6963616c417373657473546f74616c56616c75653a20556e737570706f72746564205f71756f746541737365745f5f63616c634465726976617469766556616c75653a2041727261797320756e657175616c206c656e6774687363616c6343616e6f6e6963616c417373657473546f74616c56616c75653a2041727261797320756e657175616c206c656e677468735f5f63616c634465726976617469766556616c75653a204e6f20756e6465726c79696e67735f5f63616c63417373657456616c75653a20556e737570706f72746564205f62617365417373657463616c6343616e6f6e6963616c417373657456616c75653a20556e737570706f72746564205f71756f74654173736574a2646970667358221220f42a83ab14efeb8ab495097bf31baae09fdbb3af79626ba2f2e531734d76395064736f6c634300060c0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100625760003560e01c806349be72f3146100675780634c67e1061461008b5780635d880c7d146100da5780637733db7d146100e2578063ae3be7f414610118578063ae6f52ad146101df575b600080fd5b61006f61030d565b604080516001600160a01b039092168252519081900360200190f35b6100c1600480360360608110156100a157600080fd5b506001600160a01b03813581169160208101359160409091013516610331565b6040805192835290151560208301528051918290030190f35b61006f61044e565b6100c1600480360360608110156100f857600080fd5b506001600160a01b03813581169160208101359160409091013516610472565b6100c16004803603606081101561012e57600080fd5b810190602081018135600160201b81111561014857600080fd5b82018360208201111561015a57600080fd5b803590602001918460208302840111600160201b8311171561017b57600080fd5b919390929091602081019035600160201b81111561019857600080fd5b8201836020820111156101aa57600080fd5b803590602001918460208302840111600160201b831117156101cb57600080fd5b9193509150356001600160a01b0316610480565b6100c1600480360360608110156101f557600080fd5b810190602081018135600160201b81111561020f57600080fd5b82018360208201111561022157600080fd5b803590602001918460208302840111600160201b8311171561024257600080fd5b9190808060200260200160405190810160405280939291908181526020018383602002808284376000920191909152509295949360208101935035915050600160201b81111561029157600080fd5b8201836020820111156102a357600080fd5b803590602001918460208302840111600160201b831117156102c457600080fd5b919080806020026020016040519081016040528093929190818152602001838360200280828437600092019190915250929550505090356001600160a01b031691506105009050565b7f000000000000000000000000000000000000000000000000000000000000000090565b600080826001600160a01b0316856001600160a01b03161480610352575083155b1561036257508290506001610446565b7f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316639be918e6846040518263ffffffff1660e01b815260040180826001600160a01b0316815260200191505060206040518083038186803b1580156103cf57600080fd5b505afa1580156103e3573d6000803e3d6000fd5b505050506040513d60208110156103f957600080fd5b50516104365760405162461bcd60e51b8152600401808060200182810382526030815260200180610ceb6030913960400191505060405180910390fd5b610441858585610688565b915091505b935093915050565b7f000000000000000000000000000000000000000000000000000000000000000090565b600080610441858585610331565b6000806104f287878080602002602001604051908101604052809392919081815260200183836020028082843760009201919091525050604080516020808b0282810182019093528a82529093508a925089918291850190849080828437600092019190915250889250610500915050565b915091509550959350505050565b60008083518551146105435760405162461bcd60e51b8152600401808060200182810382526035815260200180610c696035913960400191505060405180910390fd5b7f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316639be918e6846040518263ffffffff1660e01b815260040180826001600160a01b0316815260200191505060206040518083038186803b1580156105b057600080fd5b505afa1580156105c4573d6000803e3d6000fd5b505050506040513d60208110156105da57600080fd5b50516106175760405162461bcd60e51b8152600401808060200182810382526036815260200180610c066036913960400191505060405180910390fd5b50600160005b855181101561067f5760008061065a88848151811061063857fe5b602002602001015188858151811061064c57fe5b602002602001015188610688565b90925090506106698583610902565b94508061067557600093505b505060010161061d565b50935093915050565b600080826001600160a01b0316856001600160a01b031614806106a9575083155b156106b957508290506001610446565b7f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316639be918e6866040518263ffffffff1660e01b815260040180826001600160a01b0316815260200191505060206040518083038186803b15801561072657600080fd5b505afa15801561073a573d6000803e3d6000fd5b505050506040513d602081101561075057600080fd5b5051156108095760408051630372a91f60e31b81526001600160a01b03878116600483015260248201879052858116604483015282517f000000000000000000000000000000000000000000000000000000000000000090911692631b9548f89260648082019391829003018186803b1580156107cc57600080fd5b505afa1580156107e0573d6000803e3d6000fd5b505050506040513d60408110156107f657600080fd5b5080516020909101519092509050610446565b60007f00000000000000000000000000000000000000000000000000000000000000006001600160a01b03166368e81c6d876040518263ffffffff1660e01b815260040180826001600160a01b0316815260200191505060206040518083038186803b15801561087857600080fd5b505afa15801561088c573d6000803e3d6000fd5b505050506040513d60208110156108a257600080fd5b505190506001600160a01b038116156108cb576108c181878787610963565b9250925050610446565b60405162461bcd60e51b8152600401808060200182810382526028815260200180610cc36028913960400191505060405180910390fd5b60008282018381101561095c576040805162461bcd60e51b815260206004820152601b60248201527f536166654d6174683a206164646974696f6e206f766572666c6f770000000000604482015290519081900360640190fd5b9392505050565b600080606080876001600160a01b031663727212f688886040518363ffffffff1660e01b815260040180836001600160a01b0316815260200182815260200192505050600060405180830381600087803b1580156109c057600080fd5b505af11580156109d4573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f1916820160409081528110156109fd57600080fd5b8101908080516040519392919084600160201b821115610a1c57600080fd5b908301906020820185811115610a3157600080fd5b82518660208202830111600160201b82111715610a4d57600080fd5b82525081516020918201928201910280838360005b83811015610a7a578181015183820152602001610a62565b5050505090500160405260200180516040519392919084600160201b821115610aa257600080fd5b908301906020820185811115610ab757600080fd5b82518660208202830111600160201b82111715610ad357600080fd5b82525081516020918201928201910280838360005b83811015610b00578181015183820152602001610ae8565b50505050905001604052505050915091506000825111610b515760405162461bcd60e51b8152600401808060200182810382526025815260200180610c9e6025913960400191505060405180910390fd5b8051825114610b915760405162461bcd60e51b815260040180806020018281038252602d815260200180610c3c602d913960400191505060405180910390fd5b6001925060005b8251811015610bf957600080610bd5858481518110610bb357fe5b6020026020010151858581518110610bc757fe5b60200260200101518a610688565b9150915080610be357600095505b610bed8783610902565b96505050600101610b98565b5050509450949250505056fe63616c6343616e6f6e6963616c417373657473546f74616c56616c75653a20556e737570706f72746564205f71756f746541737365745f5f63616c634465726976617469766556616c75653a2041727261797320756e657175616c206c656e6774687363616c6343616e6f6e6963616c417373657473546f74616c56616c75653a2041727261797320756e657175616c206c656e677468735f5f63616c634465726976617469766556616c75653a204e6f20756e6465726c79696e67735f5f63616c63417373657456616c75653a20556e737570706f72746564205f62617365417373657463616c6343616e6f6e6963616c417373657456616c75653a20556e737570706f72746564205f71756f74654173736574a2646970667358221220f42a83ab14efeb8ab495097bf31baae09fdbb3af79626ba2f2e531734d76395064736f6c634300060c0033",
+  "devdoc": {
+    "details": "This contract contains several \"live\" value calculations, which for this release are simply aliases to their \"canonical\" value counterparts since the only primitive price feed (Chainlink) is immutable in this contract and only has one type of value. Including the \"live\" versions of functions only serves as a placeholder for infrastructural components and plugins (e.g., policies) to explicitly define the types of values that they should (and will) be using in a future release.",
+    "kind": "dev",
+    "methods": {
+      "calcCanonicalAssetValue(address,uint256,address)": {
+        "details": "Does not alter protocol state, but not a view because calls to price feeds can potentially update third party state",
+        "params": {
+          "_amount": "The amount of the _baseAsset to convert",
+          "_baseAsset": "The asset from which to convert",
+          "_quoteAsset": "The asset to which to convert"
+        },
+        "returns": {
+          "isValid_": "True if the price feed rates used to derive value are all valid",
+          "value_": "The equivalent quantity in the _quoteAsset"
+        }
+      },
+      "calcCanonicalAssetsTotalValue(address[],uint256[],address)": {
+        "details": "Does not alter protocol state, but not a view because calls to price feeds can potentially update third party state",
+        "params": {
+          "_amounts": "The amounts of the _baseAssets to convert",
+          "_baseAssets": "The assets to convert",
+          "_quoteAsset": "The asset to which to convert"
+        },
+        "returns": {
+          "isValid_": "True if the price feed rates used to derive value are all valid",
+          "value_": "The sum value of _baseAssets, denominated in the _quoteAsset"
+        }
+      },
+      "getAggregatedDerivativePriceFeed()": {
+        "returns": {
+          "aggregatedDerivativePriceFeed_": "The `AGGREGATED_DERIVATIVE_PRICE_FEED` variable value"
+        }
+      },
+      "getPrimitivePriceFeed()": {
+        "returns": {
+          "primitivePriceFeed_": "The `PRIMITIVE_PRICE_FEED` variable value"
+        }
+      }
+    },
+    "title": "ValueInterpreter Contract",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "calcCanonicalAssetValue(address,uint256,address)": {
+        "notice": "Calculates the value of a given amount of one asset in terms of another asset"
+      },
+      "calcCanonicalAssetsTotalValue(address[],uint256[],address)": {
+        "notice": "Calculates the total value of given amounts of assets in a single quote asset"
+      },
+      "calcLiveAssetValue(address,uint256,address)": {
+        "notice": "An alias of calcCanonicalAssetValue"
+      },
+      "calcLiveAssetsTotalValue(address[],uint256[],address)": {
+        "notice": "An alias of calcCanonicalAssetsTotalValue"
+      },
+      "getAggregatedDerivativePriceFeed()": {
+        "notice": "Gets the `AGGREGATED_DERIVATIVE_PRICE_FEED` variable"
+      },
+      "getPrimitivePriceFeed()": {
+        "notice": "Gets the `PRIMITIVE_PRICE_FEED` variable"
+      }
+    },
+    "notice": "Interprets price feeds to provide covert value between asset pairs",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [],
+    "types": null
+  }
+}

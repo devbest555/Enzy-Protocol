@@ -1,0 +1,355 @@
+{
+  "id": "d62804b401fa98e4d42140a08299bdaf",
+  "_format": "hh-sol-build-info-1",
+  "solcVersion": "0.6.12",
+  "solcLongVersion": "0.6.12+commit.27d51765",
+  "input": {
+    "language": "Solidity",
+    "sources": {
+      "contracts/mocks/interfaces/ISynthetixDelegateApprovals.sol": {
+        "content": "// SPDX-License-Identifier: GPL-3.0\r\n\r\n\r\n\r\npragma solidity 0.6.12;\r\n\r\n/// @title ISynthetixDelegateApprovals Interface\r\ninterface ISynthetixDelegateApprovals {\r\n    function approveExchangeOnBehalf(address) external;\r\n\r\n    function canExchangeFor(address, address) external view returns (bool);\r\n}\r\n"
+      }
+    },
+    "settings": {
+      "optimizer": {
+        "enabled": true,
+        "runs": 200,
+        "details": {
+          "yul": false
+        }
+      },
+      "outputSelection": {
+        "*": {
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata",
+            "devdoc",
+            "userdoc",
+            "storageLayout",
+            "evm.gasEstimates"
+          ],
+          "": [
+            "ast"
+          ]
+        }
+      },
+      "metadata": {
+        "useLiteralContent": true
+      }
+    }
+  },
+  "output": {
+    "contracts": {
+      "contracts/mocks/interfaces/ISynthetixDelegateApprovals.sol": {
+        "ISynthetixDelegateApprovals": {
+          "abi": [
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "name": "approveExchangeOnBehalf",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                },
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "name": "canExchangeFor",
+              "outputs": [
+                {
+                  "internalType": "bool",
+                  "name": "",
+                  "type": "bool"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            }
+          ],
+          "devdoc": {
+            "kind": "dev",
+            "methods": {},
+            "title": "ISynthetixDelegateApprovals Interface",
+            "version": 1
+          },
+          "evm": {
+            "bytecode": {
+              "linkReferences": {},
+              "object": "",
+              "opcodes": "",
+              "sourceMap": ""
+            },
+            "deployedBytecode": {
+              "immutableReferences": {},
+              "linkReferences": {},
+              "object": "",
+              "opcodes": "",
+              "sourceMap": ""
+            },
+            "gasEstimates": null,
+            "methodIdentifiers": {
+              "approveExchangeOnBehalf(address)": "447fbc63",
+              "canExchangeFor(address,address)": "faf431bb"
+            }
+          },
+          "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"approveExchangeOnBehalf\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"canExchangeFor\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"title\":\"ISynthetixDelegateApprovals Interface\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/mocks/interfaces/ISynthetixDelegateApprovals.sol\":\"ISynthetixDelegateApprovals\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"details\":{\"constantOptimizer\":true,\"cse\":true,\"deduplicate\":true,\"jumpdestRemover\":true,\"orderLiterals\":true,\"peephole\":true,\"yul\":false},\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/mocks/interfaces/ISynthetixDelegateApprovals.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\r\\n\\r\\n\\r\\n\\r\\npragma solidity 0.6.12;\\r\\n\\r\\n/// @title ISynthetixDelegateApprovals Interface\\r\\ninterface ISynthetixDelegateApprovals {\\r\\n    function approveExchangeOnBehalf(address) external;\\r\\n\\r\\n    function canExchangeFor(address, address) external view returns (bool);\\r\\n}\\r\\n\",\"keccak256\":\"0x73d6356396666d4c83d8f0537ffcd5299e69b34308c20db782e98ea89e09906a\",\"license\":\"GPL-3.0\"}},\"version\":1}",
+          "storageLayout": {
+            "storage": [],
+            "types": null
+          },
+          "userdoc": {
+            "kind": "user",
+            "methods": {},
+            "version": 1
+          }
+        }
+      }
+    },
+    "sources": {
+      "contracts/mocks/interfaces/ISynthetixDelegateApprovals.sol": {
+        "ast": {
+          "absolutePath": "contracts/mocks/interfaces/ISynthetixDelegateApprovals.sol",
+          "exportedSymbols": {
+            "ISynthetixDelegateApprovals": [
+              17
+            ]
+          },
+          "id": 18,
+          "license": "GPL-3.0",
+          "nodeType": "SourceUnit",
+          "nodes": [
+            {
+              "id": 1,
+              "literals": [
+                "solidity",
+                "0.6",
+                ".12"
+              ],
+              "nodeType": "PragmaDirective",
+              "src": "43:23:0"
+            },
+            {
+              "abstract": false,
+              "baseContracts": [],
+              "contractDependencies": [],
+              "contractKind": "interface",
+              "documentation": {
+                "id": 2,
+                "nodeType": "StructuredDocumentation",
+                "src": "70:50:0",
+                "text": "@title ISynthetixDelegateApprovals Interface"
+              },
+              "fullyImplemented": false,
+              "id": 17,
+              "linearizedBaseContracts": [
+                17
+              ],
+              "name": "ISynthetixDelegateApprovals",
+              "nodeType": "ContractDefinition",
+              "nodes": [
+                {
+                  "body": null,
+                  "documentation": null,
+                  "functionSelector": "447fbc63",
+                  "id": 7,
+                  "implemented": false,
+                  "kind": "function",
+                  "modifiers": [],
+                  "name": "approveExchangeOnBehalf",
+                  "nodeType": "FunctionDefinition",
+                  "overrides": null,
+                  "parameters": {
+                    "id": 5,
+                    "nodeType": "ParameterList",
+                    "parameters": [
+                      {
+                        "constant": false,
+                        "id": 4,
+                        "mutability": "mutable",
+                        "name": "",
+                        "nodeType": "VariableDeclaration",
+                        "overrides": null,
+                        "scope": 7,
+                        "src": "198:7:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "typeName": {
+                          "id": 3,
+                          "name": "address",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "198:7:0",
+                          "stateMutability": "nonpayable",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "value": null,
+                        "visibility": "internal"
+                      }
+                    ],
+                    "src": "197:9:0"
+                  },
+                  "returnParameters": {
+                    "id": 6,
+                    "nodeType": "ParameterList",
+                    "parameters": [],
+                    "src": "215:0:0"
+                  },
+                  "scope": 17,
+                  "src": "165:51:0",
+                  "stateMutability": "nonpayable",
+                  "virtual": false,
+                  "visibility": "external"
+                },
+                {
+                  "body": null,
+                  "documentation": null,
+                  "functionSelector": "faf431bb",
+                  "id": 16,
+                  "implemented": false,
+                  "kind": "function",
+                  "modifiers": [],
+                  "name": "canExchangeFor",
+                  "nodeType": "FunctionDefinition",
+                  "overrides": null,
+                  "parameters": {
+                    "id": 12,
+                    "nodeType": "ParameterList",
+                    "parameters": [
+                      {
+                        "constant": false,
+                        "id": 9,
+                        "mutability": "mutable",
+                        "name": "",
+                        "nodeType": "VariableDeclaration",
+                        "overrides": null,
+                        "scope": 16,
+                        "src": "248:7:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "typeName": {
+                          "id": 8,
+                          "name": "address",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "248:7:0",
+                          "stateMutability": "nonpayable",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "value": null,
+                        "visibility": "internal"
+                      },
+                      {
+                        "constant": false,
+                        "id": 11,
+                        "mutability": "mutable",
+                        "name": "",
+                        "nodeType": "VariableDeclaration",
+                        "overrides": null,
+                        "scope": 16,
+                        "src": "257:7:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "typeName": {
+                          "id": 10,
+                          "name": "address",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "257:7:0",
+                          "stateMutability": "nonpayable",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "value": null,
+                        "visibility": "internal"
+                      }
+                    ],
+                    "src": "247:18:0"
+                  },
+                  "returnParameters": {
+                    "id": 15,
+                    "nodeType": "ParameterList",
+                    "parameters": [
+                      {
+                        "constant": false,
+                        "id": 14,
+                        "mutability": "mutable",
+                        "name": "",
+                        "nodeType": "VariableDeclaration",
+                        "overrides": null,
+                        "scope": 16,
+                        "src": "289:4:0",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        "typeName": {
+                          "id": 13,
+                          "name": "bool",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "289:4:0",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_bool",
+                            "typeString": "bool"
+                          }
+                        },
+                        "value": null,
+                        "visibility": "internal"
+                      }
+                    ],
+                    "src": "288:6:0"
+                  },
+                  "scope": 17,
+                  "src": "224:71:0",
+                  "stateMutability": "view",
+                  "virtual": false,
+                  "visibility": "external"
+                }
+              ],
+              "scope": 18,
+              "src": "120:178:0"
+            }
+          ],
+          "src": "43:257:0"
+        },
+        "id": 0
+      }
+    }
+  }
+}

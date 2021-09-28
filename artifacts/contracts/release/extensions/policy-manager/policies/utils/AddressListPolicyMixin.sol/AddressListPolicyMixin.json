@@ -1,0 +1,92 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "AddressListPolicyMixin",
+  "sourceName": "contracts/release/extensions/policy-manager/policies/utils/AddressListPolicyMixin.sol",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "comptrollerProxy",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address[]",
+          "name": "items",
+          "type": "address[]"
+        }
+      ],
+      "name": "AddressesAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "comptrollerProxy",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address[]",
+          "name": "items",
+          "type": "address[]"
+        }
+      ],
+      "name": "AddressesRemoved",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_comptrollerProxy",
+          "type": "address"
+        }
+      ],
+      "name": "getList",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "list_",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_comptrollerProxy",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_item",
+          "type": "address"
+        }
+      ],
+      "name": "isInList",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "isInList_",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

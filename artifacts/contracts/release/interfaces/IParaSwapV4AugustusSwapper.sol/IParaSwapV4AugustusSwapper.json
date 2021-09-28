@@ -1,0 +1,116 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IParaSwapV4AugustusSwapper",
+  "sourceName": "contracts/release/interfaces/IParaSwapV4AugustusSwapper.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "fromToken",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "fromAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "toAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "expectedAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address payable",
+              "name": "beneficiary",
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "referrer",
+              "type": "string"
+            },
+            {
+              "internalType": "bool",
+              "name": "useReduxToken",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "to",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "totalNetworkFee",
+                  "type": "uint256"
+                },
+                {
+                  "components": [
+                    {
+                      "internalType": "address payable",
+                      "name": "exchange",
+                      "type": "address"
+                    },
+                    {
+                      "internalType": "address",
+                      "name": "targetExchange",
+                      "type": "address"
+                    },
+                    {
+                      "internalType": "uint256",
+                      "name": "percent",
+                      "type": "uint256"
+                    },
+                    {
+                      "internalType": "bytes",
+                      "name": "payload",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint256",
+                      "name": "networkFee",
+                      "type": "uint256"
+                    }
+                  ],
+                  "internalType": "struct IParaSwapV4AugustusSwapper.Route[]",
+                  "name": "routes",
+                  "type": "tuple[]"
+                }
+              ],
+              "internalType": "struct IParaSwapV4AugustusSwapper.Path[]",
+              "name": "path",
+              "type": "tuple[]"
+            }
+          ],
+          "internalType": "struct IParaSwapV4AugustusSwapper.SellData",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "name": "multiSwap",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

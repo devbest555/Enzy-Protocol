@@ -1,0 +1,129 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "NormalizedRateProviderBase",
+  "sourceName": "contracts/mocks/utils/NormalizedRateProviderBase.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "_defaultRateAssets",
+          "type": "address[]"
+        },
+        {
+          "internalType": "address[]",
+          "name": "_specialAssets",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint8[]",
+          "name": "_specialAssetDecimals",
+          "type": "uint8[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_ratePrecision",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "ETH_ADDRESS",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "RATE_PRECISION",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "assetToAssetRate",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "_baseAssets",
+          "type": "address[]"
+        },
+        {
+          "internalType": "address[]",
+          "name": "_quoteAssets",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "_rates",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "setRates",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "specialAssetToDecimals",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
