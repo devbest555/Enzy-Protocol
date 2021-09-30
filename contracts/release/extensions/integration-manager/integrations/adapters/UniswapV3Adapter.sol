@@ -104,12 +104,22 @@ contract UniswapV3Adapter is AdapterBase2, UniswapV3ActionsMixin {
         );
     }
 
-    function fillOrderZeroEX(bytes calldata, bytes calldata)
-        external
-        override
-        returns (uint256 amount_) 
+    function swapForRedeem(address, bytes calldata, bytes calldata) external override {   
+        return;
+    }
+    
+    /// @dev Helper to decode the take swap for redeem encoded call arguments
+    function __decodeSwapRedeemCallArgs(bytes memory _encodedCallArgs)
+        private
+        pure
+        returns (
+            address vaultProxy_, 
+            uint256 payoutAmount_, 
+            address payoutAsset_, 
+            address denomAsset_
+        )
     {
-        return amount_;
+        return abi.decode(_encodedCallArgs, (address, uint256, address, address));
     }
 
     /// @dev Helper to decode the encoded callOnIntegration call arguments

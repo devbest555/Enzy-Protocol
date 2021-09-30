@@ -6,6 +6,7 @@ pragma solidity 0.6.12;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/EnumerableSet.sol";
 import "../../core/fund/vault/IVault.sol";
 import "../../infrastructure/price-feeds/derivatives/IDerivativePriceFeed.sol";
@@ -31,6 +32,7 @@ contract IntegrationManager is
     using AddressArrayLib for address[];
     using EnumerableSet for EnumerableSet.AddressSet;
     using SafeMath for uint256;
+    using SafeERC20 for ERC20;
 
     event AdapterDeregistered(address indexed adapter, string indexed identifier);
 
@@ -118,7 +120,7 @@ contract IntegrationManager is
     function isAuthUserForFund(address _comptrollerProxy, address _who)
         public
         view
-        returns ( bool  isAuthUser_ )
+        returns (bool isAuthUser_)
     {
         return
             comptrollerProxyToAcctToIsAuthUser[_comptrollerProxy][_who] ||
@@ -173,6 +175,7 @@ contract IntegrationManager is
         // activateForFund(), this function does not require further validation of the
         // sending ComptrollerProxy
         address vaultProxy = comptrollerProxyToVaultProxy[msg.sender];
+        
         require(vaultProxy != address(0), "receiveCallFromComptroller: Fund is not active");
         require(
             isAuthUserForFund(msg.sender, _caller),
@@ -181,71 +184,61 @@ contract IntegrationManager is
 
         // Dispatch the action
         if (_actionId == 0) {
-            __callOnIntegration (_caller, vaultProxy, _callArgs);
+            __callOnIntegration(_caller, vaultProxy, _callArgs);
         } else if (_actionId == 1) {
-            __addZeroBalanceTrackedAssets (vaultProxy, _callArgs);
+            __addZeroBalanceTrackedAssets(vaultProxy, _callArgs);
         } else if (_actionId == 2) {
             __removeZeroBalanceTrackedAssets(vaultProxy, _callArgs);
         } else {
             revert("receiveCallFromComptroller: Invalid _actionId");
         }
-    }    
+    }        
 
-    function actionForZeroEX(        
-        address _orderMaker,
+    function actionForRedeem(  
         address _adapter,
         uint256[] memory _payoutAmounts, 
-        address[] memory _payoutAssets,
-        bytes calldata _signature
-    ) external override returns (uint256 amount_) {
-
+        address[] memory _payoutAssets        
+    ) external override {        
         address denominationAsset = IComptroller(msg.sender).getDenominationAsset();
-
-        require(adapterIsRegistered(_adapter), "actionForZeroEX: Adapter is not registered");
-
-        address[] memory orderAddresses = new address[](6);
-        uint256[] memory orderValues = new uint256[](6);
-        uint256 denomAmount;
-        uint256 takerAssetAmount;//denomination asset amount calculated from chainlinkprice
-        bool isValid;
+        address vaultProxy = comptrollerProxyToVaultProxy[msg.sender];
+        string memory identifier = IIntegrationAdapter(_adapter).identifier();
         
+        require(vaultProxy != address(0x00), "actionForRedeem: Fund is not active");
+        require(adapterIsRegistered(_adapter), "actionForRedeem: Adapter is not registered");
+        require(compareStringsbyBytes(identifier, "UNISWAP_V2"), "actionForRedeem: Adapter must be uniswap v2");
+
         for(uint256 i; i < _payoutAssets.length; i++) {
-            require(
-                __isSupportedAsset(_payoutAssets[i]),
-                "actionForZeroEX: Unsupported asset"
+
+            if(!__isSupportedAsset(_payoutAssets[i])) continue;
+
+            if(_payoutAssets[i] == denominationAsset) continue;
+
+            __approveAssetSpender(
+                msg.sender,
+                _payoutAssets[i],
+                _adapter,
+                _payoutAmounts[i]
             );
             
-            // Skip if denomination asset because calc in forward
-            if (_payoutAssets[i] == denominationAsset) continue;
+            bytes memory swapArgs = abi.encode(
+                _payoutAmounts[i], 
+                _payoutAssets[i], 
+                denominationAsset
+            );           
 
-            (takerAssetAmount, isValid) = IPrimitivePriceFeed(PRIMITIVE_PRICE_FEED).
-            calcCanonicalValue(_payoutAssets[i], _payoutAmounts[i], denominationAsset);
-
-            if (!isValid) continue;
-
-            /** makerAssetData, takerAssetData : will process in Adapter */
-            orderAddresses[0] = _orderMaker;                // maker
-            orderAddresses[1] = address(0);                 // taker
-            orderAddresses[2] = address(0);                 // feeRecipient
-            orderAddresses[3] = address(0);                 // sender
-            orderAddresses[4] = _payoutAssets[i];           // makerAsset
-            orderAddresses[5] = denominationAsset;          // takerAsset
-
-            orderValues[0] = _payoutAmounts[i];             // makerAssetAmount
-            orderValues[1] = takerAssetAmount;              // takerAssetAmount
-            orderValues[2] = 0;                             // makerFee
-            orderValues[3] = 0;                             // takerFee
-            orderValues[4] = block.timestamp.add(ONE_DAY);  // expirationTimeSeconds
-            orderValues[5] = block.timestamp;               // salt
+            bytes memory transferArgs = abi.encode(
+                _payoutAssets[i], 
+                _payoutAmounts[i], 
+                denominationAsset
+            );   
             
-            bytes memory orderArgs = abi.encode(orderAddresses, orderValues);
-            
-            denomAmount = IIntegrationAdapter(_adapter).fillOrderZeroEX(orderArgs, _signature);
-
-            amount_ = amount_.add(denomAmount);
+            IIntegrationAdapter(_adapter).swapForRedeem(vaultProxy, swapArgs, transferArgs);
         }
+    }
 
-        return amount_;
+    /// @dev Helper to compare two strings
+    function compareStringsbyBytes(string memory s1, string memory s2) internal pure returns(bool) {
+        return keccak256(abi.encodePacked(s1)) == keccak256(abi.encodePacked(s2));
     }
 
     /// @dev Adds assets with a zero balance as tracked assets of the fund
@@ -317,7 +310,7 @@ contract IntegrationManager is
             uint256[] memory incomingAssetAmounts,
             address[] memory outgoingAssets,
             uint256[] memory outgoingAssetAmounts
-        ) =  __callOnIntegrationInner (_vaultProxy, _callArgs);
+        ) =  __callOnIntegrationInner(_vaultProxy, _callArgs);
 
         __postCoIHook(
             adapter,
@@ -343,7 +336,7 @@ contract IntegrationManager is
 
     /// @dev Helper to execute the bulk of logic of callOnIntegration.
     /// Avoids the stack-too-deep-error.
-    function __callOnIntegrationInner ( address  vaultProxy , bytes  memory  _callArgs )
+    function __callOnIntegrationInner(address vaultProxy, bytes memory _callArgs)
         private
         returns (
             address[] memory incomingAssets_,
@@ -361,15 +354,6 @@ contract IntegrationManager is
             uint256[] memory maxSpendAssetAmounts,
             uint256[] memory preCallSpendAssetBalances
         ) = __preProcessCoI(vaultProxy, _callArgs);
-
-        for(uint256 i; i < spendAssets.length; i++) {
-            console.log("===sol-IM1-0::", expectedIncomingAssets[i]);
-            console.log("===sol-IM1-1::", preCallIncomingAssetBalances[i]);
-            console.log("===sol-IM1-2::", minIncomingAssetAmounts[i]);
-            console.log("===sol-IM1-3::", spendAssets[i]);
-            console.log("===sol-IM1-4::", maxSpendAssetAmounts[i]);
-            console.log("===sol-IM1-5::", preCallSpendAssetBalances[i]);
-        }
 
         __executeCoI(
             vaultProxy,
@@ -462,8 +446,7 @@ contract IntegrationManager is
                 _encodedAssetTransferArgs
             )
         );
-        console.log("===sol-IM-1::", success);
-        console.log("===sol-IM-2::", adapter);
+        
         require(success, string(returnData));
     }
 
@@ -682,9 +665,7 @@ contract IntegrationManager is
         for (uint256 i = 0; i < _expectedIncomingAssets.length; i++) {
             uint256 balanceDiff = __getVaultAssetBalance(_vaultProxy, _expectedIncomingAssets[i])
                 .sub(_preCallIncomingAssetBalances[i]);
-            console.log("====sol-balance-0::", _expectedIncomingAssets[i]);
-            console.log("====sol-balance-1::", balanceDiff);
-            console.log("====sol-balance-2::", _minIncomingAssetAmounts[i]);
+                
             require(
                 balanceDiff >= _minIncomingAssetAmounts [i],
                 "__reconcileCoIAssets: Received incoming asset less than expected"

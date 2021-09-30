@@ -376,9 +376,6 @@ contract ChainlinkPriceFeed is IPrimitivePriceFeed, FundDeployerOwnerMixin {
     /// @param _aggregator The Chainlink aggregator of which to check staleness
     /// @return rateIsStale_ True if the rate is considered stale
     function rateIsStale(address _aggregator) public view returns (bool rateIsStale_) {
-        console.log("===time-1::", IChainlinkAggregator(_aggregator).latestTimestamp());
-        console.log("===time-1::", block.timestamp);
-        console.log("===time-1::", staleRateThreshold);
         return
             IChainlinkAggregator(_aggregator).latestTimestamp() <
             block.timestamp.sub(staleRateThreshold);

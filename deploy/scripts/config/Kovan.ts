@@ -27,10 +27,10 @@ const primitives = {
   usdt: '0x50e7615a526f715556c478749303c75571f1e6b5', //USDT
   wbtc: '0x08adedfb5f473a7dffd05da2c0f33651553668a9', //BTC
   yfi: '0x3a854556f28f77dcc803538032ca64fdf42a0783',
-  zrx: '0x8955cd6b7826a86e820f0774278d89b76db25c46',
+  zrx: '0x162c44e53097e7b5aae939b297fffd6bf90d1ee3',//0x8955cd6b7826a86e820f0774278d89b76db25c46
 } as const;
 
-const weth = '0xd0a1e359811322d97991e03f863a0c30c2cf029c'; //'0x87DA91E531e091B97D16B8da68584d0c1dB07c52';
+const weth = '0xd0a1e359811322d97991e03f863a0c30c2cf029c';
 
 const aggregators = {
   bat: ['0x0e4fcec26c9f85c3d714370c98f43c4e02fc35ae', ChainlinkRateAsset.ETH],
@@ -148,11 +148,8 @@ const mainnetConfig: DeploymentConfig = {
   },
   zeroex: {
     allowedMakers: [],
-    exchange: '0x6Ffa4088e56986E25e65d73657C23D3A869EE570',
-  },
-  zeroexV4: {
-    allowedMakers: [],
-    exchange: '0xdef1c0ded9bec7f1a1670819833240f027b25eff',
+    exchange: '0x849e06a093b782457Cb4b8D09632a9A049d159d4',
+    erc20Proxy: '0x95e6f48254609a6ee006f7d493c8e5fb97094cef'
   },
   vaultCalls: [
     [

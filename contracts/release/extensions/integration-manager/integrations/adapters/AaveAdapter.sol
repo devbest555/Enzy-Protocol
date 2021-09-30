@@ -97,14 +97,10 @@ contract AaveAdapter is AdapterBase {
         );
     }
 
-    function fillOrderZeroEX(bytes calldata, bytes calldata)
-        external
-        override
-        returns (uint256 amount_) 
-    {
-        return amount_;
+    function swapForRedeem(address, bytes calldata, bytes calldata) external override {   
+        return;
     }
-
+    
     /// @notice Lends an amount of a token to AAVE
     /// @param _vaultProxy The VaultProxy of the calling fund
     /// @param _encodedAssetTransferArgs Encoded args for expected assets to spend and receive

@@ -84,14 +84,10 @@ contract ParaSwapV4Adapter is AdapterBase2, ParaSwapV4ActionsMixin {
         );
     }
 
-    function fillOrderZeroEX(bytes calldata, bytes calldata)
-        external
-        override
-        returns (uint256 amount_) 
-    {
-        return amount_;
+    function swapForRedeem(address, bytes calldata, bytes calldata) external override {   
+        return;
     }
-
+    
     /// @notice Trades assets on ParaSwap
     /// @param _vaultProxy The VaultProxy of the calling fund
     /// @param _encodedCallArgs Encoded order parameters

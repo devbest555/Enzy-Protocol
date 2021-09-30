@@ -90,14 +90,9 @@ contract AlphaHomoraV1Adapter is AdapterBase {
         );
     }
 
-    function fillOrderZeroEX(bytes calldata, bytes calldata)
-        external
-        override
-        returns (uint256 amount_) 
-    {
-        return amount_;
+    function swapForRedeem(address, bytes calldata, bytes calldata) external override {   
+        return;
     }
-
     /// @notice Lends WETH for ibETH
     /// @param _vaultProxy The VaultProxy of the calling fund
     /// @param _encodedCallArgs Encoded order parameters

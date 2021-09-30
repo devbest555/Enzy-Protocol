@@ -55,3 +55,18 @@ export function uniswapV2RedeemArgs({
     [poolTokenAmount, [tokenA, tokenB], [amountAMin, amountBMin]],
   );
 }
+
+export function uniswapV2SwapArgs({
+  outgoingAssetAmount, 
+  outgoingAsset, 
+  incomingAsset
+}: {
+  outgoingAssetAmount: BigNumberish;
+  outgoingAsset: AddressLike;
+  incomingAsset: AddressLike;
+}) {
+  return encodeArgs(
+    ['uint256', 'address', 'address'],
+    [outgoingAssetAmount, outgoingAsset, incomingAsset],
+  );
+}

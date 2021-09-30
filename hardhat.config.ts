@@ -21,6 +21,7 @@ function accounts(networkName: string) {
 }
 
 const mnemonic = process.env.MNEMONIC; //'test test test test test test test test test test test junk';//
+// const etherScan_api_key = process.env.ETHERSCAN_API_KEY;
 
 const config: HardhatUserConfig = {
   codeCoverage: {
@@ -85,20 +86,26 @@ const config: HardhatUserConfig = {
     hardhat: {
       hardfork: 'istanbul',
       accounts: {
-        // accountsBalance: utils.parseUnits('1', 36).toString(),
-        // count: 5,
         mnemonic,
       },
-      chainId: 42, //42
       forking: {
-        // blockNumber: 11095000,
-        url: node('kovan'),
+        blockNumber: 12540501,
+        url: node('mainnet'), // May 31, 2021
       },
+      // chainId: 42, //42
+      // forking: {
+      //   blockNumber: 27277405,
+      //   url: node('kovan'),
+      // },
       gas: 9500000,
       gasPrice: 0, // TODO: Consider removing this again.
       ...(process.env.COVERAGE && {
         allowUnlimitedContractSize: true,
       }),
+    },
+    arbitrum: {
+      url: 'https://rinkeby.arbitrum.io/rpc',
+      gasPrice: 0,
     },
     kovan: {
       hardfork: 'istanbul',
@@ -114,6 +121,9 @@ const config: HardhatUserConfig = {
       url: node('mainnet'),
     },
   },
+  // etherscan: {
+  //   apiKey: etherScan_api_key
+  // },
   paths: {
     deploy: 'deploy/scripts',
   },

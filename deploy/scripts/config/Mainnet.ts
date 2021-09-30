@@ -364,10 +364,7 @@ const mainnetConfig: DeploymentConfig = {
       '0xe0238DA09Cab56B3066F26F98657DccE801c16B9'
     ],
     exchange: '0x080bf510fcbf18b91105470639e9561022937712',
-  },
-  zeroexV4: {
-    allowedMakers: [],
-    exchange: '0xDef1C0ded9bec7F1a1670819833240f027b25EfF',
+    erc20Proxy: '0x95e6f48254609a6ee006f7d493c8e5fb97094cef'
   },
   vaultCalls: [
     [

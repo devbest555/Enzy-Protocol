@@ -80,12 +80,9 @@ export interface DeploymentConfig {
     };
   };
   zeroex: {
-    exchange: string;
     allowedMakers: string[];
-  };
-  zeroexV4: {
-    exchange: string;
-    allowedMakers: string[];
+    exchange: string;    
+    erc20Proxy: string;
   };
   policies: {
     guaranteedRedemption: {

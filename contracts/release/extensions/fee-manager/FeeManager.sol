@@ -344,7 +344,6 @@ contract FeeManager is
         }
 
         if (sharesOutstandingDue > 0) {
-            console.log("=====fee-1::", sharesOutstandingDue);
             __transferShares(
                 _comptrollerProxy,
                 vaultProxy,
@@ -354,7 +353,6 @@ contract FeeManager is
         }
         //==== Transfer Shares of fees from VaultProxy to DAO Wallet 
         if (sharesOutstandingToProtocol > 0 && daoAddress != address(0)) {
-            console.log("=====fee-2::", sharesOutstandingToProtocol);
             __transferShares(
                 _comptrollerProxy,
                 vaultProxy,
