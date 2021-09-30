@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
 
-
-
 pragma solidity 0.6.12;
 
 /// @title ProxiableVaultLib Contract
@@ -13,7 +11,7 @@ abstract contract ProxiableVaultLib {
     /// @dev Updates the target of the proxy to be the contract at _nextVaultLib
     function __updateCodeAddress(address _nextVaultLib) internal {
         require(
-            bytes32(0x027b9570e9fedc1a80b937ae9a06861e5faef3992491af30b684a64b3fbec7a5) ==
+            bytes32(0x3b5a7770459800df1d6333d62cac9887c9f88b09f54508f5ae9aca9f9becef72) ==
                 ProxiableVaultLib(_nextVaultLib).proxiableUUID(),
             "__updateCodeAddress: _nextVaultLib not compatible"
         );
@@ -28,8 +26,8 @@ abstract contract ProxiableVaultLib {
 
     /// @notice Returns a unique bytes32 hash for VaultLib instances
     /// @return uuid_ The bytes32 hash representing the UUID
-    /// @dev The UUID is `bytes32(keccak256('mln.proxiable.vaultlib'))`
+    /// @dev The UUID is `bytes32(keccak256('tao2.0.proxiable.vaultlib'))`
     function proxiableUUID() public pure returns (bytes32 uuid_) {
-        return 0x027b9570e9fedc1a80b937ae9a06861e5faef3992491af30b684a64b3fbec7a5;
+        return 0x3b5a7770459800df1d6333d62cac9887c9f88b09f54508f5ae9aca9f9becef72;
     }
 }
