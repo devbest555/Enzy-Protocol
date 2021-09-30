@@ -20,7 +20,8 @@ function accounts(networkName: string) {
     .filter(Boolean);
 }
 
-const mnemonic = process.env.MNEMONIC//'test test test test test test test test test test test junk';//
+const mnemonic = process.env.MNEMONIC; //'test test test test test test test test test test test junk';//
+// const etherScan_api_key = process.env.ETHERSCAN_API_KEY;
 
 const config: HardhatUserConfig = {
   codeCoverage: {
@@ -89,7 +90,7 @@ const config: HardhatUserConfig = {
       },
       forking: {
         blockNumber: 12540501,
-        url: node('mainnet'),// May 31, 2021
+        url: node('mainnet'), // May 31, 2021
       },
       // chainId: 42, //42
       // forking: {
@@ -101,6 +102,10 @@ const config: HardhatUserConfig = {
       ...(process.env.COVERAGE && {
         allowUnlimitedContractSize: true,
       }),
+    },
+    arbitrum: {
+      url: 'https://rinkeby.arbitrum.io/rpc',
+      gasPrice: 0,
     },
     kovan: {
       hardfork: 'istanbul',
@@ -116,6 +121,9 @@ const config: HardhatUserConfig = {
       url: node('mainnet'),
     },
   },
+  // etherscan: {
+  //   apiKey: etherScan_api_key
+  // },
   paths: {
     deploy: 'deploy/scripts',
   },
