@@ -48,6 +48,7 @@
     "@enzymefinance/hardhat": "^0.0.13",
     "@manypkg/cli": "^0.18.0",
     "@openzeppelin/contracts": "^3.4.1",
+    "@openzeppelin/contracts-upgradeable": "^4.3.2",
     "@preconstruct/cli": "^2.1.0",
     "@taodao/protocol": "^1.0.0",
     "@types/jest": "^26.0.23",

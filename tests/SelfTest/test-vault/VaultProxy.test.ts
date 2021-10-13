@@ -1,7 +1,9 @@
 import { extractEvent, randomAddress } from '@enzymefinance/ethers';
-import { IMigrationHookHandler, StandardToken, VaultLib, WETH } from '@taodao/protocol';
+import { IMigrationHookHandler, StandardToken, VaultLib, WETH, ComptrollerLib } from '@taodao/protocol';
 import { addNewAssetsToFund, assertEvent, createNewFund, deployProtocolFixture } from '@taodao/testutils';
 import { BigNumber, constants, utils } from 'ethers';
+import { resolveArguments } from '@enzymefinance/ethers';
+import { sighash } from '../../../packages/protocol/src/utils/sighash';
 
 async function snapshot() {
   const {
@@ -49,6 +51,34 @@ async function snapshot() {
     vaultProxy,
   };
 }
+
+function encodeArgs(types: (string | utils.ParamType)[], args: any[]) {
+  const params = types.map((type) => utils.ParamType.from(type));
+  const resolved = resolveArguments(params, args);
+  const hex = utils.defaultAbiCoder.encode(params, resolved);
+  return utils.hexlify(utils.arrayify(hex));
+}
+
+function encodeFunctionData(fragment: utils.FunctionFragment, args: any[] = []) {
+  const encodedArgs = encodeArgs(fragment.inputs, args);
+
+  return utils.hexlify(utils.concat([sighash(fragment), encodedArgs]));
+}
+
+describe('TEST-Param', () => {
+  it('calc values', async () => {
+    const { deployer, config, deployment } = await deployProtocolFixture();
+    console.log('========deployer::', deployer.address);
+    console.log('========weth::', config.weth);
+    const denominationAsset = new StandardToken('0xd0a1e359811322d97991e03f863a0c30c2cf029c', deployer);
+    const sharesActionTimelock = 0;
+    const comptrollerLib = new ComptrollerLib('0x3C1789217bd228e1C5d86052AA2dCA5FA3534ABe', deployer);
+    console.log('========comptrollerLib::', comptrollerLib.address);
+    const constructData = encodeFunctionData(comptrollerLib.init.fragment, [denominationAsset, sharesActionTimelock]);
+
+    console.log('========constructData::', constructData);
+  });
+});
 
 describe('init', () => {
   it('correctly sets initial proxy values', async () => {

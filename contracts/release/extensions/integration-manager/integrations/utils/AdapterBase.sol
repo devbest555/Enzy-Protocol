@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0
 
-
+/*
+    This file is part of the Enzyme Protocol.
+    (c) Enzyme Council <council@enzyme.finance>
+    For the full license information, please view the LICENSE
+    file that was distributed with this source code.
+*/
 
 pragma solidity 0.6.12;
 
@@ -52,10 +57,7 @@ abstract contract AdapterBase is IIntegrationAdapter, IntegrationSelectors {
         __transferContractAssetBalancesToFund(_vaultProxy, spendAssets);
     }
 
-    modifier swapTransferHandler(
-        address _vaultProxy,
-        bytes memory _encodedAssetTransferArgs
-    ) {
+    modifier swapTransferHandler(address _vaultProxy, bytes memory _encodedAssetTransferArgs) {
         (
             address spendAsset,
             uint256 spendAssetAmount,
@@ -63,11 +65,7 @@ abstract contract AdapterBase is IIntegrationAdapter, IntegrationSelectors {
         ) = __decodeAssetTransferArgs(_encodedAssetTransferArgs);
 
         // Take custody of spend assets (if necessary)
-        ERC20(spendAsset).safeTransferFrom(
-            _vaultProxy,
-            address(this),
-            spendAssetAmount
-        );
+        ERC20(spendAsset).safeTransferFrom(_vaultProxy, address(this), spendAssetAmount);
 
         // Execute call
         _;
@@ -98,8 +96,8 @@ abstract contract AdapterBase is IIntegrationAdapter, IntegrationSelectors {
         address _asset,
         address _target,
         uint256 _neededAmount
-    ) internal {        
-        if (ERC20(_asset).allowance(address(this), _target) < _neededAmount) {            
+    ) internal {
+        if (ERC20(_asset).allowance(address(this), _target) < _neededAmount) {
             ERC20(_asset).safeApprove(_target, type(uint256).max);
         }
     }
@@ -125,10 +123,14 @@ abstract contract AdapterBase is IIntegrationAdapter, IntegrationSelectors {
     function __decodeAssetTransferArgs(bytes memory _encodedAssetTransferArgs)
         internal
         pure
-        returns (address spendAsset_, uint256 spendAssetAmount_, address incomingAsset_)
+        returns (
+            address spendAsset_,
+            uint256 spendAssetAmount_,
+            address incomingAsset_
+        )
     {
         return abi.decode(_encodedAssetTransferArgs, (address, uint256, address));
-    }    
+    }
 
     /// @dev Helper to transfer full contract balances of assets to the specified VaultProxy
     function __transferContractAssetBalancesToFund(address _vaultProxy, address[] memory _assets)

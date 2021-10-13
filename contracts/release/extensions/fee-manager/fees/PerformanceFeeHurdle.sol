@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0
 
-
+/*
+    This file is part of the Enzyme Protocol.
+    (c) Enzyme Council <council@enzyme.finance>
+    For the full license information, please view the LICENSE
+    file that was distributed with this source code.
+*/
 
 pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
@@ -22,23 +27,30 @@ contract PerformanceFeeHurdle is FeeBase {
     using SafeMath for uint256;
     using SignedSafeMath for int256;
 
-    event ActivatedForFund(address indexed comptrollerProxy, uint256 lastSharePrice); 
+    event ActivatedForFund(address indexed comptrollerProxy, uint256 lastSharePrice);
 
-    event FundSettingsAdded(address indexed comptrollerProxy, uint256 rate, uint256 period, uint256 hurdleRate);
+    event FundSettingsAdded(
+        address indexed comptrollerProxy,
+        uint256 rate,
+        uint256 period,
+        uint256 hurdleRate
+    );
 
-    event LastSharePriceUpdated(  
+    event LastSharePriceUpdated(
         address indexed comptrollerProxy,
         uint256 prevSharePrice,
         uint256 nextSharePrice
     );
 
-    event PaidOut( //??
+    event PaidOut(
+        //??
         address indexed comptrollerProxy,
         uint256 lastSharePrice,
         uint256 aggregateValueDue
     );
 
-    event PerformanceUpdated( //?
+    event PerformanceUpdated(
+        //?
         address indexed comptrollerProxy,
         uint256 prevAggregateValueDue,
         uint256 nextAggregateValueDue,
@@ -93,11 +105,14 @@ contract PerformanceFeeHurdle is FeeBase {
         override
         onlyFeeManager
     {
-        (uint256 feeRate, uint256 feePeriod, uint256 hurdleRate) = abi.decode(_settingsData, (uint256, uint256, uint256));
+        (uint256 feeRate, uint256 feePeriod, uint256 hurdleRate) = abi.decode(
+            _settingsData,
+            (uint256, uint256, uint256)
+        );
         require(feeRate > 0, "addFundSettings: feeRate must be greater than 0");
-        require(feePeriod >= 30 days, "addFundSettings: feePeriod must be greater than 30 days");  
+        require(feePeriod >= 30 days, "addFundSettings: feePeriod must be greater than 30 days");
         require(hurdleRate > 0, "addFundSettings: hurdleRate must be greater than 0");
-        
+
         comptrollerProxyToFeeInfo[_comptrollerProxy] = FeeInfo({
             rate: feeRate,
             period: feePeriod,
@@ -163,9 +178,9 @@ contract PerformanceFeeHurdle is FeeBase {
 
         FeeInfo storage feeInfo = comptrollerProxyToFeeInfo[_comptrollerProxy];
         feeInfo.lastPaid = block.timestamp;
-        
+
         uint256 lastSharePrice = feeInfo.lastSharePrice;
-        
+
         uint256 prevAggregateValueDue = feeInfo.aggregateValueDue;
 
         // Update state as necessary
@@ -173,11 +188,7 @@ contract PerformanceFeeHurdle is FeeBase {
             feeInfo.aggregateValueDue = 0;
         }
 
-        emit PaidOut(
-            _comptrollerProxy,
-            lastSharePrice,
-            prevAggregateValueDue
-        );
+        emit PaidOut(_comptrollerProxy, lastSharePrice, prevAggregateValueDue);
 
         return true;
     }
@@ -214,7 +225,7 @@ contract PerformanceFeeHurdle is FeeBase {
             _vaultProxy,
             _gav
         );
-        if (settlementSharesDue == 0) {  
+        if (settlementSharesDue == 0) {
             return (IFeeManager.SettlementType.None, address(0), 0);
         } else if (settlementSharesDue > 0) {
             // Settle by minting shares outstanding for custody
@@ -303,13 +314,15 @@ contract PerformanceFeeHurdle is FeeBase {
         uint256 _feeRate,
         uint256 _hurdleFeeRate
     ) private pure returns (uint256) {
-
-        int256 hurdleValue = int256(_prevSharePrice).mul(int256(_hurdleFeeRate)).div(int256(RATE_DIVISOR)); 
+        int256 hurdleValue = int256(_prevSharePrice).mul(int256(_hurdleFeeRate)).div(
+            int256(RATE_DIVISOR)
+        );
 
         int256 lastSharePriceWithHurdleRate = int256(_prevSharePrice).add(hurdleValue);
 
-        int256 valueSinceLastSettled = (int256(_sharePriceWithoutPerformance).sub(lastSharePriceWithHurdleRate))
-        .mul(int256(_netSharesSupply)).div(int256(SHARE_UNIT));
+        int256 valueSinceLastSettled = (
+            int256(_sharePriceWithoutPerformance).sub(lastSharePriceWithHurdleRate)
+        ).mul(int256(_netSharesSupply)).div(int256(SHARE_UNIT));
 
         int256 valueDueSinceLastSettled = valueSinceLastSettled.mul(int256(_feeRate)).div(
             int256(RATE_DIVISOR)
@@ -338,7 +351,8 @@ contract PerformanceFeeHurdle is FeeBase {
         bytes memory _settlementData,
         uint256 _gav
     ) private view returns (uint256 nextSharePrice_) {
-        uint256 denominationAssetUnit = 10 **uint256(ERC20(ComptrollerLib(_comptrollerProxy).getDenominationAsset()).decimals());
+        uint256 denominationAssetUnit = 10 **
+            uint256(ERC20(ComptrollerLib(_comptrollerProxy).getDenominationAsset()).decimals());
         if (_gav == 0) {
             return denominationAssetUnit;
         }
@@ -395,7 +409,7 @@ contract PerformanceFeeHurdle is FeeBase {
         // Cannot be 0, as _totalSharesSupply != _totalSharesOutstanding
         uint256 netSharesSupply = _totalSharesSupply.sub(_totalSharesOutstanding);
         uint256 sharePriceWithoutPerformance = _gav.mul(SHARE_UNIT).div(netSharesSupply);
-        
+
         // If gross share price has not changed, can exit early
         uint256 prevSharePrice = feeInfo.lastSharePrice;
         if (sharePriceWithoutPerformance == prevSharePrice) {

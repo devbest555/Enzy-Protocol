@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0
 
-
+/*
+    This file is part of the Enzyme Protocol.
+    (c) Enzyme Council <council@enzyme.finance>
+    For the full license information, please view the LICENSE
+    file that was distributed with this source code.
+*/
 
 pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
@@ -97,7 +102,7 @@ contract PerformanceFeeHWM is FeeBase {
     {
         (uint256 feeRate, uint256 feePeriod) = abi.decode(_settingsData, (uint256, uint256));
         require(feeRate > 0, "addFundSettings: feeRate must be greater than 0");
-        require(feePeriod >= 30 days, "addFundSettings: feePeriod must be greater than 30 days");  
+        require(feePeriod >= 30 days, "addFundSettings: feePeriod must be greater than 30 days");
         comptrollerProxyToFeeInfo[_comptrollerProxy] = FeeInfo({
             rate: feeRate,
             period: feePeriod,
@@ -340,7 +345,8 @@ contract PerformanceFeeHWM is FeeBase {
         bytes memory _settlementData,
         uint256 _gav
     ) private view returns (uint256 nextSharePrice_) {
-        uint256 denominationAssetUnit = 10 **uint256(ERC20(ComptrollerLib(_comptrollerProxy).getDenominationAsset()).decimals());
+        uint256 denominationAssetUnit = 10 **
+            uint256(ERC20(ComptrollerLib(_comptrollerProxy).getDenominationAsset()).decimals());
         if (_gav == 0) {
             return denominationAssetUnit;
         }
@@ -397,7 +403,7 @@ contract PerformanceFeeHWM is FeeBase {
         // Cannot be 0, as _totalSharesSupply != _totalSharesOutstanding
         uint256 netSharesSupply = _totalSharesSupply.sub(_totalSharesOutstanding);
         uint256 sharePriceWithoutPerformance = _gav.mul(SHARE_UNIT).div(netSharesSupply);
-        
+
         // If gross share price has not changed, can exit early
         uint256 prevSharePrice = feeInfo.lastSharePrice;
         if (sharePriceWithoutPerformance == prevSharePrice) {

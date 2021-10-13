@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0
 
-
+/*
+    This file is part of the Enzyme Protocol.
+    (c) Enzyme Council <council@enzyme.finance>
+    For the full license information, please view the LICENSE
+    file that was distributed with this source code.
+*/
 
 pragma solidity 0.6.12;
 
@@ -124,10 +129,14 @@ contract YearnVaultV2Adapter is AdapterBase2, YearnVaultV2ActionsMixin {
         revert("parseAssetsForMethod: _selector invalid");
     }
 
-    function swapForRedeem(address, bytes calldata, bytes calldata) external override {   
+    function swapForRedeem(
+        address,
+        bytes calldata,
+        bytes calldata
+    ) external override {
         return;
     }
-    
+
     /// @dev Helper function to parse spend and incoming assets from encoded call args
     /// during lend() calls
     function __parseAssetsForLend(bytes calldata _encodedCallArgs)

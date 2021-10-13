@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0
 
-
+/*
+    This file is part of the Enzyme Protocol.
+    (c) Enzyme Council <council@enzyme.finance>
+    For the full license information, please view the LICENSE
+    file that was distributed with this source code.
+*/
 
 pragma solidity 0.6.12;
 
@@ -58,8 +63,8 @@ contract IntegrationManager is
     address private immutable DERIVATIVE_PRICE_FEED;
     address private immutable POLICY_MANAGER;
     address private immutable PRIMITIVE_PRICE_FEED;
-    
-    uint256 private constant ONE_DAY = 24 * 60 * 60;    
+
+    uint256 private constant ONE_DAY = 24 * 60 * 60;
     uint256 private constant RATE_DIVISOR = 10**18;
 
     EnumerableSet.AddressSet private registeredAdapters;
@@ -94,7 +99,7 @@ contract IntegrationManager is
 
         comptrollerProxyToAcctToIsAuthUser[_comptrollerProxy][_who] = true;
 
-        emit  AuthUserAddedForFund (_comptrollerProxy, _who);
+        emit AuthUserAddedForFund(_comptrollerProxy, _who);
     }
 
     /// @notice Deactivate the extension by destroying storage
@@ -110,7 +115,7 @@ contract IntegrationManager is
 
         comptrollerProxyToAcctToIsAuthUser[_comptrollerProxy][_who] = false;
 
-        emit  AuthUserRemovedForFund (_comptrollerProxy, _who);
+        emit AuthUserRemovedForFund(_comptrollerProxy, _who);
     }
 
     /// @notice Checks whether an account is an authorized IntegrationManager user for a given fund
@@ -175,7 +180,7 @@ contract IntegrationManager is
         // activateForFund(), this function does not require further validation of the
         // sending ComptrollerProxy
         address vaultProxy = comptrollerProxyToVaultProxy[msg.sender];
-        
+
         require(vaultProxy != address(0), "receiveCallFromComptroller: Fund is not active");
         require(
             isAuthUserForFund(msg.sender, _caller),
@@ -192,52 +197,53 @@ contract IntegrationManager is
         } else {
             revert("receiveCallFromComptroller: Invalid _actionId");
         }
-    }        
+    }
 
-    function actionForRedeem(  
+    function actionForRedeem(
         address _adapter,
-        uint256[] memory _payoutAmounts, 
-        address[] memory _payoutAssets        
-    ) external override {        
+        uint256[] memory _payoutAmounts,
+        address[] memory _payoutAssets
+    ) external override {
         address denominationAsset = IComptroller(msg.sender).getDenominationAsset();
         address vaultProxy = comptrollerProxyToVaultProxy[msg.sender];
         string memory identifier = IIntegrationAdapter(_adapter).identifier();
-        
+
         require(vaultProxy != address(0x00), "actionForRedeem: Fund is not active");
         require(adapterIsRegistered(_adapter), "actionForRedeem: Adapter is not registered");
-        require(compareStringsbyBytes(identifier, "UNISWAP_V2"), "actionForRedeem: Adapter must be uniswap v2");
+        require(
+            compareStringsbyBytes(identifier, "UNISWAP_V2"),
+            "actionForRedeem: Adapter must be uniswap v2"
+        );
 
-        for(uint256 i; i < _payoutAssets.length; i++) {
+        for (uint256 i; i < _payoutAssets.length; i++) {
+            if (!__isSupportedAsset(_payoutAssets[i])) continue;
 
-            if(!__isSupportedAsset(_payoutAssets[i])) continue;
+            if (_payoutAssets[i] == denominationAsset) continue;
 
-            if(_payoutAssets[i] == denominationAsset) continue;
+            __approveAssetSpender(msg.sender, _payoutAssets[i], _adapter, _payoutAmounts[i]);
 
-            __approveAssetSpender(
-                msg.sender,
-                _payoutAssets[i],
-                _adapter,
-                _payoutAmounts[i]
-            );
-            
             bytes memory swapArgs = abi.encode(
-                _payoutAmounts[i], 
-                _payoutAssets[i], 
+                _payoutAmounts[i],
+                _payoutAssets[i],
                 denominationAsset
-            );           
+            );
 
             bytes memory transferArgs = abi.encode(
-                _payoutAssets[i], 
-                _payoutAmounts[i], 
+                _payoutAssets[i],
+                _payoutAmounts[i],
                 denominationAsset
-            );   
-            
+            );
+
             IIntegrationAdapter(_adapter).swapForRedeem(vaultProxy, swapArgs, transferArgs);
         }
     }
 
     /// @dev Helper to compare two strings
-    function compareStringsbyBytes(string memory s1, string memory s2) internal pure returns(bool) {
+    function compareStringsbyBytes(string memory s1, string memory s2)
+        internal
+        pure
+        returns (bool)
+    {
         return keccak256(abi.encodePacked(s1)) == keccak256(abi.encodePacked(s2));
     }
 
@@ -310,7 +316,7 @@ contract IntegrationManager is
             uint256[] memory incomingAssetAmounts,
             address[] memory outgoingAssets,
             uint256[] memory outgoingAssetAmounts
-        ) =  __callOnIntegrationInner(_vaultProxy, _callArgs);
+        ) = __callOnIntegrationInner(_vaultProxy, _callArgs);
 
         __postCoIHook(
             adapter,
@@ -386,7 +392,7 @@ contract IntegrationManager is
     }
 
     /// @dev Helper to decode CoI args
-    function __decodeCallOnIntegrationArgs (bytes memory _callArgs)
+    function __decodeCallOnIntegrationArgs(bytes memory _callArgs)
         private
         pure
         returns (
@@ -405,7 +411,7 @@ contract IntegrationManager is
         address _caller,
         address _adapter,
         bytes4 _selector,
-        bytes  memory  _integrationData ,
+        bytes memory _integrationData,
         address[] memory _incomingAssets,
         uint256[] memory _incomingAssetAmounts,
         address[] memory _outgoingAssets,
@@ -429,7 +435,7 @@ contract IntegrationManager is
     /// @dev Avoids stack-too-deep error
     function __executeCoI(
         address _vaultProxy,
-        bytes  memory  _callArgs ,
+        bytes memory _callArgs,
         bytes memory _encodedAssetTransferArgs
     ) private {
         (
@@ -446,7 +452,7 @@ contract IntegrationManager is
                 _encodedAssetTransferArgs
             )
         );
-        
+
         require(success, string(returnData));
     }
 
@@ -528,7 +534,7 @@ contract IntegrationManager is
                 "__preProcessCoI: Empty incoming asset address"
             );
             require(
-                minIncomingAssetAmounts_ [i] >  0 ,
+                minIncomingAssetAmounts_[i] > 0,
                 "__preProcessCoI: minIncomingAssetAmount must be >0"
             );
             require(
@@ -603,7 +609,7 @@ contract IntegrationManager is
         address _vaultProxy,
         address[] memory _expectedIncomingAssets,
         uint256[] memory _preCallIncomingAssetBalances,
-        uint256 [] memory  _minIncomingAssetAmounts ,
+        uint256[] memory _minIncomingAssetAmounts,
         SpendAssetsHandleType _spendAssetsHandleType,
         address[] memory _spendAssets,
         uint256[] memory _maxSpendAssetAmounts,
@@ -650,7 +656,7 @@ contract IntegrationManager is
         address _vaultProxy,
         address[] memory _expectedIncomingAssets,
         uint256[] memory _preCallIncomingAssetBalances,
-        uint256 [] memory  _minIncomingAssetAmounts ,
+        uint256[] memory _minIncomingAssetAmounts,
         address[] memory _increasedSpendAssets,
         uint256[] memory _increasedSpendAssetAmounts
     ) private returns (address[] memory incomingAssets_, uint256[] memory incomingAssetAmounts_) {
@@ -665,9 +671,9 @@ contract IntegrationManager is
         for (uint256 i = 0; i < _expectedIncomingAssets.length; i++) {
             uint256 balanceDiff = __getVaultAssetBalance(_vaultProxy, _expectedIncomingAssets[i])
                 .sub(_preCallIncomingAssetBalances[i]);
-                
+
             require(
-                balanceDiff >= _minIncomingAssetAmounts [i],
+                balanceDiff >= _minIncomingAssetAmounts[i],
                 "__reconcileCoIAssets: Received incoming asset less than expected"
             );
 

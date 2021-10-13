@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0
 
-
+/*
+    This file is part of the Enzyme Protocol.
+    (c) Enzyme Council <council@enzyme.finance>
+    For the full license information, please view the LICENSE
+    file that was distributed with this source code.
+*/
 
 pragma solidity 0.6.12;
 
@@ -134,8 +139,8 @@ contract UniswapV2Adapter is AdapterBase {
             incomingAssets_,
             minIncomingAssetAmounts_
         );
-    }    
-    
+    }
+
     /// @notice Lends assets for pool tokens on Uniswap
     /// @param _vaultProxy The VaultProxy of the calling fund
     /// @param _encodedCallArgs Encoded order parameters
@@ -223,31 +228,33 @@ contract UniswapV2Adapter is AdapterBase {
 
         __takeOrder(_vaultProxy, outgoingAssetAmount, minIncomingAssetAmount, path);
     }
-        
+
     /// @notice Swap assets to denominationAsset on Uniswap
     /// @param _swapArgs Encoded order parameters //onlyIntegrationManager
     function swapForRedeem(
         address _vaultProxy,
         bytes calldata _swapArgs,
         bytes calldata _encodedAssetTransferArgs
-    ) 
-        external 
-        override 
+    )
+        external
+        override
         onlyIntegrationManager
         swapTransferHandler(_vaultProxy, _encodedAssetTransferArgs)
-    {   
+    {
         (
-            uint256 payoutAmount, 
-            address payoutAsset, 
+            uint256 payoutAmount,
+            address payoutAsset,
             address denomAsset
         ) = __decodeSwapRedeemCallArgs(_swapArgs);
-        
+
         address[] memory path = new address[](2);
         path[0] = payoutAsset;
         path[1] = denomAsset;
 
         // Get expected output amount on Uniswap
-        uint256 expectedDenomAmount = IUniswapV2Router2(ROUTER).getAmountsOut(payoutAmount, path)[1];
+        uint256 expectedDenomAmount = IUniswapV2Router2(ROUTER).getAmountsOut(payoutAmount, path)[
+            1
+        ];
 
         console.log("====sol-expectedDenomAmount::", expectedDenomAmount);
         console.log("====sol-payoutAmount::", payoutAmount);
@@ -301,8 +308,8 @@ contract UniswapV2Adapter is AdapterBase {
         private
         pure
         returns (
-            uint256 payoutAmount_, 
-            address payoutAsset_, 
+            uint256 payoutAmount_,
+            address payoutAsset_,
             address denomAsset_
         )
     {

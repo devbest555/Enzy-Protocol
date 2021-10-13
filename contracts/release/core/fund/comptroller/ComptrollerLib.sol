@@ -1,5 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0
 
+/*
+    This file is part of the Enzyme Protocol.
+    (c) Enzyme Council <council@enzyme.finance>
+    For the full license information, please view the LICENSE
+    file that was distributed with this source code.
+*/
+
 pragma solidity 0.6.12;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
@@ -72,13 +79,13 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     address private immutable PROTOCOLFEE;
     address internal denominationAsset;
     address internal vaultProxy;
-    bool  internal isLib;
+    bool internal isLib;
 
     // Storage
     // Allows a fund owner to override a release-level pause
     bool internal overridePause;
     // A reverse-mutex, granting atomic permission for particular contracts to make vault calls
-    bool  internal permissionedVaultActionAllowed;
+    bool internal permissionedVaultActionAllowed;
     // A mutex to protect against reentrancy
     bool internal reentranceLocked;
     // A timelock between any "shares actions" (i.e., buy and redeem shares), per-account
@@ -89,7 +96,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     uint256 internal feeWithdraw;
     address internal daoAddress;
     uint256 internal buyFeeAmount;
-    
+
     mapping(address => uint256) public investAmount;
 
     ///////////////
@@ -103,29 +110,29 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         permissionedVaultActionAllowed = false;
     }
 
-    modifier locksReentrance () {
+    modifier locksReentrance() {
         __assertNotReentranceLocked();
         reentranceLocked = true;
         _;
         reentranceLocked = false;
     }
 
-    modifier onlyActive () {
+    modifier onlyActive() {
         __assertIsActive(vaultProxy);
         _;
     }
 
-    modifier onlyNotPaused () {
+    modifier onlyNotPaused() {
         __assertNotPaused();
         _;
     }
 
-    modifier onlyFundDeployer () {
+    modifier onlyFundDeployer() {
         __assertIsFundDeployer(msg.sender);
         _;
     }
 
-    modifier onlyOwner () {
+    modifier onlyOwner() {
         __assertIsOwner(msg.sender);
         _;
     }
@@ -232,7 +239,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
 
         overridePause = _nextOverridePause;
 
-        emit  OverridePauseSet (_nextOverridePause);
+        emit OverridePauseSet(_nextOverridePause);
     }
 
     /// @notice Makes an arbitrary call with the VaultProxy contract as the sender
@@ -430,7 +437,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             // to payout fee shares owed during migration, these shares are not lost.
             uint256 sharesDue = ERC20(_vaultProxy).balanceOf(_vaultProxy);
             if (sharesDue > 0) {
-                IVault (_vaultProxy). transferShares (
+                IVault(_vaultProxy).transferShares(
                     _vaultProxy,
                     IVault(_vaultProxy).getOwner(),
                     sharesDue
@@ -517,9 +524,9 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     function calcGrossShareValue(bool _requireFinality)
         external
         override
-        returns ( uint256   grossShareValue_ , bool   isValid_ )
+        returns (uint256 grossShareValue_, bool isValid_)
     {
-        uint256 gav ;
+        uint256 gav;
         (gav, isValid_) = calcGav(_requireFinality);
 
         grossShareValue_ = __calcGrossShareValue(
@@ -533,7 +540,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
 
     /// @dev Helper for calculating the gross share value
     function __calcGrossShareValue(
-        uint256   _gav ,
+        uint256 _gav,
         uint256 _sharesSupply,
         uint256 _denominationAssetUnit
     ) private pure returns (uint256 grossShareValue_) {
@@ -549,11 +556,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     function calcEachBalance(address _asset) external override returns (uint256 balance_) {
         address vaultProxyAddress = vaultProxy;
 
-        balance_ = __finalizeIfSynthAndGetAssetBalance(
-            vaultProxyAddress,
-            _asset,
-            true
-        );
+        balance_ = __finalizeIfSynthAndGetAssetBalance(vaultProxyAddress, _asset, true);
 
         return balance_;
     }
@@ -575,8 +578,8 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     /// @dev Param arrays have indexes corresponding to individual __buyShares() orders.
     function buyShares(
         address[] calldata _buyers,
-        uint256 [] calldata _investmentAmounts ,
-        uint256 [] calldata _minSharesQuantities
+        uint256[] calldata _investmentAmounts,
+        uint256[] calldata _minSharesQuantities
     )
         external
         onlyNotPaused
@@ -626,9 +629,9 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
                 denominationAssetCopy
             );
 
-            gav = gav.add(_investmentAmounts [i]);
+            gav = gav.add(_investmentAmounts[i]);
         }
-        
+
         __buySharesCompletedHook(msg.sender, sharesReceivedAmounts_, gav);
 
         return sharesReceivedAmounts_;
@@ -643,7 +646,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     function __buyShares(
         address _buyer,
         uint256 _investmentAmount,
-        uint256   _minSharesQuantity ,
+        uint256 _minSharesQuantity,
         address _vaultProxy,
         uint256 _sharePrice,
         uint256 _preBuySharesGav,
@@ -664,7 +667,11 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         IVault(_vaultProxy).mintShares(_buyer, sharesIssued);
 
         // Transfer the investment asset to the fund.
-        ERC20(_denominationAsset).safeTransferFrom(msg.sender, _vaultProxy, investmentAmountWithFee);
+        ERC20(_denominationAsset).safeTransferFrom(
+            msg.sender,
+            _vaultProxy,
+            investmentAmountWithFee
+        );
         investAmount[_denominationAsset] = investAmount[_denominationAsset].add(_investmentAmount);
         //==== Transfer Asset amount of fees from VaultProxy to DAO Wallet
         if (daoAddress != address(0) && buyFeeAmount > 0) {
@@ -732,7 +739,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     function __preBuySharesHook(
         address _buyer,
         uint256 _investmentAmount,
-        uint256   _minSharesQuantity ,
+        uint256 _minSharesQuantity,
         uint256 _gav
     ) private {
         IFeeManager(FEE_MANAGER).invokeHook(
@@ -779,7 +786,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     function redeemShares()
         external
         returns (address[] memory payoutAssets_, uint256[] memory payoutAmounts_)
-    {           
+    {
         return
             __redeemShares(
                 msg.sender,
@@ -859,7 +866,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
                 abi.encode(_redeemer, _sharesQuantity),
                 0
             )
-        {} catch ( bytes   memory   reason ) {
+        {} catch (bytes memory reason) {
             emit PreRedeemSharesHookFailed(reason, _redeemer, _sharesQuantity);
         }
     }
@@ -869,17 +876,25 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         uint256 _sharesQuantity,
         address[] memory _additionalAssets,
         address[] memory _assetsToSkip
-    ) 
+    )
         private
         locksReentrance
-        returns (address[] memory payoutAssets_, uint256[] memory payoutAmounts_, uint256[] memory assetAmountToFees_, uint256 sharesSupply_)
+        returns (
+            address[] memory payoutAssets_,
+            uint256[] memory payoutAmounts_,
+            uint256[] memory assetAmountToFees_,
+            uint256 sharesSupply_
+        )
     {
         require(_sharesQuantity > 0, "__calcRedeemShares: _sharesQuantity must be >0");
         require(
             _additionalAssets.isUniqueSet(),
             "__calcRedeemShares: _additionalAssets contains duplicates"
         );
-        require(_assetsToSkip.isUniqueSet(), "__calcRedeemShares: _assetsToSkip contains duplicates");
+        require(
+            _assetsToSkip.isUniqueSet(),
+            "__calcRedeemShares: _assetsToSkip contains duplicates"
+        );
 
         IVault vaultProxyContract = IVault(vaultProxy);
 
@@ -914,8 +929,8 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         payoutAmounts_ = new uint256[](payoutAssets_.length);
         assetAmountToFees_ = new uint256[](payoutAssets_.length);
         sharesSupply_ = sharesContract.totalSupply();
-        
-        uint256 redeemFeeAmount = _sharesQuantity.mul(feeWithdraw).div(RATE_DIVISOR);        
+
+        uint256 redeemFeeAmount = _sharesQuantity.mul(feeWithdraw).div(RATE_DIVISOR);
         uint256 sharesQuantityWithoutFee = _sharesQuantity.sub(redeemFeeAmount);
 
         for (uint256 i; i < payoutAssets_.length; i++) {
@@ -925,7 +940,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
                 true
             );
             require(assetBalance > 0, "__calcRedeemShares: Payout amount must be greater 0");
-            
+
             payoutAmounts_[i] = assetBalance.mul(sharesQuantityWithoutFee).div(sharesSupply_);
             assetAmountToFees_[i] = assetBalance.mul(redeemFeeAmount).div(sharesSupply_);
         }
@@ -943,15 +958,10 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         private
         locksReentrance
         returns (address[] memory payoutAssets_, uint256[] memory payoutAmounts_)
-    {   
+    {
         uint256[] memory assetAmountToFees_;
         uint256 sharesSupply_;
-        (
-            payoutAssets_, 
-            payoutAmounts_, 
-            assetAmountToFees_,
-            sharesSupply_
-        ) = __calcRedeemShares(
+        (payoutAssets_, payoutAmounts_, assetAmountToFees_, sharesSupply_) = __calcRedeemShares(
             _redeemer,
             _sharesQuantity,
             _additionalAssets,
@@ -959,15 +969,15 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         );
 
         burnAndTransfer(
-            _redeemer, 
-            _sharesQuantity, 
-            payoutAssets_, 
-            payoutAmounts_, 
-            assetAmountToFees_, 
-            sharesSupply_, 
-            0, 
+            _redeemer,
+            _sharesQuantity,
+            payoutAssets_,
+            payoutAmounts_,
+            assetAmountToFees_,
+            sharesSupply_,
+            0,
             true
-        );        
+        );
 
         emit SharesRedeemed(_redeemer, _sharesQuantity, payoutAssets_, payoutAmounts_);
 
@@ -977,21 +987,20 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     function burnAndTransfer(
         address _redeemer,
         uint256 _sharesQuantity,
-        address[] memory _payoutAssets, 
-        uint256[] memory _payoutAmounts, 
+        address[] memory _payoutAssets,
+        uint256[] memory _payoutAmounts,
         uint256[] memory _assetAmountToFees,
         uint256 _sharesSupply,
         uint256 _redeemAmountToDenom,
         bool _redeemType
     ) private {
         // Burn the shares.
-        IVault vaultProxyContract = IVault(vaultProxy);      
+        IVault vaultProxyContract = IVault(vaultProxy);
         vaultProxyContract.burnShares(_redeemer, _sharesQuantity);
         daoAddress = ProtocolFee(PROTOCOLFEE).getDaoAddress();
 
         // Transfer payout asset amounts due to redeemer
         for (uint256 i; i < _payoutAssets.length; i++) {
-
             if (_sharesQuantity == _sharesSupply) {
                 if (_payoutAssets[i] != denominationAsset) {
                     vaultProxyContract.removeTrackedAsset(_payoutAssets[i]);
@@ -1001,21 +1010,33 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
             // Transfer payout assets individually to a redeemer on SharesRedeemed()
             if (_redeemType) {
                 if (_payoutAmounts[i] > 0) {
-                    vaultProxyContract.withdrawAssetTo(_payoutAssets[i], _redeemer, _payoutAmounts[i]);
+                    vaultProxyContract.withdrawAssetTo(
+                        _payoutAssets[i],
+                        _redeemer,
+                        _payoutAmounts[i]
+                    );
                 }
-            } 
+            }
             // Transfer denomination Asset amount to redeemer on SharesRedeemedToDenom()
             else {
-                if(_redeemAmountToDenom > 0) {
-                    vaultProxyContract.withdrawAssetTo(denominationAsset, _redeemer, _redeemAmountToDenom);
+                if (_redeemAmountToDenom > 0) {
+                    vaultProxyContract.withdrawAssetTo(
+                        denominationAsset,
+                        _redeemer,
+                        _redeemAmountToDenom
+                    );
                 }
-            }            
+            }
 
             // Transfer fee asset amount to protocol(DAO wallet address)
             if (_assetAmountToFees[i] > 0 && daoAddress != address(0)) {
-                vaultProxyContract.withdrawAssetTo(_payoutAssets[i], daoAddress, _assetAmountToFees[i]);
+                vaultProxyContract.withdrawAssetTo(
+                    _payoutAssets[i],
+                    daoAddress,
+                    _assetAmountToFees[i]
+                );
             }
-        }   
+        }
     }
 
     function redeemSharesToDenomDetailed(
@@ -1024,115 +1045,121 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         address[] calldata _additionalAssets
     ) external returns (uint256 redeemAmountToDenom_) {
         (
-            address[] memory payoutAssets, 
-            uint256[] memory payoutAmounts, 
+            address[] memory payoutAssets,
+            uint256[] memory payoutAmounts,
             uint256[] memory assetAmountToFees,
             uint256 sharesSupply
         ) = __calcRedeemShares(msg.sender, _sharesQuantity, _additionalAssets, new address[](0));
 
         // initial total denominationAsset Amount of Vault
-        uint256 totalDenomAmountBeforeSwap = ERC20(denominationAsset).balanceOf(vaultProxy);   
-        console.log("===sol-BeforeSwap", totalDenomAmountBeforeSwap);       
-        
+        uint256 totalDenomAmountBeforeSwap = ERC20(denominationAsset).balanceOf(vaultProxy);
+        console.log("===sol-BeforeSwap", totalDenomAmountBeforeSwap);
+
         uint256 denomAmountBeforeSwap;
-        for(uint256 i; i < payoutAssets.length; i++) {
+        for (uint256 i; i < payoutAssets.length; i++) {
             console.log("===sol-payoutAmounts", payoutAmounts[i]);
-            if(payoutAssets[i] == denominationAsset) {
-                denomAmountBeforeSwap = payoutAmounts[i];        
+            if (payoutAssets[i] == denominationAsset) {
+                denomAmountBeforeSwap = payoutAmounts[i];
             }
         }
         permissionedVaultActionAllowed = true;
-        // Get amount(in Vault) in denomination asset from other assets excepted denomination asset            
-        IExtension(INTEGRATION_MANAGER).actionForRedeem(
-            _adapter,
-            payoutAmounts,
-            payoutAssets
-        );
+        // Get amount(in Vault) in denomination asset from other assets excepted denomination asset
+        IExtension(INTEGRATION_MANAGER).actionForRedeem(_adapter, payoutAmounts, payoutAssets);
 
         // denominationAsset Amount after swap on Uniswap V2
         uint256 totalDenomAmountAfterSwap = ERC20(denominationAsset).balanceOf(vaultProxy);
- 
-        console.log("===sol-AfterSwap", totalDenomAmountAfterSwap);     
-        // Get denomination asset amount for transfer to redeemer
-        redeemAmountToDenom_ = totalDenomAmountAfterSwap.sub(totalDenomAmountBeforeSwap).add(denomAmountBeforeSwap);
 
-        console.log("===sol-redeemAmount", redeemAmountToDenom_); 
+        console.log("===sol-AfterSwap", totalDenomAmountAfterSwap);
+        // Get denomination asset amount for transfer to redeemer
+        redeemAmountToDenom_ = totalDenomAmountAfterSwap.sub(totalDenomAmountBeforeSwap).add(
+            denomAmountBeforeSwap
+        );
+
+        console.log("===sol-redeemAmount", redeemAmountToDenom_);
         if (redeemAmountToDenom_ > 0) {
             burnAndTransfer(
-                msg.sender, 
-                _sharesQuantity, 
-                payoutAssets, 
-                payoutAmounts, 
-                assetAmountToFees, 
-                sharesSupply, 
-                redeemAmountToDenom_, 
+                msg.sender,
+                _sharesQuantity,
+                payoutAssets,
+                payoutAmounts,
+                assetAmountToFees,
+                sharesSupply,
+                redeemAmountToDenom_,
                 false
-            );   
+            );
         }
 
-        emit SharesRedeemedToDenom(msg.sender, _sharesQuantity, denominationAsset, redeemAmountToDenom_); 
+        emit SharesRedeemedToDenom(
+            msg.sender,
+            _sharesQuantity,
+            denominationAsset,
+            redeemAmountToDenom_
+        );
 
         return redeemAmountToDenom_;
     }
 
     /// @notice Redeem all of the sender's shares in the denominationAsset
-    // function redeemSharesToDenom(address adapter) 
-    //     external 
-    //     allowsPermissionedVaultAction
-    //     returns (uint256 redeemAmountToDenom_)
-    // {           
-    //     uint256 sharesQuantity = ERC20(vaultProxy).balanceOf(msg.sender);
-        
-    //     console.log("===sol-sharesQuantity", sharesQuantity);
-    //     (
-    //         address[] memory payoutAssets, 
-    //         uint256[] memory payoutAmounts, 
-    //         uint256[] memory assetAmountToFees,
-    //         uint256 sharesSupply
-    //     ) = __calcRedeemShares(msg.sender, sharesQuantity, new address[](0), new address[](0));
+    function redeemSharesToDenom(address adapter)
+        external
+        allowsPermissionedVaultAction
+        returns (uint256 redeemAmountToDenom_)
+    {
+        uint256 sharesQuantity = ERC20(vaultProxy).balanceOf(msg.sender);
 
-    //     // initial total denominationAsset Amount of Vault
-    //     uint256 totalDenomAmountBeforeSwap = ERC20(denominationAsset).balanceOf(vaultProxy);        
-    //     uint256 denomAmountBeforeSwap;
-    //     for(uint256 i; i < payoutAssets.length; i++) {
-    //         if(payoutAssets[i] == denominationAsset) {
-    //             denomAmountBeforeSwap = payoutAmounts[i];
-    //         }
-    //     }
-    //     // Get amount(in Vault) in denomination asset from other assets excepted denomination asset            
-    //     IExtension(INTEGRATION_MANAGER).actionForRedeem(
-    //         adapter,
-    //         payoutAmounts,
-    //         payoutAssets
-    //     );
+        console.log("===sol-sharesQuantity", sharesQuantity);
+        (
+            address[] memory payoutAssets,
+            uint256[] memory payoutAmounts,
+            uint256[] memory assetAmountToFees,
+            uint256 sharesSupply
+        ) = __calcRedeemShares(msg.sender, sharesQuantity, new address[](0), new address[](0));
 
-    //     // denominationAsset Amount after swap on Uniswap V2
-    //     uint256 totalDenomAmountAfterSwap = ERC20(denominationAsset).balanceOf(vaultProxy);
+        // initial total denominationAsset Amount of Vault
+        uint256 totalDenomAmountBeforeSwap = ERC20(denominationAsset).balanceOf(vaultProxy);
+        uint256 denomAmountBeforeSwap;
+        for (uint256 i; i < payoutAssets.length; i++) {
+            if (payoutAssets[i] == denominationAsset) {
+                denomAmountBeforeSwap = payoutAmounts[i];
+            }
+        }
+        // Get amount(in Vault) in denomination asset from other assets excepted denomination asset
+        IExtension(INTEGRATION_MANAGER).actionForRedeem(adapter, payoutAmounts, payoutAssets);
 
-    //     // Get denomination asset amount for transfer to redeemer
-    //     if(totalDenomAmountAfterSwap > totalDenomAmountBeforeSwap) {
-    //         redeemAmountToDenom_ = totalDenomAmountAfterSwap.sub(totalDenomAmountBeforeSwap).add(denomAmountBeforeSwap);
-    //     } else {
-    //         redeemAmountToDenom_ = denomAmountBeforeSwap;
-    //     }        
+        // denominationAsset Amount after swap on Uniswap V2
+        uint256 totalDenomAmountAfterSwap = ERC20(denominationAsset).balanceOf(vaultProxy);
 
-    //     if (redeemAmountToDenom_ > 0) {
-    //         burnAndTransfer(
-    //             msg.sender, 
-    //             sharesQuantity, 
-    //             payoutAssets, 
-    //             payoutAmounts, 
-    //             assetAmountToFees, 
-    //             sharesSupply, 
-    //             redeemAmountToDenom_, 
-    //             false
-    //         );   
-    //     }
+        // Get denomination asset amount for transfer to redeemer
+        if (totalDenomAmountAfterSwap > totalDenomAmountBeforeSwap) {
+            redeemAmountToDenom_ = totalDenomAmountAfterSwap.sub(totalDenomAmountBeforeSwap).add(
+                denomAmountBeforeSwap
+            );
+        } else {
+            redeemAmountToDenom_ = denomAmountBeforeSwap;
+        }
 
-    //     emit SharesRedeemedToDenom(msg.sender, sharesQuantity, denominationAsset, redeemAmountToDenom_); 
+        if (redeemAmountToDenom_ > 0) {
+            burnAndTransfer(
+                msg.sender,
+                sharesQuantity,
+                payoutAssets,
+                payoutAmounts,
+                assetAmountToFees,
+                sharesSupply,
+                redeemAmountToDenom_,
+                false
+            );
+        }
 
-    //     return redeemAmountToDenom_;
-    // }
+        emit SharesRedeemedToDenom(
+            msg.sender,
+            sharesQuantity,
+            denominationAsset,
+            redeemAmountToDenom_
+        );
+
+        return redeemAmountToDenom_;
+    }
 
     ///////////////////
     // STATE GETTERS //
@@ -1169,7 +1196,7 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     }
 
     /// @notice Gets the `overridePause` variable
-    function getOverridePause () external   view   returns ( bool   overridePause_ ) {
+    function getOverridePause() external view returns (bool overridePause_) {
         return overridePause;
     }
 

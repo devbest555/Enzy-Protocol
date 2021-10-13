@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0
 
-
+/*
+    This file is part of the Enzyme Protocol.
+    (c) Enzyme Council <council@enzyme.finance>
+    For the full license information, please view the LICENSE
+    file that was distributed with this source code.
+*/
 
 pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
@@ -106,7 +111,7 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
                 order.takerFee,
                 takerAssetFillAmount
             ); // fee calculated relative to taker fill amount
-            
+
             if (takerFeeAsset == makerAsset) {
                 require(
                     order.takerFee < order.makerAssetAmount,
@@ -152,10 +157,14 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
         );
     }
 
-    function swapForRedeem(address, bytes calldata, bytes calldata) external override {   
+    function swapForRedeem(
+        address,
+        bytes calldata,
+        bytes calldata
+    ) external override {
         return;
     }
-    
+
     function takeOrder(
         address _vaultProxy,
         bytes calldata _encodedCallArgs,
@@ -170,7 +179,7 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
             uint256 takerAssetFillAmount
         ) = __decodeTakeOrderCallArgs(_encodedCallArgs);
         IZeroExV2.Order memory order = __constructOrderStruct(encodedZeroExOrderArgs);
-        
+
         // Approve spend assets as needed
         __approveMaxAsNeeded(
             __getAssetAddress(order.takerAssetData),
@@ -208,6 +217,7 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
             address[4] memory orderAddresses,
             uint256[6] memory orderValues,
             bytes[2] memory orderData,
+
         ) = __decodeZeroExOrderArgs(_encodedOrderArgs);
         return
             IZeroExV2.Order({
@@ -232,14 +242,14 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
         pure
         returns (IZeroExV2.Order memory order_)
     {
-        (
-            address[6] memory orderAddresses,
-            uint256[6] memory orderValues
-        ) = abi.decode(_encodedOrderArgs, (address[6], uint256[6]));
+        (address[6] memory orderAddresses, uint256[6] memory orderValues) = abi.decode(
+            _encodedOrderArgs,
+            (address[6], uint256[6])
+        );
 
         bytes4 ERC20_SELECTOR = bytes4(keccak256("ERC20Token(address)"));
         return
-            IZeroExV2.Order({                
+            IZeroExV2.Order({
                 makerAddress: orderAddresses[0],
                 takerAddress: orderAddresses[1],
                 feeRecipientAddress: orderAddresses[2],
@@ -318,9 +328,9 @@ contract ZeroExV2Adapter is AdapterBase, FundDeployerOwnerMixin, MathHelpers {
                 mload(add(_assetData, 32)),
                 0xFFFFFFFF00000000000000000000000000000000000000000000000000000000
             )
-        }//= 0xf47261b0
+        } //= 0xf47261b0
         assetProxy_ = IZeroExV2(EXCHANGE).getAssetProxy(assetProxyId);
-        
+
         return assetProxy_;
     }
 
