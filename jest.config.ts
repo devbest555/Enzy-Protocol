@@ -32,8 +32,9 @@ const projects = [
   // project('core', ['tests/SelfTest/test-feemanager-stream']),
   // project('core', ['tests/SelfTest/test-vault']),
   // project('core', ['tests/SelfTest/test-zeroAdapter']),
-  project('core', ['tests/SelfTest/test-uniswapV2-takeorder']),
+  // project('core', ['tests/SelfTest/test-uniswapV2-takeorder']),
   // project('core', ['tests/SelfTest/test-uniswapV2']),
+  project('core', ['tests/SelfTest/test-fundActionWrap']),
 ].filter((project) => !!project);
 
 export default {
