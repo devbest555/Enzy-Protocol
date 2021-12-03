@@ -84,6 +84,7 @@ const config: HardhatUserConfig = {
   defaultNetwork: 'hardhat',
   networks: {
     hardhat: {
+      allowUnlimitedContractSize: true,
       hardfork: 'istanbul',
       accounts: {
         mnemonic,
