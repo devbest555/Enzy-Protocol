@@ -24,7 +24,6 @@ import "../utils/PermissionedVaultActionMixin.sol";
 import "./integrations/IIntegrationAdapter.sol";
 import "./IIntegrationManager.sol";
 import "../../interfaces/IZeroExV2.sol";
-import "hardhat/console.sol";
 
 /// @title IntegrationManager
 /// @notice Extension to handle DeFi integration actions for funds

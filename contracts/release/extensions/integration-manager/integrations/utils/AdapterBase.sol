@@ -14,8 +14,6 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "../IIntegrationAdapter.sol";
 import "./IntegrationSelectors.sol";
 
-import "hardhat/console.sol";
-
 /// @title AdapterBase Contract
 /// @notice A base contract for integration adapters
 abstract contract AdapterBase is IIntegrationAdapter, IntegrationSelectors {

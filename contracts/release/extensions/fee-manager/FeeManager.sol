@@ -23,7 +23,6 @@ import "./IFee.sol";
 import "./IFeeManager.sol";
 import "../../core/fund/comptroller/ComptrollerLib.sol";
 import "./fees/ProtocolFee.sol";
-import "hardhat/console.sol";
 
 /// @title FeeManager Contract
 /// @notice Manages fees for funds

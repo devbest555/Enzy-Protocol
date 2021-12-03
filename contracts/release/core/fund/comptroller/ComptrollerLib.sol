@@ -925,7 +925,6 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
 
         // Calculate payout asset amounts due to redeemer
         feeWithdraw = ProtocolFee(PROTOCOLFEE).getFeeWithdraw();
-        console.log("====sol:feeWithdraw::", feeWithdraw);
         payoutAmounts_ = new uint256[](payoutAssets_.length);
         assetAmountToFees_ = new uint256[](payoutAssets_.length);
         sharesSupply_ = sharesContract.totalSupply();
@@ -1053,11 +1052,9 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
 
         // initial total denominationAsset Amount of Vault
         uint256 totalDenomAmountBeforeSwap = ERC20(denominationAsset).balanceOf(vaultProxy);
-        console.log("===sol-BeforeSwap", totalDenomAmountBeforeSwap);
 
         uint256 denomAmountBeforeSwap;
         for (uint256 i; i < payoutAssets.length; i++) {
-            console.log("===sol-payoutAmounts", payoutAmounts[i]);
             if (payoutAssets[i] == denominationAsset) {
                 denomAmountBeforeSwap = payoutAmounts[i];
             }
@@ -1069,13 +1066,11 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
         // denominationAsset Amount after swap on Uniswap V2
         uint256 totalDenomAmountAfterSwap = ERC20(denominationAsset).balanceOf(vaultProxy);
 
-        console.log("===sol-AfterSwap", totalDenomAmountAfterSwap);
         // Get denomination asset amount for transfer to redeemer
         redeemAmountToDenom_ = totalDenomAmountAfterSwap.sub(totalDenomAmountBeforeSwap).add(
             denomAmountBeforeSwap
         );
 
-        console.log("===sol-redeemAmount", redeemAmountToDenom_);
         if (redeemAmountToDenom_ > 0) {
             burnAndTransfer(
                 msg.sender,
@@ -1107,7 +1102,6 @@ contract ComptrollerLib is IComptroller, AssetFinalityResolver {
     {
         uint256 sharesQuantity = ERC20(vaultProxy).balanceOf(msg.sender);
 
-        console.log("===sol-sharesQuantity", sharesQuantity);
         (
             address[] memory payoutAssets,
             uint256[] memory payoutAmounts,

@@ -13,7 +13,6 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "../../../../interfaces/IUniswapV2Factory.sol";
 import "../../../../interfaces/IUniswapV2Router2.sol";
 import "../utils/AdapterBase.sol";
-import "hardhat/console.sol";
 
 /// @title UniswapV2Adapter Contract
 /// @notice Adapter for interacting with Uniswap v2
@@ -256,8 +255,6 @@ contract UniswapV2Adapter is AdapterBase {
             1
         ];
 
-        console.log("====sol-expectedDenomAmount::", expectedDenomAmount);
-        console.log("====sol-payoutAmount::", payoutAmount);
         __takeOrder(_vaultProxy, payoutAmount, expectedDenomAmount, path);
     }
 

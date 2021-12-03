@@ -16,7 +16,6 @@ import "../../../../utils/MathHelpers.sol";
 import "../../../../utils/AddressArrayLib.sol";
 import "../../../utils/FundDeployerOwnerMixin.sol";
 import "../utils/AdapterBase.sol";
-import "hardhat/console.sol";
 
 /// @title ZeroExV2Adapter Contract
 /// @notice Adapter to 0xV2 Exchange Contract
